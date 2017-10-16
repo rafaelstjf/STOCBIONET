@@ -4,7 +4,7 @@ using namespace std;
 
 int main()
 {
-
+/*Example 1
         int p[7][5] = {
     0,0,0,0,1,
     0,0,0,0,0,
@@ -31,7 +31,32 @@ int main()
         re[i] = r[i];
         pr[i] = p[i];
     }
-    DependencyGraph *dg = new DependencyGraph(5, re, pr, 7);
+*/
+int r[6][6]{
+    1,0,0,0,0,0,
+    0,1,0,0,0,0,
+    0,0,1,0,0,0,
+    0,0,1,0,0,0,
+    0,0,0,1,0,1,
+    0,0,0,0,1,0
+};
+int p[6][6]{
+    0,0,0,0,1,0,
+    1,0,0,0,0,1,
+    0,1,0,0,0,0,
+    0,0,0,0,0,0,
+    0,0,1,1,0,0,
+    0,0,0,1,0,0
+};
+ int** re= new int*[6];
+    int** pr = new int*[6];
+
+    for(int i = 0; i<6; i++)
+    {
+        re[i] = r[i];
+        pr[i] = p[i];
+    }
+    DependencyGraph *dg = new DependencyGraph(6, re, pr, 6);
     dg->printGraph();
 
     //delete dg;
