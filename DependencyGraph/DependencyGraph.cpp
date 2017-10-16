@@ -2,6 +2,7 @@
 
 DependencyGraph::DependencyGraph(int n, int** reactants, int** products, int numElements)
 {
+
     int** affects;
     int* r;
     int* p;
@@ -20,8 +21,8 @@ DependencyGraph::DependencyGraph(int n, int** reactants, int** products, int num
     affects = new int*[n];
     for(int i =0; i<n; i++)
     {
-        r = reactants[i];
-        p = products[i];
+        r = extractElements(reactants, i);
+        p = extractElements(products, i);
         affects[i] = unionSet(r, p);
     }
 
@@ -29,7 +30,7 @@ DependencyGraph::DependencyGraph(int n, int** reactants, int** products, int num
     {
         for(int j = 0; j< n; j++)
         {
-            r = reactants[j];
+            r = extractElements(reactants, j);
             int count = 0;
             int* inter = intersectionSet(affects[i],r);
             for(int k =0; k<numElements; k++)
@@ -98,6 +99,14 @@ int* DependencyGraph::unionSet(int* a, int* b)
     }
     return un;
 
+}
+int* DependencyGraph::extractElements(int** a, int c){
+    //return an array with the elements of a determined reaction
+    int* ar = new int[numElements];
+    for(int i = 0;i<numElements; i++){
+        ar[i] = a[i][c];
+    }
+    return ar;
 }
 int* DependencyGraph::intersectionSet(int* a, int* b)
 //return a vector with the intersection of the arrays a and b

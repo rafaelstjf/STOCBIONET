@@ -22,6 +22,7 @@ private:
     DGVertex** vertex;
     int* unionSet(int* a, int* b);
     int* intersectionSet(int* a, int*b);
+    int* extractElements(int** a, int c);
 
 
 };
