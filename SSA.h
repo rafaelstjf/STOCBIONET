@@ -3,8 +3,14 @@
 
 #include<string>
 #include <iostream>
+#include <stdlib.h>
+#include "DependencyGraph.h"
+#include <sbml/SBMLTypes.h> //sbml external library
+#include <sbml/common/extern.h>
+#include <ctime>
 
 using namespace std;
+
 class SSA
 {
 public:
@@ -21,18 +27,17 @@ protected:
         int numElements;
 
     } Reactions;
-
     Reactions* reactions; //reactions of the model
     int* k; //reaction rate constant
     float* a0; //propensity array
+    Model* model; //creates a pointer for a document type
 private:
 
     virtual void initialize(string filename) = 0; //read the model and initialize data structures
     virtual void calcPropensity() = 0; //calculate the propensity function for each reaction
     virtual void genReactionTime() = 0; //estimate the occurrence time for the next reaction
     virtual void selectReaction() = 0; //select which reaction will occur next
-
-
+    DependencyGraph* generateDG(); //create the dependency graph using the model
 
 };
 

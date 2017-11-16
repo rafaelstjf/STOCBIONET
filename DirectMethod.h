@@ -4,6 +4,7 @@
 #include <iostream>
 #include "WithoutDelay.h"
 
+
 using namespace std;
 
 class DirectMethod : public WithoutDelay
