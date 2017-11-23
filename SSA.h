@@ -8,6 +8,7 @@
 #include <sbml/SBMLTypes.h> //sbml external library
 #include <sbml/common/extern.h>
 #include <ctime>
+#include "Specie.h"
 
 using namespace std;
 
@@ -24,7 +25,7 @@ protected:
         int** reactants;
         int** products;
         int numReactions;
-        int numElements;
+        int numSpecies;
 
     } Reactions;
     Reactions* reactions; //reactions of the model
@@ -37,7 +38,7 @@ private:
     virtual void calcPropensity() = 0; //calculate the propensity function for each reaction
     virtual void genReactionTime() = 0; //estimate the occurrence time for the next reaction
     virtual void selectReaction() = 0; //select which reaction will occur next
-    DependencyGraph* generateDG(); //create the dependency graph using the model
+    void importFromModel(); //create the reactions structure using the sbml model
 
 };
 

@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include "DGVertex.h"
+#include <sbml/SBMLTypes.h> //sbml external library
+#include <sbml/common/extern.h>
 
 using namespace std;
 class DependencyGraph
@@ -23,7 +25,6 @@ private:
     int* unionSet(int* a, int* b);
     int* intersectionSet(int* a, int*b);
     int* extractElements(int** a, int c);
-
 
 };
 
