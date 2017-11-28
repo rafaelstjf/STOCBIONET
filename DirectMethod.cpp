@@ -41,8 +41,9 @@ void DirectMethod::initialize(string filename)
     ListOfSpecies *listspe = model->getListOfSpecies();      //get all the species
     cout << "Extracting species' ID" << endl;
     Specie *listIntSpec = new Specie(listspe->size()); //class to save the species in DG index
-    for (int i = 0; i < listspe->size(); i++)
+    for (int i = 0; i < listspe->size(); i++){
         listIntSpec->insertSpecie(listspe->get(i)->getId());
+    }
     reactions = new Reactions;
     reactions->numReactions = listReac->size(); //get the number of reactions
     reactions->numSpecies = listspe->size();    //get the number of species
@@ -73,7 +74,6 @@ void DirectMethod::initialize(string filename)
         {
             
             index = listIntSpec->getIndexById(listReactants->get(j)->getId());
-            cout << listReactants->get(j)->getId() << endl;
             if (index != -1)
                 reactants[index][i] = 1;
             else
@@ -91,6 +91,23 @@ void DirectMethod::initialize(string filename)
     reactions->reactants = reactants;
     reactions->products = products;
     cout << "Model successfully imported" << endl;
+
+    
+    cout << "Reactants" << endl;
+    for(int i = 0; i<reactions->numSpecies; i++){
+        for(int j = 0; j<reactions->numSpecies; j++){
+            cout <<reactions->reactants[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    cout << "Products" << endl;
+    for(int i = 0; i<reactions->numSpecies; i++){
+        for(int j = 0; j<reactions->numSpecies; j++){
+            cout <<reactions->products[i][j] << " ";
+        }
+        cout << endl;
+    }
 }
 
 void DirectMethod::calcPropensity()

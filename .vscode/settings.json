@@ -5,6 +5,8 @@
         "initializer_list": "cpp",
         "utility": "cpp",
         "functional": "cpp",
-        "istream": "cpp"
+        "istream": "cpp",
+        "*.tcc": "cpp",
+        "tuple": "cpp"
     }
 }

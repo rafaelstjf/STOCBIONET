@@ -14,6 +14,7 @@ class Specie
     void insertSpecie(string id);
     int getIndexById(string id);
     string getIdByIndex(int index);
+    void printSpecies();
 
   private:
     vector<string> species; //array of species' id

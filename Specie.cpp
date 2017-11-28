@@ -23,3 +23,9 @@ int Specie::getIndexById(string id){
     }
     return -1; //id not found
 }
+
+void Specie::printSpecies(){
+    cout << "Printing species!" << endl;
+    for(int i = 0; i<species.size(); i++)
+    cout << "Specie[" << i << "]: " << species[i] << endl;
+}
