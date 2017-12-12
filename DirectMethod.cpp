@@ -34,6 +34,7 @@ void DirectMethod::initialize(string filename)
 
     //test
     int index  = 0;
+    bool sucess = true;
     ListOfSpeciesReferences *listReactants;
     ListOfSpeciesReferences *listProducts;
     cout << "Importing from model" << endl;
@@ -73,41 +74,47 @@ void DirectMethod::initialize(string filename)
         for (int j = 0; j < listReactants->size(); j++)
         {
             
-            index = listIntSpec->getIndexById(listReactants->get(j)->getId());
+            index = listIntSpec->getIndexById(listReactants->get(j)->getSpecies());
             if (index != -1)
                 reactants[index][i] = 1;
-            else
+            else{
                 cout << "Invalid index" << endl;
+                sucess = false;
+            }
         }
         for (int j = 0; j < listProducts->size(); j++)
         {
-            index = listIntSpec->getIndexById(listProducts->get(j)->getId());
+            index = listIntSpec->getIndexById(listProducts->get(j)->getSpecies());
             if (index != -1)
                 products[index][i] = 1;
-            else
+            else{
                 cout << "Invalid index" << endl;
+                sucess = false;
+            }
         }
     }
     reactions->reactants = reactants;
     reactions->products = products;
-    cout << "Model successfully imported" << endl;
-
-    
+    if(sucess)
+        cout << "Model successfully imported" << endl;
+    else
+        cout << "Error!" << endl;
+/*
     cout << "Reactants" << endl;
     for(int i = 0; i<reactions->numSpecies; i++){
-        for(int j = 0; j<reactions->numSpecies; j++){
+        for(int j = 0; j<reactions->numReactions; j++){
             cout <<reactions->reactants[i][j] << " ";
         }
         cout << endl;
     }
-
     cout << "Products" << endl;
     for(int i = 0; i<reactions->numSpecies; i++){
-        for(int j = 0; j<reactions->numSpecies; j++){
+        for(int j = 0; j<reactions->numReactions; j++){
             cout <<reactions->products[i][j] << " ";
         }
         cout << endl;
     }
+*/
 }
 
 void DirectMethod::calcPropensity()

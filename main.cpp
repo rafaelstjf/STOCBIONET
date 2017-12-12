@@ -6,6 +6,6 @@ int main()
 {
     cout << "Hello world!" << endl;
     DirectMethod* dm = new DirectMethod();
-    dm->perform("Models/BIOMD0000000001_SBML-L2V3.xml");
+    dm->perform("Models/BIOMD0000000625.xml");
     return 0;
 }
