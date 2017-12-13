@@ -38,6 +38,7 @@ protected:
     virtual void genReactionTime() = 0; //estimate the occurrence time for the next reaction
     virtual void selectReaction() = 0; //select which reaction will occur next
     void importFromModel(); //create the reactions structure using the sbml model
+    void readModel(string filename); //read the sbml model file
 
 };
 
