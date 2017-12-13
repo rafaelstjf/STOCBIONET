@@ -19,7 +19,7 @@ Requirements:
 
  * [libsbml 5.14](http://sbml.org/Software/libSBML)
 
-Example os use:
+Example of use:
 
 ```c++
 SSA* dm = new DirectMethod();
