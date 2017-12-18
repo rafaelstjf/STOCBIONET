@@ -15,10 +15,10 @@ public:
     void perform(string filename);
 
 private:
-    virtual void initialize(string filename); //read the model and initialize data structures
-    virtual void calcPropensity(); //calculate the propensity function for each reaction
-    virtual void genReactionTime(); //estimate the occurrence time for the next reaction
-    virtual void selectReaction(); //select which reaction will occur next
+    void initialize(string filename); //read the model and initialize data structures
+    void calcPropensity(); //calculate the propensity function for each reaction
+    void genReactionTime(); //estimate the occurrence time for the next reaction
+    void selectReaction(); //select which reaction will occur next
 };
 
 #endif // DIRECTMETHOD_H

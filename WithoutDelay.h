@@ -12,7 +12,7 @@ class WithoutDelay :public SSA
 public:
     WithoutDelay();
     virtual ~WithoutDelay();
-    void perform(string filename);
+    virtual void perform(string filename) = 0;
 
 protected:
         DependencyGraph* dg;

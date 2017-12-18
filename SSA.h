@@ -22,15 +22,15 @@ protected:
     typedef struct Reactions
     {
         // each reaction has 2 matrix(products and reactants)
-        int** reactants;
-        int** products;
+        double** reactants;
+        double** products;
         int numReactions;
         int numSpecies;
 
     } Reactions;
     Reactions* reactions; //reactions of the model
-    int* k; //reaction rate constant
-    float* a0; //propensity array
+    int* k; //reaction rate constant array
+    float* p; //propensity array
     Model* model; //creates a pointer for a document type
     //functions
     virtual void initialize(string filename) = 0; //read the model and initialize data structures

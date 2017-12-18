@@ -7,6 +7,9 @@
         "functional": "cpp",
         "istream": "cpp",
         "*.tcc": "cpp",
-        "tuple": "cpp"
+        "tuple": "cpp",
+        "iostream": "cpp",
+        "system_error": "cpp",
+        "string": "cpp"
     }
 }

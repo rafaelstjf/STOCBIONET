@@ -6,7 +6,7 @@ SSA::SSA()
     reactions = NULL;
 }
 
-virtual SSA::~SSA()
+SSA::~SSA()
 {
     delete reactions;
 }
@@ -34,6 +34,7 @@ void SSA::importFromModel()
 {
     int index = 0;
     bool sucess = true;
+    bool debug = true;
     ListOfSpeciesReferences *listReactants;
     ListOfSpeciesReferences *listProducts;
     cout << "----------------------------------------------" << endl;
@@ -51,20 +52,20 @@ void SSA::importFromModel()
     reactions->numSpecies = listspe->size();    //get the number of species
     // [species][reactions]
     cout << "Creating reactants and products arrays" << endl;
-    int **reactants = new int *[reactions->numSpecies];
-    int **products = new int *[reactions->numSpecies];
+    double **reactants = new double *[reactions->numSpecies];
+    double **products = new double *[reactions->numSpecies];
     for (int i = 0; i < reactions->numSpecies; i++)
     {
-        reactants[i] = new int[reactions->numReactions];
-        products[i] = new int[reactions->numReactions];
+        reactants[i] = new double[reactions->numReactions];
+        products[i] = new double[reactions->numReactions];
     }
     //setting 0 in all elements
     for (int i = 0; i < reactions->numSpecies; i++)
     {
         for (int j = 0; j < reactions->numReactions; j++)
         {
-            reactants[i][j] = 0;
-            products[i][j] = 0;
+            reactants[i][j] = 0.0;
+            products[i][j] = 0.0;
         }
     }
     cout << "Extracting reactants and products" << endl;
@@ -77,10 +78,10 @@ void SSA::importFromModel()
 
             index = listIntSpec->getIndexById(listReactants->get(j)->getSpecies()); //get the specie of the reactant j
             if (index != -1)
-                reactants[index][i] = 1;
+                reactants[index][i] = model->getReaction(i)->getReactant(j)->getStoichiometry();
             else
             {
-                cout << "Invalid index while extracting reactant[" <<  j << "]" << endl;
+                cout << "Invalid index while extracting reactant[" << j << "]" << endl;
                 sucess = false;
             }
         }
@@ -88,10 +89,10 @@ void SSA::importFromModel()
         {
             index = listIntSpec->getIndexById(listProducts->get(j)->getSpecies()); //get the specie of the product j
             if (index != -1)
-                products[index][i] = 1;
+                products[index][i] = model->getReaction(i)->getProduct(j)->getStoichiometry();
             else
             {
-                cout << "Invalid index while extracting product[" <<  j << "]" << endl;
+                cout << "Invalid index while extracting product[" << j << "]" << endl;
                 sucess = false;
             }
         }
@@ -100,6 +101,27 @@ void SSA::importFromModel()
     reactions->products = products;
     if (sucess)
         cout << "Model successfully imported" << endl;
+    if (debug)
+    {
+        //print the product and reactant matrix if it's in debug mode
+        cout << "Reactants" << endl;
+        for (int i = 0; i <reactions->numSpecies; i++)
+        {
+            for (int j = 0;j < reactions -> numReactions; j++){
+                cout << reactions->reactants[i][j] << " ";
+            }
+            cout << endl;
+        }
+        cout << "--------------------------------" << endl;
+        cout << "Products" << endl;
+        for (int i = 0; i <reactions->numSpecies; i++)
+        {
+            for (int j = 0;j < reactions -> numReactions; j++){
+                cout << reactions->products[i][j] << " ";
+            }
+            cout << endl;
+        }
+    }
     else
     {
         cout << "Error!" << endl;
