@@ -23,8 +23,8 @@ private:
     int numElements;
     DGVertex** vertex;
     int* unionSet(int* a, int* b);
-    int* intersectionSet(int* a, int*b);
-    int* extractElements(int** a, int c);
+    double* intersectionSet(double* a, double*b);
+    int* extractElements(double** a, int c);
 
 };
 
