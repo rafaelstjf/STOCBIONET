@@ -29,8 +29,8 @@ protected:
 
     } Reactions;
     Reactions* reactions; //reactions of the model
-    int* k; //reaction rate constant
-    float* a0; //propensity array
+    int* k; //reaction rate constant array
+    float* p; //propensity array
     Model* model; //creates a pointer for a document type
     //functions
     virtual void initialize(string filename) = 0; //read the model and initialize data structures

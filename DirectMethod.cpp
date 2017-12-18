@@ -20,6 +20,7 @@ void DirectMethod::initialize(string filename)
 
 void DirectMethod::calcPropensity()
 {
+    
 }
 
 void DirectMethod::genReactionTime()

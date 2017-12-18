@@ -6,7 +6,7 @@ SSA::SSA()
     reactions = NULL;
 }
 
-virtual SSA::~SSA()
+SSA::~SSA()
 {
     delete reactions;
 }
