@@ -51,20 +51,20 @@ void SSA::importFromModel()
     reactions->numSpecies = listspe->size();    //get the number of species
     // [species][reactions]
     cout << "Creating reactants and products arrays" << endl;
-    int **reactants = new int *[reactions->numSpecies];
-    int **products = new int *[reactions->numSpecies];
+    double **reactants = new double *[reactions->numSpecies];
+    double **products = new double *[reactions->numSpecies];
     for (int i = 0; i < reactions->numSpecies; i++)
     {
-        reactants[i] = new int[reactions->numReactions];
-        products[i] = new int[reactions->numReactions];
+        reactants[i] = new double[reactions->numReactions];
+        products[i] = new double[reactions->numReactions];
     }
     //setting 0 in all elements
     for (int i = 0; i < reactions->numSpecies; i++)
     {
         for (int j = 0; j < reactions->numReactions; j++)
         {
-            reactants[i][j] = 0;
-            products[i][j] = 0;
+            reactants[i][j] = 0.0;
+            products[i][j] = 0.0;
         }
     }
     cout << "Extracting reactants and products" << endl;
@@ -77,7 +77,7 @@ void SSA::importFromModel()
 
             index = listIntSpec->getIndexById(listReactants->get(j)->getSpecies()); //get the specie of the reactant j
             if (index != -1)
-                reactants[index][i] = 1;
+                reactants[index][i] = listReactants->get(j)->getSpecies()->getInitialAmount(); //get the initial amount on the current specie
             else
             {
                 cout << "Invalid index while extracting reactant[" <<  j << "]" << endl;
@@ -88,7 +88,7 @@ void SSA::importFromModel()
         {
             index = listIntSpec->getIndexById(listProducts->get(j)->getSpecies()); //get the specie of the product j
             if (index != -1)
-                products[index][i] = 1;
+                products[index][i] = listProducts->get(j)->getSpecies()->getInitialAmount(); //get the initial amount on the current specie
             else
             {
                 cout << "Invalid index while extracting product[" <<  j << "]" << endl;

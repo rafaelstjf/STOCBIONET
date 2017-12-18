@@ -22,8 +22,8 @@ protected:
     typedef struct Reactions
     {
         // each reaction has 2 matrix(products and reactants)
-        int** reactants;
-        int** products;
+        double** reactants;
+        double** products;
         int numReactions;
         int numSpecies;
 
