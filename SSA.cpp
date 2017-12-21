@@ -78,7 +78,7 @@ void SSA::importFromModel()
 
             index = listIntSpec->getIndexById(listReactants->get(j)->getSpecies()); //get the specie of the reactant j
             if (index != -1)
-                reactants[index][i] = model->getReaction(i)->getReactant(j)->getStoichiometry();
+                reactants[index][i] = model->getReaction(i)->getReactant(j)->getStoichiometry(); //get the stoichiometry
             else
             {
                 cout << "Invalid index while extracting reactant[" << j << "]" << endl;
@@ -89,7 +89,7 @@ void SSA::importFromModel()
         {
             index = listIntSpec->getIndexById(listProducts->get(j)->getSpecies()); //get the specie of the product j
             if (index != -1)
-                products[index][i] = model->getReaction(i)->getProduct(j)->getStoichiometry();
+                products[index][i] = model->getReaction(i)->getProduct(j)->getStoichiometry(); //get the stoichiometry
             else
             {
                 cout << "Invalid index while extracting product[" << j << "]" << endl;
