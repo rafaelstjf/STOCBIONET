@@ -24,5 +24,9 @@ class Reaction
     void setTextRepresentation(string textRepresentation);
     double getRate();
     void setRate(double rate);
+    list<SpecieQuantity> getReactants();
+    list<SpecieQuantity> getProducts();
+    void setReactants(list<SpecieQuantity> reactants);
+    void setProducts(list<SpecieQuantity> products);
 };
 #endif
