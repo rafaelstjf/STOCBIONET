@@ -4,16 +4,11 @@ TReact::TReact()
     reactionCounter = 0;
     specieCounter = 0;
     even = false;
+    sm = new StringManager();
 }
 TReact::~TReact()
 {
-}
-string TReact::replaceChar(string str, char c1, char c2){
-    for(int i = 0; i<str.length(); i++){
-        if(str[i]==c1)
-            str[i] = c2;
-    }
-    return string;
+    delete sm;
 }
 list<Reaction> TReact::getReactions(string textToTranslate, map<string, long int> speciesAndNumbers, map<string, long int> speciesQuantity, list<string> modelRepresentation)
 {
@@ -26,5 +21,11 @@ list<Reaction> TReact::getReactions(string textToTranslate, map<string, long int
     constants.clear();
     reactionCounter = 0;
     specieCounter = 0;
-    textToTranslate = 
+    textToTranslate = sm->replaceString(textToTranslate,"\r\n", "");
+    textToTranslate = sm->replaceString(textToTranslate, "\n", "");
+    vector<string> lines = sm->explode(TextToTranslate, ';');
+    for(i = 0; i< lines.size();i++){
+        newLines.clear();
+        newLinesX.clear();
+    }
 }

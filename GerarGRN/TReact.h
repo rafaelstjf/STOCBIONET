@@ -5,8 +5,10 @@
 #include <map>
 #include <string>
 #include <list>
+#include <vector>
 #include "SpecieQuantity.h"
 #include "Reaction.h"
+#include "StringManager.h"
 using namespace std;
 
 class TReact
@@ -17,6 +19,7 @@ class TReact
     map<string, long int> speciesNumber;
     int specieCounter;
     bool even;
+    StringManager* sm;
     //functions
     void getSpecialNewLines(list<string> newLines, string lineOrig);
     void getLinesModulus(list<string> newLines, string lineOrig);
