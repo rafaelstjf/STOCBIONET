@@ -8,6 +8,13 @@ TReact::TReact()
 TReact::~TReact()
 {
 }
+string TReact::replaceChar(string str, char c1, char c2){
+    for(int i = 0; i<str.length(); i++){
+        if(str[i]==c1)
+            str[i] = c2;
+    }
+    return string;
+}
 list<Reaction> TReact::getReactions(string textToTranslate, map<string, long int> speciesAndNumbers, map<string, long int> speciesQuantity, list<string> modelRepresentation)
 {
     Reaction react;
@@ -19,5 +26,5 @@ list<Reaction> TReact::getReactions(string textToTranslate, map<string, long int
     constants.clear();
     reactionCounter = 0;
     specieCounter = 0;
-    //textToTranslate = 
+    textToTranslate = 
 }

@@ -26,6 +26,7 @@ class TReact
     Reaction* getTranslatedReaction(string textReact); 
     list<SpecieQuantity> getListOfSpeciesQuantity(string speciesQuantityText);
     SpecieQuantity getSpecieQuantity(string specQText);
+    string replaceChar(string str, char c1, char c2);
   public:
   TReact();
   ~TReact();
