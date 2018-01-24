@@ -81,6 +81,7 @@ string TReact::getLineSum2(string lineOrig)
             int n;
             istringstream iss(valK[0]);
             iss > n;
+            int m;
             istringstream iss2(valK[1]);
             iss2 >> m;
             return(sm->replaceString(tempString, to_string(n + m)));
@@ -88,4 +89,32 @@ string TReact::getLineSum2(string lineOrig)
         }
     }
     return lineOrig;
+}
+string TReact::getLineSum(string lineOrig){
+    if(lineOrig.find("{") != string::npos){
+        int idxStart = lineOrig.find("{") + 1;
+        int idxEnd = lineOrig.find("}");
+        string key = lineOrig.substr(idxStart, idxEnd - idxStart);
+        string keyOri = "";
+        string plus= "";
+        if(key.find("+") != string::npos){
+            vector<string> valK = sm->explode(key, '+');
+            keyOri = valK[0];
+            key = keyOri;
+            plus = valK[1];
+            int n;
+            istringstream iss(valK[0]);
+            iss > n;
+            int m;
+            istringstream iss2(valK[1]);
+            iss2 >> m;
+            return(sm->replaceString(tempString, to_string(n + m)));
+        } 
+        return lineOrig;
+    }
+}
+Reaction* TReact::getTranslatedReaction(string textReact){
+    Reaction* react = new Reaction();
+    vector<string> reactionSplit;
+    textReact = 
 }
