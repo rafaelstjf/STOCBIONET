@@ -116,5 +116,25 @@ string TReact::getLineSum(string lineOrig){
 Reaction* TReact::getTranslatedReaction(string textReact){
     Reaction* react = new Reaction();
     vector<string> reactionSplit;
-    textReact = 
+    textReact = sm->trim(textReact);
+    reactionCounter+;
+    if(textReact.find(':') == string::npos)
+        cout << "Invalid reaction: " << textReact << endl;
+    reactionSplit = sm->explode(textReact, ':');
+    if(reactionSplit.size() != 2)
+        cout << "Invalid reactio: " << textReac << endl;
+    if(reactionSplit[0].find(',') != string::npos){
+        vector<string> reactNameAndRate = sm->explode(reactionSplit[0], ',');
+        react->setName(sm->trim(reactNameAndRate[0]));
+        string indexStr = sm->(reactNameAndRate[1]);
+        int indexRate = atoi(indexStr.c_str());
+        react->setRate(indexRate);
+    }
+    else{
+        react->setName("Reaction # " + sm->toString(reactionCounter));
+        react->setRate(constants[(sm->trim(reactionSplit(0)).c_str())]);
+    }
+    react->setTextRepresentation(sm->trim(reactionSplit[1]));
+
+
 }

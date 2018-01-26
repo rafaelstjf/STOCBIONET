@@ -65,3 +65,18 @@ const vector<string> StringManager::explode(const string& s, const char& c)
 	
 	return v;
 }
+string StringManager::trim(string str){
+    string output;
+    for(int i = 0; i < str.size(); i++){
+        if(str[i]!= " ")
+            output.append(1,str[i]);
+    }
+    return output;
+}
+
+string StringManager::toString( T Number )
+{
+	stringstream ss;
+	ss << Number;
+	return ss.str();
+}
