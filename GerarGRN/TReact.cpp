@@ -12,12 +12,13 @@ TReact::~TReact()
 }
 list<Reaction> TReact::getReactions(string textToTranslate, map<string, long int> speciesAndNumbers, map<string, long int> speciesQuantity, list<string> modelRepresentation)
 {
+    string x;
     Reaction react;
     list<Reaction> ret;
     list<string> newLinesX;
     list<string> newLines;
     list<string> modelRepresentation;
-    string con;
+    vector<string> con;
     constants.clear();
     reactionCounter = 0;
     specieCounter = 0;
@@ -26,9 +27,44 @@ list<Reaction> TReact::getReactions(string textToTranslate, map<string, long int
     vector<string> lines = sm->explode(TextToTranslate, ';');
     for (i = 0; i < lines.size(); i++)
     {
+        x = lines[i];
         newLines.clear();
         newLinesX.clear();
+        getLines(newLinesX, lineOrig);
+        for(int j = 0; j< newLinesX.size(); j++){
+            string y = sm-replaceChar(x, '{', ']');
+            y = sm->replaceChar(y, '}', ']');
+            getLines(newlines, y);
+
+        }
+        for(int j = 0; j< newLines.size(); j++){
+            string line = newLines[j];
+            if(sm->trim(line).size() >0){
+                if(line.find('>') != string::npos){
+                    react = getTranslatedReaction(line);
+                    if(react != NULL){
+                        ret.add(react);
+                    }
+                    modelRepresentation.add(sm->trim(line));
+                }
+                else
+                {
+                    con = sm->explode(line, '=');
+                    if(con.size() != 2){
+                        cout << "Invalid constant " << line << endl;
+                    }
+                    else if(constants.find(con[0]) != map::end){
+                        cout << "Duplicate constant" << line << endl;
+                    }else{
+                        constants.insert(con[0], stoi(sm->replaceChar(con[1], '.', ',')));
+                        modelRepresentation.add(sm->trim(line));
+                    }
+                }
+            }
+        }
     }
+    speciesAndNumbers = speciesNumber;
+    map<string, long int> speciesQuantity;
 }
 void TReact::getLines(list<string> newLines, string lineOrig)
 {
@@ -135,6 +171,28 @@ Reaction* TReact::getTranslatedReaction(string textReact){
         react->setRate(constants[(sm->trim(reactionSplit(0)).c_str())]);
     }
     react->setTextRepresentation(sm->trim(reactionSplit[1]));
+    
+}
+list<SpecieQuantity> TReact::getListOfSpeciesQuantity(string speciesQuantityText){
+    list<SpecieQuantity> ret;
+    SpecieQuantity specQ;
+    string specQ;
+    speciesQuantityText = sm->trim(speciesQuantityText);
+    if(speciesQuantityText.size()!=0){
+        vector<string> specQTextList = sm->explode(speciesQuantityText, '+');
+        fo(int i = 0; i< specQTextList.size(); i++){
+            specQ = getSpecieQuantity(specQTextList[i]);
+            if(specQ != NULL){
+                ret.Add(specQ);
+            }
 
-
+        }
+    }
+    return ret;
+}
+SpecieQuantity TReact::getSpecieQuantity(string specQText){
+    specQText = sm->trim(specQText);
+    SpecieQuantity spec = new SpecieQuantity();
+    int position = -1;
+    
 }

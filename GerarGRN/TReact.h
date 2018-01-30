@@ -22,7 +22,7 @@ class TReact
     StringManager* sm;
     //functions
     void getSpecialNewLines(list<string> newLines, string lineOrig);
-    void getLinesModulus(list<string> newLines, string lineOrig);
+   // void getLinesModulus(list<string> newLines, string lineOrig);
     void getLines(list<string> newLines, string lineOrig);
     string getLineSum2(string lineOrig);
     string getLineSum(string lineOrig);
