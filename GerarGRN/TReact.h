@@ -26,10 +26,9 @@ class TReact
     void getLines(list<string> newLines, string lineOrig);
     string getLineSum2(string lineOrig);
     string getLineSum(string lineOrig);
-    Reaction* getTranslatedReaction(string textReact); 
+    Reaction getTranslatedReaction(string textReact); 
     list<SpecieQuantity> getListOfSpeciesQuantity(string speciesQuantityText);
     SpecieQuantity getSpecieQuantity(string specQText);
-    string replaceChar(string str, char c1, char c2);
   public:
   TReact();
   ~TReact();

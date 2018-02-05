@@ -14,6 +14,7 @@ class StringManager
         virtual ~StringManager();
         string replaceString(string str, string r1, string r2);
         const vector<string> explode(const string& s, const char& c);
+        const vector<string> multExplode(const string &s, const char &c1, const char &c2)
         string trim(string str);
         string toString(T Number);
     protected:
