@@ -241,6 +241,45 @@ SpecieQuantity TReact::getSpecieQuantity(string specQText)
     specQText = sm->trim(specQText);
     SpecieQuantity spec = new SpecieQuantity();
     int position = -1;
+    stringstream sbNumber;
+    while(position < specQText.size() && ){
+        sbNumber << specQText[position];
+        
+    }
+    string s = sbNumber.str();
+    s = sm->trim(s);
+    if(s.size() == 0){
+
+    }else{
+        spec.setQuantity(sm->toString(s));
+    }
+    stringstream sbName;
+    position--;
+    while(position < specQText.size() && specQText[position] != '('){
+        sbName << specQText[position];
+        position++;
+    }
+    Specie s = new Specie();
+    s.setName(sm->toString(sm->trim(sbName)));
+    spec.SetSpecie(s);
+    if(speciesNumber.find(s.getName()) == map::end){
+        specieCounter++
+        speciesNumber.insert(make_pair(s.getName(), specieCounter));
+
+    }
+    s.setNumber(speciesNumer[s.getName()]);
+    specQ.SetSpecie(s);
+    stringstream sbDelay;
+    while(position < specQText.size() && specQText(position] != ')')){
+        sbDelay.insert(specQText[position]);
+    }
+    string delay  = sm->trim(sm->toString(sbDelay));
+    if(delay.size() > 0){
+        if(delay.find(',') != string::npos){
+            vector<string> delays = sm->explode(delay, ',');
+            //specQ.setDelay()
+        }
+    }
 
 }
 Reaction TReact::getTranslatedReaction(string textReact){
