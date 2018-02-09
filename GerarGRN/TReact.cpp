@@ -269,6 +269,7 @@ SpecieQuantity TReact::getSpecieQuantity(string specQText)
     }
     s.setNumber(speciesNumer[s.getName()]);
     specQ.SetSpecie(s);
+    Delay specQDelay = new Delay();
     stringstream sbDelay;
     while(position < specQText.size() && specQText(position] != ')')){
         sbDelay.insert(specQText[position]);
@@ -277,9 +278,14 @@ SpecieQuantity TReact::getSpecieQuantity(string specQText)
     if(delay.size() > 0){
         if(delay.find(',') != string::npos){
             vector<string> delays = sm->explode(delay, ',');
-            //specQ.setDelay()
+            specQDelay.setValue(atof(constants[sm->trim(delays[0])]));
+            specQDelay.setVariation(atof(constants[sm->trim(delays[1])]));
+        }else{
+            specQDelay.setValue(atof(constants[delay]));
         }
     }
+    specQ.setDelay(specQDelay);
+    return specQ;
 
 }
 Reaction TReact::getTranslatedReaction(string textReact){
