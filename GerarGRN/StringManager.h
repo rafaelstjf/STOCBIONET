@@ -4,19 +4,20 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-template <typename T>
-
+#include <vector>
 using namespace std;
+
 class StringManager
 {
     public:
         StringManager();
         virtual ~StringManager();
         string replaceString(string str, string r1, string r2);
-        const vector<string> explode(const string& s, const char& c);
-        const vector<string> multExplode(const string &s, const char &c1, const char &c2)
+        string replaceChar(string str, char c1, char c2);
+        const vector<string> explodeChar(const string& s, const char& c);
+        const vector<string> multExplodeChar(const string &s, const char &c1, const char &c2);
+        const vector<string> explodeString(const string &str, const string &s1);
         string trim(string str);
-        string toString(T Number);
     protected:
 
     private:

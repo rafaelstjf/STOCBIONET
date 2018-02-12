@@ -12,8 +12,8 @@ class Delay
   public:
     Delay();
     ~Delay();
-    void setValue(double value);
-    void setVariation(double variation);
+    void setValue(double val);
+    void setVariation(double var);
     double getValue();
     double getVariation();
 };

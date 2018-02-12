@@ -5,14 +5,12 @@ quantity = 0;
 
 }
 SpecieQuantity::~SpecieQuantity(){
-    delete delay;
-    delete specie;
 }
 int SpecieQuantity::getQuantity(){
     return quantity;
 }
-void SpecieQuantity::setQuantity(int quantity){
-    this.quantity = quantity;
+void SpecieQuantity::setQuantity(int quant){
+    quantity = quant;
 }
 Delay SpecieQuantity::getDelay(){
     return delay;
@@ -20,9 +18,9 @@ Delay SpecieQuantity::getDelay(){
 Specie SpecieQuantity::getSpecie(){
     return specie;
 }
-void SpecieQuantity::setSpecie(Specie specie){
-    this.specie = specie;
+void SpecieQuantity::setSpecie(Specie sp){
+   specie = sp;
 }
-void SpecieQuantity::setDelay(Delay delay){
-    this.delay = delay;
+void SpecieQuantity::setDelay(Delay de){
+    delay = de;
 }

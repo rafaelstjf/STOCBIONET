@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 
+using namespace std;
 class Specie
 {
   private:
@@ -13,8 +14,8 @@ class Specie
   public:
     Specie();
     ~Specie();
-    void setName(string name);
-    void setNumber(long int number);
+    void setName(string n);
+    void setNumber(long int num);
     string getName();
     long int getNumber();
 };

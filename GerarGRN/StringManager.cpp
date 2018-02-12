@@ -9,6 +9,18 @@ StringManager::~StringManager()
 {
     //dtor
 }
+string StringManager::replaceChar(string str, char c1, char c2)
+{
+    string outputString;
+    for(int i = 0; i< str.size(); i++)
+    {
+        if(str[i] == c1)
+            outputString.append(1, c2);
+        else
+            outputString.append(1, str[i]);
+    }
+    return outputString;
+}
 string StringManager::replaceString(string str, string r1, string r2)
 {
     string outputString;
@@ -32,7 +44,8 @@ string StringManager::replaceString(string str, string r1, string r2)
                 }
             }
             if (rIndex == r1.length() - 1)
-            { //substring matches
+            {
+                //substring matches
                 for (int j = 0; j < r2.length(); j++)
                 {
                     char c = r2[j];
@@ -58,14 +71,14 @@ string StringManager::replaceString(string str, string r1, string r2)
     }
     return outputString;
 }
-const vector<string> StringManager::explode(const string &s, const char &c)
+const vector<string> StringManager::explodeChar(const string &s, const char &c)
 {
     //source: http://www.cplusplus.com/articles/2wA0RXSz/
-    string buff{""};
+    string buff;
     vector<string> v;
-
-    for (auto n : s)
+    for(int i = 0; i<s.size(); i++)
     {
+        char n = s[i];
         if (n != c)
             buff += n;
         else if (n == c && buff != "")
@@ -84,30 +97,25 @@ string StringManager::trim(string str)
     string output;
     for (int i = 0; i < str.size(); i++)
     {
-        if (str[i] != " ")
+        if (str[i] != ' ')
             output.append(1, str[i]);
     }
     return output;
 }
 
-string StringManager::toString(T Number)
+const vector<string> StringManager::multExplodeChar(const string &s, const char &c1, const char &c2)
 {
-    stringstream ss;
-    ss << Number;
-    return ss.str();
-}
-const vector<string> StringManager::multExplode(const string &s, const char &c1, const char &c2)
-{
-    vector<string> v = explode(s, c1);
+    vector<string> v = explodeChar(s, c1);
     vector<string> v2;
-    string buff = {""};
+    string buff;
     for (int i = 0; i < v.size(); i++)
     {
-        for (auto n : v[i])
+        for(int j = 0; j< v[i].size(); j++)
         {
-            if (v[i] != c2)
+            char n = v[i][j];
+            if (v[i][j] != c2)
                 buff += v[i];
-            else if (v[i] == c2 && buff != "")
+            else if (v[i][j] == c2 && buff != "")
             {
                 v2.push_back(buff);
                 buff = "";
@@ -115,7 +123,29 @@ const vector<string> StringManager::multExplode(const string &s, const char &c1,
         }
         if (buff != "")
             v2.push_back(buff);
-        buff = {""};
+        buff = "";
     }
     return v2;
+}
+const vector<string> StringManager::explodeString(const string &str, const string &s1)
+{
+    string buffer;
+    vector<string> v;
+    for(int i = 0; i< str.size(); i++)
+    {
+        if(str[i]==s1[0] && str[i+1] == s1[1])
+        {
+            v.push_back(buffer);
+            buffer = "";
+            i++;
+        }
+        else
+        {
+            buffer.append(1,str[i]);
+        }
+    }
+    v.push_back(buffer);
+    return v;
+}
+const vector<string> StringManager::multExplodeString(const string &str, const string &s1){
 }

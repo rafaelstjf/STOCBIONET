@@ -16,17 +16,17 @@ string Reaction::getName(){
 string Reaction::getTextRepresentation(){
     return textRepresentation;
 }
-void Reaction::setName(string name){
-    this.name = name;
+void Reaction::setName(string n){
+    name = n;
 }
-void Reaction::setTextRepresentation(string textRepresentation){
-    this.textRepresentation = textRepresentation;
+void Reaction::setTextRepresentation(string textRep){
+    textRepresentation = textRep;
 }
 double Reaction::getRate(){
     return rate;
 }
-void Reaction::setRate(double rate){
-    this.rate = rate;
+void Reaction::setRate(double r){
+   rate = r;
 }
 list<SpecieQuantity> Reaction::getReactants(){
     return reactants;
@@ -34,9 +34,9 @@ list<SpecieQuantity> Reaction::getReactants(){
 list<SpecieQuantity> Reaction::getProducts(){
     return products;
 }
-void Reaction::setReactants(list<SpecieQuantity> reactants){
-    this.reactants = reactants;
+void Reaction::setReactants(list<SpecieQuantity> reac){
+    reactants = reac;
 }
-void Reaction::setProducts(list<SpecieQuantity> products){
-    this.products = products;
+void Reaction::setProducts(list<SpecieQuantity> prod){
+    products = prod;
 }

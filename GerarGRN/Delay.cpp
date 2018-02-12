@@ -16,11 +16,11 @@ double Delay::getVariation()
 {
     return variation;
 }
-void Delay::setValue(double value)
+void Delay::setValue(double val)
 {
-    this.value = value;
+    value = val;
 }
-void Delay::setVariation(double variation)
+void Delay::setVariation(double var)
 {
-    this.variation = variation;
+    variation = var;
 }

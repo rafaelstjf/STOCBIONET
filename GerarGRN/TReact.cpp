@@ -10,32 +10,32 @@ TReact::~TReact()
 {
     delete sm;
 }
-list<Reaction> TReact::getReactions(string textToTranslate, map<string, long int> speciesAndNumbers, map<string, long int> speciesQuantity, list<string> modelRepresentation)
+vector<Reaction> TReact::getReactions(string textToTranslate, map<string, long int> speciesAndNumbers, map<string, long int> speciesQuantity, vector<string> modelRepresentation)
 {
     string x;
     Reaction react;
-    list<Reaction> ret;
-    list<string> newLinesX;
-    list<string> newLines;
-    list<string> modelRepresentation;
+    vector<Reaction> ret;
+    vector<string> newLinesX;
+    vector<string> newLines;
     vector<string> con;
     constants.clear();
     reactionCounter = 0;
     specieCounter = 0;
     textToTranslate = sm->replaceString(textToTranslate, "\r\n", "");
     textToTranslate = sm->replaceString(textToTranslate, "\n", "");
-    vector<string> lines = sm->explode(TextToTranslate, ';');
-    for (i = 0; i < lines.size(); i++)
+    vector<string> lines = sm->explodeChar(textToTranslate, ';');
+    for (int i = 0; i < lines.size(); i++)
     {
         x = lines[i];
         newLines.clear();
         newLinesX.clear();
+        string lineOrig;
         getLines(newLinesX, lineOrig);
         for (int j = 0; j < newLinesX.size(); j++)
         {
-            string y = sm - replaceChar(x, '{', ']');
+            string y = sm ->replaceChar(x, '{', ']');
             y = sm->replaceChar(y, '}', ']');
-            getLines(newlines, y);
+            getLines(newLines, y);
         }
         for (int j = 0; j < newLines.size(); j++)
         {
@@ -53,7 +53,7 @@ list<Reaction> TReact::getReactions(string textToTranslate, map<string, long int
                 }
                 else
                 {
-                    con = sm->explode(line, '=');
+                    con = sm->explodeChar(line, '=');
                     if (con.size() != 2)
                     {
                         cout << "Invalid constant " << line << endl;
@@ -88,7 +88,7 @@ list<Reaction> TReact::getReactions(string textToTranslate, map<string, long int
     }
     return ret;
 }
-void TReact::getLines(list<string> newLines, string lineOrig)
+void TReact::getLines(vector<string> newLines, string lineOrig)
 {
     size_t found;
     found = lineOrig.find("[...]");
@@ -104,7 +104,7 @@ void TReact::getLines(list<string> newLines, string lineOrig)
         string plus = "";
         if (key.find("+") != string::npos)
         {
-            vector<string> valK = sm->explode(key, '+');
+            vector<string> valK = sm->explodeChar(key, '+');
             keyOri = valK[0];
             key = keyOri;
             plis = valK[1];
@@ -122,7 +122,7 @@ void TReact::getLines(list<string> newLines, string lineOrig)
         }
         if (key.find("%") != string::npos)
         {
-            vector<string> valK = sm->explode(key, '%');
+            vector<string> valK = sm->explodeChar(key, '%');
             key = keyOri;
             plus = valK[1];
             int n;
@@ -149,7 +149,7 @@ string TReact::getLineSum2(string lineOrig)
         string plus = "";
         if (key.find("+") != string::npos)
         {
-            vector<string> valK = sm->explode(key, '+');
+            vector<string> valK = sm->explodeChar(key, '+');
             keyOri = valK[0];
             key = keyOri;
             plus = valK[1];
@@ -175,7 +175,7 @@ string TReact::getLineSum(string lineOrig)
         string plus = "";
         if (key.find("+") != string::npos)
         {
-            vector<string> valK = sm->explode(key, '+');
+            vector<string> valK = sm->explodeChar(key, '+');
             keyOri = valK[0];
             key = keyOri;
             plus = valK[1];
@@ -198,12 +198,12 @@ Reaction *TReact::getTranslatedReaction(string textReact)
     reactionCounter + ;
     if (textReact.find(':') == string::npos)
         cout << "Invalid reaction: " << textReact << endl;
-    reactionSplit = sm->explode(textReact, ':');
+    reactionSplit = sm->explodeChar(textReact, ':');
     if (reactionSplit.size() != 2)
         cout << "Invalid reaction: " << textReac << endl;
     if (reactionSplit[0].find(',') != string::npos)
     {
-        vector<string> reactNameAndRate = sm->explode(reactionSplit[0], ',');
+        vector<string> reactNameAndRate = sm->explodeChar(reactionSplit[0], ',');
         react->setName(sm->trim(reactNameAndRate[0]));
         string indexStr = sm->(reactNameAndRate[1]);
         int indexRate = atoi(indexStr.c_str());
@@ -216,15 +216,15 @@ Reaction *TReact::getTranslatedReaction(string textReact)
     }
     react->setTextRepresentation(sm->trim(reactionSplit[1]));
 }
-list<SpecieQuantity> TReact::getListOfSpeciesQuantity(string speciesQuantityText)
+vector<SpecieQuantity> TReact::getListOfSpeciesQuantity(string speciesQuantityText)
 {
-    list<SpecieQuantity> ret;
+    vector<SpecieQuantity> ret;
     SpecieQuantity specQ;
     string specQ;
     speciesQuantityText = sm->trim(speciesQuantityText);
     if (speciesQuantityText.size() != 0)
     {
-        vector<string> specQTextList = sm->explode(speciesQuantityText, '+');
+        vector<string> specQTextList = sm->explodeChar(speciesQuantityText, '+');
         fo(int i = 0; i < specQTextList.size(); i++)
         {
             specQ = getSpecieQuantity(specQTextList[i]);
@@ -244,7 +244,7 @@ SpecieQuantity TReact::getSpecieQuantity(string specQText)
     stringstream sbNumber;
     while(position < specQText.size() && ){
         sbNumber << specQText[position];
-        
+
     }
     string s = sbNumber.str();
     s = sm->trim(s);
@@ -277,7 +277,7 @@ SpecieQuantity TReact::getSpecieQuantity(string specQText)
     string delay  = sm->trim(sm->toString(sbDelay));
     if(delay.size() > 0){
         if(delay.find(',') != string::npos){
-            vector<string> delays = sm->explode(delay, ',');
+            vector<string> delays = sm->explodeChar(delay, ',');
             specQDelay.setValue(atof(constants[sm->trim(delays[0])]));
             specQDelay.setVariation(atof(constants[sm->trim(delays[1])]));
         }else{
@@ -296,12 +296,12 @@ Reaction TReact::getTranslatedReaction(string textReact){
     if(textReact.find(':') == string::npos){
         cout << "Invalid reaction: " << textReact << endl;
     }
-    reactionSplit = sm->explode(textReact, ',');
+    reactionSplit = sm->explodeChar(textReact, ',');
     if(reactionSplit.size() != 2){
         cout << "Invalid reaction: " << textReact << endl;
     }
     if(reactionSplit[0].find(',') != string::npos){
-        vector<string> reactNameAndRate = sm->explode(reactionSplit[0], ',');
+        vector<string> reactNameAndRate = sm->explodeChar(reactionSplit[0], ',');
         react.setName(sm-trim(reactionSplit[0]));
         react.setRate(constants[sm->trim(reactAndName[1])]);
     }else{
@@ -309,12 +309,12 @@ Reaction TReact::getTranslatedReaction(string textReact){
         react.setRate(constants[sm->trim(reactionSplit[0]]));
     }
     react.setTextRepresentation(sm->trim(reactionSplit[1]));
-    reactionSplit = sm->multExplode(react.getTextRepresentation, '->', '=>');
+    reactionSplit = sm->multExplodeChar(react.getTextRepresentation, '->', '=>');
     react.setReactants(getListOfSpeciesQuantity(reactionSplit[0]));
     react.setProducts(getListOfSpeciesQuantity(reactionSplit[1]));
     return react;
 }
-void TReact::getSpecialNewLines(list<string> newLines, string lineOrig){
+void TReact::getSpecialNewLines(vector<string> newLines, string lineOrig){
 const int nMax = 5;
 int n = 1;
 int m = 0;
@@ -336,7 +336,7 @@ for(n = 1; n<= (nMax/2); n++){
             if(!even){
                 lineX = sm->replaceString(lineX, "(d#)", "");
                 lineX = sm->replaceString(lineX, "(d@)", "");
-                
+
             }
             even = !even;
             newLines.insert(lineX);

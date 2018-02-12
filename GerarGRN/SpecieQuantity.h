@@ -17,10 +17,10 @@ class SpecieQuantity
     SpecieQuantity();
     ~SpecieQuantity();
     int getQuantity();
-    void setQuantity(int quantity);
+    void setQuantity(int quant);
     Specie getSpecie();
-    void SetSpecie(Specie specie);
+    void setSpecie(Specie sp);
     Delay getDelay();
-    void setDelay(Delay delay);
+    void setDelay(Delay del);
 };
 #endif

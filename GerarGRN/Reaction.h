@@ -19,14 +19,14 @@ class Reaction
     Reaction();
     ~Reaction();
     string getName();
-    void setName(string name);
+    void setName(string n);
     string getTextRepresentation();
-    void setTextRepresentation(string textRepresentation);
+    void setTextRepresentation(string textRep);
     double getRate();
-    void setRate(double rate);
+    void setRate(double r);
     list<SpecieQuantity> getReactants();
     list<SpecieQuantity> getProducts();
-    void setReactants(list<SpecieQuantity> reactants);
-    void setProducts(list<SpecieQuantity> products);
+    void setReactants(list<SpecieQuantity> reac);
+    void setProducts(list<SpecieQuantity> prod);
 };
 #endif

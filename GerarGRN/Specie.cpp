@@ -7,11 +7,11 @@ Specie::Specie(){
 Specie::~Specie(){
 
 }
-void Specie::setName(string name){
-    this.name = name;
+void Specie::setName(string n){
+  name = n;
 }
-void Specie::setNumber(long int number){
-    this.number = number;
+void Specie::setNumber(long int num){
+   number = num;
 }
 string Specie::getName(){
     return name;
