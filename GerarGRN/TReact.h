@@ -6,6 +6,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <stdlib.h>
 #include "SpecieQuantity.h"
 #include "Reaction.h"
 #include "StringManager.h"

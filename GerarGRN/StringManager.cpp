@@ -21,7 +21,7 @@ string StringManager::replaceChar(string str, char c1, char c2)
     }
     return outputString;
 }
-string StringManager::replaceString(string str, string r1, string r2)
+string StringManager::replaceString(string& str, string r1, string r2)
 {
     string outputString;
     int rIndex = 0;
@@ -147,5 +147,5 @@ const vector<string> StringManager::explodeString(const string &str, const strin
     v.push_back(buffer);
     return v;
 }
-const vector<string> StringManager::multExplodeString(const string &str, const string &s1){
-}
+//const vector<string> StringManager::multExplodeString(const string &str, const string &s1){
+

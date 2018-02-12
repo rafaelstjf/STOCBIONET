@@ -1,18 +1,23 @@
 #include <iostream>
-//#include "TReact.h"
-#include "StringManager.h"
 #include <string>
-#include <vector>
+#include <map>
 using namespace std;
 
 int main()
 {
-    StringManager* sm = new StringManager();
-    string batata = "A batata -> esta ->assando";
-    vector<string> teste = sm->explodeString(batata, "->");
-    cout << "Hello world!" << endl;
-    for(int i = 0; i< teste.size(); i++){
-        cout << teste[i] << endl;
-    }
-    return 0;
+   map<int, string> teste;
+teste[1] = "a";
+teste[2] = "c";
+teste[3] = "d";
+teste[4] = "e";
+teste[5] = "f";
+teste.insert(make_pair(1, "b"));
+map<int, string>::iterator it = teste.begin();
+while(it != teste.end())
+{
+    cout << it->first << " : " << it->second << endl << endl;
+    it++;
+
+}
+
 }
