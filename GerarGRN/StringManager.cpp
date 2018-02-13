@@ -133,11 +133,20 @@ const vector<string> StringManager::explodeString(const string &str, const strin
     vector<string> v;
     for(int i = 0; i< str.size(); i++)
     {
-        if(str[i]==s1[0] && str[i+1] == s1[1])
+        if(str[i]==s1[0])
         {
-            v.push_back(buffer);
-            buffer = "";
-            i++;
+            int tempI = i;
+            while(str[tempI] == s1[(tempI-i)] && (tempI - i) < s1.size()){
+                tempI++;
+            }
+            if(tempI == s1[s1.size()-1]){
+                v.push_back(buffer);
+                buffer = "";
+            }
+            else{
+                buffer.append(1,str[i]);
+                i++;
+            }
         }
         else
         {
@@ -147,5 +156,30 @@ const vector<string> StringManager::explodeString(const string &str, const strin
     v.push_back(buffer);
     return v;
 }
-//const vector<string> StringManager::multExplodeString(const string &str, const string &s1){
+const vector<string> StringManager::multExplodeString(const string &str, const string &s1, const string &s2){
+    vector<string> v1 = explodeString(str, s1);
+    vector<string> v2;
+    string buffer;
+    for(int i = 0; i < v1.size(); i++){
+        for(int j = 0; j < v1[i].size(); j++){
+            if(v1[i][j] == s2[0]){
+                int tempJ = j;
+                 while(v1[i][tempJ] == s2[(tempJ-j)] && (tempJ - j) < s2.size()){
+                tempJ++;
+            }
+            if(tempJ == s2[s2.size()-1]){
+                v2.push_back(buffer);
+                buffer = "";
+            }
+            else{
+                buffer.append(1,v1[i][j]);
+                i++;
+            }
+            }
+            v2.push_back(buffer);
+            buffer = "";
+        }
+    return v2;
+}
+}
 

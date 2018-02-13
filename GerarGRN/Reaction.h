@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <string>
-#include <list>
+#include <vector>
 #include "SpecieQuantity.h"
 using namespace std;
 
@@ -13,8 +13,8 @@ class Reaction
     string name;
     string textRepresentation;
     double rate;
-    list<SpecieQuantity> reactants;
-    list<SpecieQuantity> products;
+    vector<SpecieQuantity> reactants;
+    vector<SpecieQuantity> products;
     public:
     Reaction();
     ~Reaction();
@@ -24,9 +24,9 @@ class Reaction
     void setTextRepresentation(string textRep);
     double getRate();
     void setRate(double r);
-    list<SpecieQuantity> getReactants();
-    list<SpecieQuantity> getProducts();
-    void setReactants(list<SpecieQuantity> reac);
-    void setProducts(list<SpecieQuantity> prod);
+    vector<SpecieQuantity> getReactants();
+    vector<SpecieQuantity> getProducts();
+    void setReactants(vector<SpecieQuantity> reac);
+    void setProducts(vector<SpecieQuantity> prod);
 };
 #endif
