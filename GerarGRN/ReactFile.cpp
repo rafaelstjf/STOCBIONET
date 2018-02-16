@@ -9,7 +9,7 @@ ReactFile::~ReactFile()
 {
     //dtor
 }
-void ReactFile::writeOutputFile(vector<Reaction> reactions, map<string, long int> speciesNumber, map<string, long int> speciesQuantity, string outputfile, vector<string> modelrepresentation)
+void ReactFile::writeOutputFile(vector<Reaction>& reactions, map<string, long int>& speciesNumber, map<string, long int>& speciesQuantity, string outputfile, vector<string>& modelrepresentation)
 {
     int i;
     int j;
@@ -159,6 +159,7 @@ void ReactFile::writeOutputFile(vector<Reaction> reactions, map<string, long int
         }
         sw << "_end\n";
         outf << sw.str();
+        //cout << sw.str();
         outf.close();
     }
     else

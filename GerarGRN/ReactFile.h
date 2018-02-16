@@ -23,7 +23,7 @@ class ReactFile
 {
     public:
         ReactFile();
-        void writeOutputFile(vector<Reaction> reactions, map<string, long int> speciesNumber, map<string, long int> speciesQuantity, string outputfile, vector<string> modelrepresentation);
+        void writeOutputFile(vector<Reaction>& reactions, map<string, long int>& speciesNumber, map<string, long int>& speciesQuantity, string outputfile, vector<string>& modelrepresentation);
         virtual ~ReactFile();
 
     protected:

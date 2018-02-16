@@ -23,9 +23,9 @@ private:
     bool even;
     StringManager* sm;
     //functions
-    void getSpecialNewLines(vector<string> newLines, string lineOrig);
+    void getSpecialNewLines(vector<string>& newLines, string lineOrig);
     // void getLinesModulus(vector<string> newLines, string lineOrig);
-    void getLines(vector<string> newLines, string lineOrig);
+    void getLines(vector<string>& newLines, string lineOrig);
     string getLineSum2(string lineOrig);
     string getLineSum(string lineOrig);
     Reaction getTranslatedReaction(string textReact);
@@ -34,7 +34,7 @@ private:
 public:
     TReact();
     ~TReact();
-    vector<Reaction> getReactions(string textToTranslate, map<string, long int> speciesAndNumbers,map<string, long int> speciesQuantity, vector<string> modelRepresentation);
+    vector<Reaction> getReactions(string textToTranslate, map<string, long int>& speciesAndNumbers,map<string, long int>& speciesQuantity, vector<string>& modelRepresentation);
 
 
 };

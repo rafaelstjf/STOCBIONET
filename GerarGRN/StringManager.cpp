@@ -9,7 +9,7 @@ StringManager::~StringManager()
 {
     //dtor
 }
-string StringManager::replaceChar(string str, char c1, char c2)
+string StringManager::replaceChar(string& str, char c1, char c2)
 {
     string outputString;
     for(int i = 0; i< str.size(); i++)

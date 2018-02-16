@@ -1,6 +1,7 @@
 #include "TReact.h"
 
-namespace patch{
+namespace patch
+{
 template < typename T > std::string to_string( const T& n )
 {
     std::ostringstream stm ;
@@ -19,7 +20,7 @@ TReact::~TReact()
 {
     delete sm;
 }
-vector<Reaction> TReact::getReactions(string textToTranslate, map<string, long int> speciesAndNumbers, map<string, long int> speciesQuantity, vector<string> modelRepresentation)
+vector<Reaction> TReact::getReactions(string textToTranslate, map<string, long int>& speciesAndNumbers, map<string, long int>& speciesQuantity, vector<string>& modelRepresentation)
 {
     string x;
     Reaction react;
@@ -96,7 +97,7 @@ vector<Reaction> TReact::getReactions(string textToTranslate, map<string, long i
     }
     return ret;
 }
-void TReact::getLines(vector<string> newLines, string lineOrig)
+void TReact::getLines(vector<string>& newLines, string lineOrig)
 {
     size_t found;
     found = lineOrig.find("[...]");
@@ -109,6 +110,7 @@ void TReact::getLines(vector<string> newLines, string lineOrig)
         int idxStart = lineOrig.find("[") + 1;
         int idxEnd = lineOrig.find("]");
         string key = lineOrig.substr(idxStart, idxEnd - idxStart);
+        cout << "KEY: " << key << endl;
         string keyOri = "";
         string plus = "";
         if (key.find("+") != string::npos)
@@ -144,9 +146,36 @@ void TReact::getLines(vector<string> newLines, string lineOrig)
             string tempString = ("[" + patch::to_string(n) + "%" + patch::to_string(m) + "]");
             lineOrig = sm ->replaceString(lineOrig, tempString, patch::to_string(n + m));
             newLines.push_back(getLineSum2(lineOrig));
+
             return;
         }
+        long int var_end;
+        long int var_start;
+        if(keyOri == "")
+        {
+            var_start = constants[key + "_start"];
+            var_end = constants[key + "_end"];
+        }
+        else
+        {
+            var_start = constants[keyOri + "_start"];
+            var_end = constants[keyOri + "_end"];
+        }
+        string ori = lineOrig;
+        for(long int i = var_start; i<=var_end; i++)
+        {
+            ori = sm->replaceString(lineOrig, "[" + key + "]", patch::to_string(i));
+            ori = sm->replaceString(ori, "[" + key + "+", "[" + patch::to_string(i) + "+");
+            ori = sm->replaceString(ori, "+" + key + "]", "+" + patch::to_string(i) + "]");
+            getLines(newLines, ori);
+        }
     }
+    else
+    {
+        string lineToSeek = getLineSum(lineOrig);
+        newLines.push_back(lineToSeek);
+    }
+
 }
 string TReact::getLineSum2(string lineOrig)
 {
@@ -314,7 +343,7 @@ Reaction TReact::getTranslatedReaction(string textReact)
     react.setProducts(getListOfSpeciesQuantity(reactionSplit[1]));
     return react;
 }
-void TReact::getSpecialNewLines(vector<string> newLines, string lineOrig)
+void TReact::getSpecialNewLines(vector<string>& newLines, string lineOrig)
 {
     const int nMax = 5;
     int n = 1;

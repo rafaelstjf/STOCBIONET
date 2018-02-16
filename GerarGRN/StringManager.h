@@ -13,7 +13,7 @@ class StringManager
         StringManager();
         virtual ~StringManager();
         string replaceString(string &str, string r1, string r2);
-        string replaceChar(string str, char c1, char c2);
+        string replaceChar(string &str, char c1, char c2);
         const vector<string> explodeChar(const string& s, const char& c);
         const vector<string> multExplodeChar(const string &s, const char &c1, const char &c2);
         const vector<string> explodeString(const string &str, const string &s1);
