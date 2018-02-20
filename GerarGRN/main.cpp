@@ -24,10 +24,12 @@ int main()
         map<string, long int> speciesNumber;
         map<string, long int>speciesQuantity;
         vector<string> modelRepresentation;
-        TReact tr;
-        vector<Reaction> reactions = tr.getReactions(buffer.str(), speciesNumber, speciesQuantity, modelRepresentation);
-        ReactFile wtf;
-        wtf.writeOutputFile(reactions, speciesNumber, speciesQuantity, "saida.txt", modelRepresentation);
+        TReact* tr = new TReact();
+        vector<Reaction*> reactions = tr->getReactions(buffer.str(), speciesNumber, speciesQuantity, modelRepresentation);
+        ReactFile* wtf = new ReactFile();
+        wtf->writeOutputFile(reactions, speciesNumber, speciesQuantity, "saida.txt", modelRepresentation);
+        delete wtf;
+        delete tr;
 
     }
     else

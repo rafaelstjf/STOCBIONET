@@ -19,6 +19,7 @@ class StringManager
         const vector<string> explodeString(const string &str, const string &s1);
         const vector<string> multExplodeString(const string &str, const string &s1, const string &s2);
         string trim(string str);
+        bool isdigit(char c);
     protected:
 
     private:

@@ -28,15 +28,15 @@ double Reaction::getRate(){
 void Reaction::setRate(double r){
    rate = r;
 }
-vector<SpecieQuantity> Reaction::getReactants(){
+vector<SpecieQuantity*> Reaction::getReactants(){
     return reactants;
 }
-vector<SpecieQuantity> Reaction::getProducts(){
+vector<SpecieQuantity*> Reaction::getProducts(){
     return products;
 }
-void Reaction::setReactants(vector<SpecieQuantity> reac){
+void Reaction::setReactants(vector<SpecieQuantity*> &reac){
     reactants = reac;
 }
-void Reaction::setProducts(vector<SpecieQuantity> prod){
+void Reaction::setProducts(vector<SpecieQuantity*> &prod){
     products = prod;
 }

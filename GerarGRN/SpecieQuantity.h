@@ -10,17 +10,17 @@ class SpecieQuantity
 {
   private:
     int quantity;
-    Specie specie;
-    Delay delay;
+    Specie* specie;
+    Delay* delay;
 
   public:
     SpecieQuantity();
     ~SpecieQuantity();
     int getQuantity();
     void setQuantity(int quant);
-    Specie getSpecie();
-    void setSpecie(Specie sp);
-    Delay getDelay();
-    void setDelay(Delay del);
+    Specie* getSpecie();
+    void setSpecie(Specie* sp);
+    Delay* getDelay();
+    void setDelay(Delay* del);
 };
 #endif

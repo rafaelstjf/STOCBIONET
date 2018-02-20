@@ -20,42 +20,51 @@ TReact::~TReact()
 {
     delete sm;
 }
-vector<Reaction> TReact::getReactions(string textToTranslate, map<string, long int>& speciesAndNumbers, map<string, long int>& speciesQuantity, vector<string>& modelRepresentation)
+vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long int>& speciesAndNumbers, map<string, long int>& speciesQuantity, vector<string>& modelRepresentation)
 {
+    //receives the raw text in textToTranslate string and saves it in the data structures
     string x;
-    Reaction react;
-    vector<Reaction> ret;
+    Reaction* react;
+    vector<Reaction*> ret;
     vector<string> newLinesX;
     vector<string> newLines;
     vector<string> con;
     constants.clear();
     reactionCounter = 0;
     specieCounter = 0;
+    //removes the newline (\n)
     textToTranslate = sm->replaceString(textToTranslate, "\r\n", "");
     textToTranslate = sm->replaceString(textToTranslate, "\n", "");
+    //split the text in a vector
     vector<string> lines = sm->explodeChar(textToTranslate, ';');
     for (int i = 0; i < lines.size(); i++)
     {
-        x = lines[i];
+        string lineOrig = lines[i];
         newLines.clear();
         newLinesX.clear();
-        string lineOrig;
         getLines(newLinesX, lineOrig);
         for (int j = 0; j < newLinesX.size(); j++)
         {
-            string y = sm ->replaceChar(x, '{', ']');
-            y = sm->replaceChar(y, '}', ']');
-            getLines(newLines, y);
+            x = newLinesX[j];
+            x = sm ->replaceChar(x, '{', '[');
+            x = sm->replaceChar(x, '}', ']');
+            getLines(newLines, x);
         }
         for (int j = 0; j < newLines.size(); j++)
         {
             string line = newLines[j];
-            if (sm->trim(line).size() > 0)
+            line = sm->trim(line);
+            if (line.size() > 0)
             {
-                if (line.find('>') != string::npos)
+                if (line.find('>') != string::npos) //contains reaction
                 {
                     react = getTranslatedReaction(line);
-                    ret.push_back(react);
+                    vector<SpecieQuantity*> spc = react->getReactants();
+                    for(int i = 0; i<spc.size(); i++){
+                        cout << i << ": " << spc[i]->getSpecie()->getName() << endl;
+                    }
+                    if(react != NULL)
+                        ret.push_back(react);
                     modelRepresentation.push_back(sm->trim(line));
                 }
                 else
@@ -63,15 +72,15 @@ vector<Reaction> TReact::getReactions(string textToTranslate, map<string, long i
                     con = sm->explodeChar(line, '=');
                     if (con.size() != 2)
                     {
-                        cout << "Invalid constant " << line << endl;
+                        cout << "Invalid constant: " << line << endl;
                     }
                     else if (constants.find(con[0]) != constants.end())
                     {
-                        cout << "Duplicate constant" << line << endl;
+                        cout << "Duplicate constant:" << con[0] << endl;
                     }
                     else
                     {
-                        constants.insert(make_pair(con[0], atoi(sm->replaceChar(con[1], '.', ',').c_str())));
+                        constants.insert(make_pair(con[0], atof(sm->replaceChar(con[1], '.', ',').c_str())));
                         modelRepresentation.push_back(sm->trim(line));
                     }
                 }
@@ -79,6 +88,7 @@ vector<Reaction> TReact::getReactions(string textToTranslate, map<string, long i
         }
     }
     speciesAndNumbers = speciesNumber;
+    speciesQuantity.clear();
     map<string, long int>::iterator it = speciesAndNumbers.begin();
     while (it != speciesAndNumbers.end())
     {
@@ -97,7 +107,7 @@ vector<Reaction> TReact::getReactions(string textToTranslate, map<string, long i
     }
     return ret;
 }
-void TReact::getLines(vector<string>& newLines, string lineOrig)
+void TReact::getLines(vector<string>& newLines, string& lineOrig)
 {
     size_t found;
     found = lineOrig.find("[...]");
@@ -110,7 +120,6 @@ void TReact::getLines(vector<string>& newLines, string lineOrig)
         int idxStart = lineOrig.find("[") + 1;
         int idxEnd = lineOrig.find("]");
         string key = lineOrig.substr(idxStart, idxEnd - idxStart);
-        cout << "KEY: " << key << endl;
         string keyOri = "";
         string plus = "";
         if (key.find("+") != string::npos)
@@ -144,7 +153,7 @@ void TReact::getLines(vector<string>& newLines, string lineOrig)
             istringstream iss2(valK[1]);
             iss2 >> m;
             string tempString = ("[" + patch::to_string(n) + "%" + patch::to_string(m) + "]");
-            lineOrig = sm ->replaceString(lineOrig, tempString, patch::to_string(n + m));
+            lineOrig = sm ->replaceString(lineOrig, tempString, patch::to_string((n/100)* m));
             newLines.push_back(getLineSum2(lineOrig));
 
             return;
@@ -172,12 +181,13 @@ void TReact::getLines(vector<string>& newLines, string lineOrig)
     }
     else
     {
-        string lineToSeek = getLineSum(lineOrig);
+        string lineToSeek;
+        lineToSeek = getLineSum(lineOrig);
         newLines.push_back(lineToSeek);
     }
 
 }
-string TReact::getLineSum2(string lineOrig)
+string TReact::getLineSum2(string& lineOrig)
 {
     if (lineOrig.find("[") != string::npos)
     {
@@ -198,13 +208,13 @@ string TReact::getLineSum2(string lineOrig)
             int m;
             istringstream iss2(valK[1]);
             iss2 >> m;
-            string tempString = ("[" + patch::to_string(n) + "%" + patch::to_string(m) + "]");
+            string tempString = ("[" + patch::to_string(n) + "+" + patch::to_string(m) + "]");
             return (sm->replaceString(lineOrig, tempString, patch::to_string(n + m)));
         }
     }
     return lineOrig;
 }
-string TReact::getLineSum(string lineOrig)
+string TReact::getLineSum(string& lineOrig)
 {
     if (lineOrig.find("{") != string::npos)
     {
@@ -225,17 +235,18 @@ string TReact::getLineSum(string lineOrig)
             int m;
             istringstream iss2(valK[1]);
             iss2 >> m;
-            string tempString = ("{" + patch::to_string(n) + "%" + patch::to_string(m) + "}");
-            return (sm->replaceString(lineOrig, tempString, patch::to_string(n + m)));
+            string tempString = ("{" + patch::to_string(n) + "+" + patch::to_string(m) + "}");
+            lineOrig = sm->replaceString(lineOrig, tempString, patch::to_string(n + m));
+            return lineOrig;
         }
-        return lineOrig;
     }
+    return lineOrig;
 }
 
-vector<SpecieQuantity> TReact::getListOfSpeciesQuantity(string speciesQuantityText)
+vector<SpecieQuantity*> TReact::getListOfSpeciesQuantity(string& speciesQuantityText)
 {
-    vector<SpecieQuantity> ret;
-    SpecieQuantity specQ;
+    vector<SpecieQuantity*> ret;
+    SpecieQuantity* specQ = new SpecieQuantity();
     speciesQuantityText = sm->trim(speciesQuantityText);
     if (speciesQuantityText.size() != 0)
     {
@@ -248,26 +259,26 @@ vector<SpecieQuantity> TReact::getListOfSpeciesQuantity(string speciesQuantityTe
     }
     return ret;
 }
-SpecieQuantity TReact::getSpecieQuantity(string specQText)
+SpecieQuantity* TReact::getSpecieQuantity(string& specQText)
 {
     specQText = sm->trim(specQText);
-    SpecieQuantity spec;
+    SpecieQuantity* spec = new SpecieQuantity();
     int position = -1;
     stringstream sbNumber;
-    while(position < specQText.size())
+    while(position < specQText.size() && sm->isdigit(specQText[position]))
     {
         sbNumber << specQText[position];
-
+        position++;
     }
     string s = sbNumber.str();
     s = sm->trim(s);
     if(s.size() == 0)
     {
-
+        spec->setQuantity(1);
     }
     else
     {
-        spec.setQuantity(atoi(patch::to_string(s).c_str()));
+        spec->setQuantity(atoi(patch::to_string(s).c_str()));
     }
     stringstream sbName;
     position--;
@@ -276,22 +287,23 @@ SpecieQuantity TReact::getSpecieQuantity(string specQText)
         sbName << specQText[position];
         position++;
     }
-    Specie sp;
-    sp.setName(patch::to_string(sm->trim(sbName.str())));
-    spec.setSpecie(sp);
-    if(speciesNumber.find(sp.getName()) == speciesNumber.end())
+    Specie* sp = new Specie();
+    sp->setName(patch::to_string(sm->trim(sbName.str())));
+    spec->setSpecie(sp);
+    if(speciesNumber.find(sp->getName()) == speciesNumber.end())
     {
         specieCounter++;
-        speciesNumber.insert(make_pair(sp.getName(), specieCounter));
+        speciesNumber.insert(make_pair(sp->getName(), specieCounter));
 
     }
-    sp.setNumber(speciesNumber[sp.getName()]);
-    spec.setSpecie(sp);
-    Delay specQDelay;
+    sp->setNumber(speciesNumber[sp->getName()]);
+    spec->setSpecie(sp);
+    Delay* specQDelay = new Delay();
     stringstream sbDelay;
     while(position < specQText.size() && specQText[position] != ')')
     {
         sbDelay << specQText[position];
+        position++;
     }
     string delay  = sm->trim(patch::to_string(sbDelay));
     if(delay.size() > 0)
@@ -299,21 +311,21 @@ SpecieQuantity TReact::getSpecieQuantity(string specQText)
         if(delay.find(',') != string::npos)
         {
             vector<string> delays = sm->explodeChar(delay, ',');
-            specQDelay.setValue(constants[sm->trim(delays[0])]);
-            specQDelay.setVariation(constants[sm->trim(delays[1])]);
+            specQDelay->setValue(constants[sm->trim(delays[0])]);
+            specQDelay->setVariation(constants[sm->trim(delays[1])]);
         }
         else
         {
-            specQDelay.setValue(constants[delay]);
+            specQDelay->setValue(constants[delay]);
         }
     }
-    spec.setDelay(specQDelay);
+    spec->setDelay(specQDelay);
     return spec;
 
 }
-Reaction TReact::getTranslatedReaction(string textReact)
+Reaction* TReact::getTranslatedReaction(string& textReact)
 {
-    Reaction react;
+    Reaction* react = new Reaction();
     vector<string> reactionSplit;
     textReact = sm->trim(textReact);
     reactionCounter++;
@@ -321,7 +333,7 @@ Reaction TReact::getTranslatedReaction(string textReact)
     {
         cout << "Invalid reaction: " << textReact << endl;
     }
-    reactionSplit = sm->explodeChar(textReact, ',');
+    reactionSplit = sm->explodeChar(textReact, ':');
     if(reactionSplit.size() != 2)
     {
         cout << "Invalid reaction: " << textReact << endl;
@@ -329,21 +341,24 @@ Reaction TReact::getTranslatedReaction(string textReact)
     if(reactionSplit[0].find(',') != string::npos)
     {
         vector<string> reactNameAndRate = sm->explodeChar(reactionSplit[0], ',');
-        react.setName(sm->trim(reactionSplit[0]));
-        react.setRate(constants[sm->trim(reactNameAndRate[1])]);
+        react->setName(sm->trim(reactionSplit[0]));
+        react->setRate(constants[sm->trim(reactNameAndRate[1])]);
     }
     else
     {
-        react.setName("Reaction # " + patch::to_string(reactionCounter));
-        react.setRate(constants[sm->trim(reactionSplit[0])]);
+        react->setName("Reaction # " + patch::to_string(reactionCounter));
+        react->setRate(constants[sm->trim(reactionSplit[0])]);
     }
-    react.setTextRepresentation(sm->trim(reactionSplit[1]));
-    reactionSplit = sm->multExplodeString(react.getTextRepresentation(), "->", "=>");
-    react.setReactants(getListOfSpeciesQuantity(reactionSplit[0]));
-    react.setProducts(getListOfSpeciesQuantity(reactionSplit[1]));
+    react->setTextRepresentation(sm->trim(reactionSplit[1]));
+    reactionSplit = sm->multExplodeString(react->getTextRepresentation(), "->", "=>");
+    //reactants and products
+    vector<SpecieQuantity*> r = getListOfSpeciesQuantity(reactionSplit[0]);
+    vector<SpecieQuantity*> p = getListOfSpeciesQuantity(reactionSplit[1]);
+    react->setReactants(r);
+    react->setProducts(p);
     return react;
 }
-void TReact::getSpecialNewLines(vector<string>& newLines, string lineOrig)
+void TReact::getSpecialNewLines(vector<string>& newLines, string& lineOrig)
 {
     const int nMax = 5;
     int n = 1;

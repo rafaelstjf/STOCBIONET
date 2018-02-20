@@ -23,18 +23,18 @@ private:
     bool even;
     StringManager* sm;
     //functions
-    void getSpecialNewLines(vector<string>& newLines, string lineOrig);
+    void getSpecialNewLines(vector<string>& newLines, string& lineOrig);
     // void getLinesModulus(vector<string> newLines, string lineOrig);
-    void getLines(vector<string>& newLines, string lineOrig);
-    string getLineSum2(string lineOrig);
-    string getLineSum(string lineOrig);
-    Reaction getTranslatedReaction(string textReact);
-    vector<SpecieQuantity> getListOfSpeciesQuantity(string speciesQuantityText);
-    SpecieQuantity getSpecieQuantity(string specQText);
+    void getLines(vector<string>& newLines, string& lineOrig);
+    string getLineSum2(string& lineOrig);
+    string getLineSum(string& lineOrig);
+    Reaction* getTranslatedReaction(string& textReact);
+    vector<SpecieQuantity*> getListOfSpeciesQuantity(string& speciesQuantityText);
+    SpecieQuantity* getSpecieQuantity(string& specQText);
 public:
     TReact();
     ~TReact();
-    vector<Reaction> getReactions(string textToTranslate, map<string, long int>& speciesAndNumbers,map<string, long int>& speciesQuantity, vector<string>& modelRepresentation);
+    vector<Reaction*> getReactions(string textToTranslate, map<string, long int>& speciesAndNumbers,map<string, long int>& speciesQuantity, vector<string>& modelRepresentation);
 
 
 };

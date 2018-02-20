@@ -1,0 +1,95 @@
+#Modelo - begin
+#k1=1;
+#k2=2;
+#k3=0.0042;
+#k4=10;
+#k5=1;
+#t1=1;
+#t2=10;
+#t3=40;
+#v1=10;
+#RNAP=2;
+#Pro=1;
+#P=0;
+#RBS=0;
+#R=0;
+#i_start=1;
+#i_end=4;
+#j_start=0;
+#j_end=3;
+#transcription,k1:RNAP1Pro]->RNAP1(t2)Pro](t1)P(t2);
+#transcription,k1:RNAP2Pro]->RNAP2(t2)Pro](t1)P(t2);
+#transcription,k1:RNAP3Pro]->RNAP3(t2)Pro](t1)P(t2);
+#transcription,k1:RNAP4Pro]->RNAP4(t2)Pro](t1)P(t2);
+#translation,k2:Pro02RBS->Pro02RBS(t2)3R(t3,v1);
+#translation,k2:Pro12RBS->Pro12RBS(t2)3R(t3,v1);
+#translation,k2:Pro22RBS->Pro22RBS(t2)3R(t3,v1);
+#translation,k2:Pro32RBS->Pro32RBS(t2)3R(t3,v1);
+#Modelo - end
+#Reactions number.
+_reac_num:8
+#Species number.
+_spec_num:0
+#Species names.
+_spec_nam:
+_begin
+
+_end
+#Species quantity.
+_spec_qty:
+_begin
+
+_end
+#Reagents. Lines = reactions. Columns = species
+_reagents:
+_begin
+
+
+
+
+
+
+
+
+_end
+#Products. Lines = reactions. Columns = species
+_products:
+_begin
+
+
+
+
+
+
+
+
+_end
+#Reaction constants for each reaction.
+_rt_const:
+_begin
+1;1;1;1;2;2;2;2
+_end
+#Delays for each product. Lines = reactions. Columns = species.
+_p_delays:
+_begin
+1;1;1;1;2;2;2;2
+1;1;1;1;2;2;2;2
+1;1;1;1;2;2;2;2
+1;1;1;1;2;2;2;2
+1;1;1;1;2;2;2;2
+1;1;1;1;2;2;2;2
+1;1;1;1;2;2;2;2
+1;1;1;1;2;2;2;2
+_end
+#Delays variations for each product. Lines = reactions. Columns = species.
+_p_delays:
+_begin
+1;1;1;1;2;2;2;2
+1;1;1;1;2;2;2;2
+1;1;1;1;2;2;2;2
+1;1;1;1;2;2;2;2
+1;1;1;1;2;2;2;2
+1;1;1;1;2;2;2;2
+1;1;1;1;2;2;2;2
+1;1;1;1;2;2;2;2
+_end

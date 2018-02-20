@@ -12,15 +12,15 @@ int SpecieQuantity::getQuantity(){
 void SpecieQuantity::setQuantity(int quant){
     quantity = quant;
 }
-Delay SpecieQuantity::getDelay(){
+Delay* SpecieQuantity::getDelay(){
     return delay;
 }
-Specie SpecieQuantity::getSpecie(){
+Specie* SpecieQuantity::getSpecie(){
     return specie;
 }
-void SpecieQuantity::setSpecie(Specie sp){
+void SpecieQuantity::setSpecie(Specie* sp){
    specie = sp;
 }
-void SpecieQuantity::setDelay(Delay de){
+void SpecieQuantity::setDelay(Delay* de){
     delay = de;
 }

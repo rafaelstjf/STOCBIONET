@@ -9,7 +9,7 @@ ReactFile::~ReactFile()
 {
     //dtor
 }
-void ReactFile::writeOutputFile(vector<Reaction>& reactions, map<string, long int>& speciesNumber, map<string, long int>& speciesQuantity, string outputfile, vector<string>& modelrepresentation)
+void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long int>& speciesNumber, map<string, long int>& speciesQuantity, string outputfile, vector<string>& modelrepresentation)
 {
     int i;
     int j;
@@ -18,7 +18,7 @@ void ReactFile::writeOutputFile(vector<Reaction>& reactions, map<string, long in
     string token;
     int specNumb;
     int reacNumb;
-    vector<SpecieQuantity> sQ;
+    vector<SpecieQuantity*> sQ;
     specNumb = speciesNumber.size();
     reacNumb = reactions.size();
     int reactants[reacNumb][specNumb];
@@ -31,27 +31,27 @@ void ReactFile::writeOutputFile(vector<Reaction>& reactions, map<string, long in
     {
         for(i = 0; i<reactions.size(); i++)
         {
-            Reaction r = reactions[i];
-            sQ = r.getReactants();
+            Reaction* r = reactions[i];
+            sQ = r->getReactants();
             for(int l = 0; l < sQ.size(); l++)
             {
-                reactants[i][sQ[l].getSpecie().getNumber()] = sQ[l].getQuantity();
+                reactants[i][sQ[l]->getSpecie()->getNumber()] = sQ[l]->getQuantity();
             }
-            sQ = r.getProducts();
+            sQ = r->getProducts();
             for(int l = 0; l < sQ.size(); l++)
             {
-                products[i][sQ[l].getSpecie().getNumber()] = sQ[l].getQuantity();
-                if(sQ[l].getDelay().getValue() > 0)
-                    delaysValues[i][sQ[l].getSpecie().getNumber()] = sQ[l].getDelay().getValue();
-                if(sQ[l].getDelay().getVariation() > 0)
-                    delaysVariations[i][sQ[l].getSpecie().getNumber()] = sQ[l].getDelay().getVariation();
+                products[i][sQ[l]->getSpecie()->getNumber()] = sQ[l]->getQuantity();
+                if(sQ[l]->getDelay()->getValue() > 0)
+                    delaysValues[i][sQ[l]->getSpecie()->getNumber()] = sQ[l]->getDelay()->getValue();
+                if(sQ[l]->getDelay()->getVariation() > 0)
+                    delaysVariations[i][sQ[l]->getSpecie()->getNumber()] = sQ[l]->getDelay()->getVariation();
             }
         }
         stringstream sw;
         sw << "#Modelo - begin\n";
         for(int k = 0; k<modelrepresentation.size(); k++)
         {
-            sw << "#" << k << ";\n";
+            sw << "#" << modelrepresentation[k] << ";\n";
         }
         sw << "#Modelo - end\n";
         sw << "#Reactions number.\n";
@@ -122,7 +122,7 @@ void ReactFile::writeOutputFile(vector<Reaction>& reactions, map<string, long in
         line.clear();
         for(i = 0; i<reactions.size(); i++)
         {
-            line << token + patch::to_string(reactions[i].getRate());
+            line << token + patch::to_string(reactions[i]->getRate());
             token = ";";
         }
         sw << line.str() << "\n";

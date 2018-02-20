@@ -182,4 +182,9 @@ const vector<string> StringManager::multExplodeString(const string &str, const s
     return v2;
 }
 }
-
+bool StringManager::isdigit(char c){
+    if(c >= 48 && c <= 57)
+        return true;
+    else
+        return false;
+}

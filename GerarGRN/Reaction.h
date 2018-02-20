@@ -13,8 +13,8 @@ class Reaction
     string name;
     string textRepresentation;
     double rate;
-    vector<SpecieQuantity> reactants;
-    vector<SpecieQuantity> products;
+    vector<SpecieQuantity*> reactants;
+    vector<SpecieQuantity*> products;
     public:
     Reaction();
     ~Reaction();
@@ -24,9 +24,9 @@ class Reaction
     void setTextRepresentation(string textRep);
     double getRate();
     void setRate(double r);
-    vector<SpecieQuantity> getReactants();
-    vector<SpecieQuantity> getProducts();
-    void setReactants(vector<SpecieQuantity> reac);
-    void setProducts(vector<SpecieQuantity> prod);
+    vector<SpecieQuantity*> getReactants();
+    vector<SpecieQuantity*> getProducts();
+    void setReactants(vector<SpecieQuantity*> &reac);
+    void setProducts(vector<SpecieQuantity*> &prod);
 };
 #endif
