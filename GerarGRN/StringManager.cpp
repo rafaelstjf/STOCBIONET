@@ -24,49 +24,36 @@ string StringManager::replaceChar(string& str, char c1, char c2)
 string StringManager::replaceString(string& str, string r1, string r2)
 {
     string outputString;
-    int rIndex = 0;
-    int nextIndex = 0;
+    int tempIndex = 0;
     for (int i = 0; i < str.length(); i++)
     {
         if (str[i] == r1[0])
         {
-            rIndex = 0;
-            while (str[i] == r1[rIndex])
+            tempIndex = i;
+            while ((str[tempIndex] == r1[tempIndex - i])) //first character is the same
             {
-                if (rIndex == r1.length() - 1)
+                if((tempIndex-i) == r1.length()-1)
                     break;
-                if (i == str.length() - 1)
-                    break;
-                else
-                {
-                    i++;
-                    rIndex++;
-                }
+               tempIndex++;
             }
-            if (rIndex == r1.length() - 1)
+            if ((tempIndex-i) == (r1.length() - 1) && r1[tempIndex-i] == str[tempIndex])
             {
                 //substring matches
                 for (int j = 0; j < r2.length(); j++)
                 {
                     char c = r2[j];
-                    outputString.append(1, c);
+                    outputString.append(1,c);
                 }
+                i = tempIndex;
             }
             else
             {
-                for (int j = i - rIndex - 2; j == i; j++)
-                {
-                    char c = r2[j];
-                    outputString.append(1, c);
-                }
-                if (i == str.length() - 1)
-                    outputString.append(1, str[i]);
-                rIndex = 0;
+               outputString.append(1,str[i]);
             }
         }
         else
         {
-            outputString.append(1, str[i]);
+            outputString.append(1,str[i]);
         }
     }
     return outputString;
@@ -98,7 +85,7 @@ string StringManager::trim(string str)
     for (int i = 0; i < str.size(); i++)
     {
         if (str[i] != ' ')
-            output.append(1, str[i]);
+            output+= str[i];
     }
     return output;
 }
@@ -139,7 +126,7 @@ const vector<string> StringManager::explodeString(const string &str, const strin
             while(str[tempI] == s1[(tempI-i)] && (tempI - i) < s1.size()){
                 tempI++;
             }
-            if(tempI == s1[s1.size()-1]){
+            if(tempI == s1[s1.size()-1] && s1[tempI] == str[tempI]){
                 v.push_back(buffer);
                 buffer = "";
             }

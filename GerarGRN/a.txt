@@ -16,5 +16,5 @@ i_start=1;
 i_end=4;
 j_start=0;
 j_end=3;
-transcription,k1:RNAP[i] + Pro[j] -> RNAP[i](t2) + Pro[j](t1) + P(t2);
-translation,k2:Pro[j] + 2 RBS -> Pro[j] + 2 RBS(t2) + 3 R(t3, v1);
+transcription,k1:RNAP[i] + Pro[j] - RNAP[i](t2) + Pro[j](t1) + P(t2);
+translation,k2:Pro[j] + 2 RBS - Pro[j] + 2 RBS(t2) + 3 R(t3, v1);

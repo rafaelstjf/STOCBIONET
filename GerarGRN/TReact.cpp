@@ -1,5 +1,6 @@
 #include "TReact.h"
 
+//patch necessary to use to_string function
 namespace patch
 {
 template < typename T > std::string to_string( const T& n )
@@ -23,19 +24,22 @@ TReact::~TReact()
 vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long int>& speciesAndNumbers, map<string, long int>& speciesQuantity, vector<string>& modelRepresentation)
 {
     //receives the raw text in textToTranslate string and saves it in the data structures
-    string x;
     Reaction* react;
     vector<Reaction*> ret;
     vector<string> newLinesX;
     vector<string> newLines;
     vector<string> con;
+    //resets everything
     constants.clear();
     reactionCounter = 0;
     specieCounter = 0;
+    even = false;
+
     //removes the newline (\n)
     textToTranslate = sm->replaceString(textToTranslate, "\r\n", "");
     textToTranslate = sm->replaceString(textToTranslate, "\n", "");
-    //split the text in a vector
+
+    //divides the text in to a vector separing by the ';'
     vector<string> lines = sm->explodeChar(textToTranslate, ';');
     for (int i = 0; i < lines.size(); i++)
     {
@@ -45,7 +49,7 @@ vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long 
         getLines(newLinesX, lineOrig);
         for (int j = 0; j < newLinesX.size(); j++)
         {
-            x = newLinesX[j];
+            string x = newLinesX[j];
             x = sm ->replaceChar(x, '{', '[');
             x = sm->replaceChar(x, '}', ']');
             getLines(newLines, x);
@@ -56,15 +60,15 @@ vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long 
             line = sm->trim(line);
             if (line.size() > 0)
             {
-                if (line.find('>') != string::npos) //contains reaction
+                if (line.find('-') != string::npos) //contains reaction
                 {
                     react = getTranslatedReaction(line);
-                    vector<SpecieQuantity*> spc = react->getReactants();
-                    for(int i = 0; i<spc.size(); i++){
-                        cout << i << ": " << spc[i]->getSpecie()->getName() << endl;
-                    }
                     if(react != NULL)
+                    {
+                        vector<SpecieQuantity*> spc = react->getReactants();
                         ret.push_back(react);
+                    }
+
                     modelRepresentation.push_back(sm->trim(line));
                 }
                 else
@@ -80,7 +84,8 @@ vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long 
                     }
                     else
                     {
-                        constants.insert(make_pair(con[0], atof(sm->replaceChar(con[1], '.', ',').c_str())));
+                        cout << con[0] << " " << con[1] << endl;
+                        constants.insert(make_pair(con[0], atof(con[1].c_str())));
                         modelRepresentation.push_back(sm->trim(line));
                     }
                 }
@@ -105,14 +110,18 @@ vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long 
         }
         it++;
     }
+    cout << "Reactions sucessfuly imported" << endl;
     return ret;
 }
-void TReact::getLines(vector<string>& newLines, string& lineOrig)
+void TReact::getLines(vector<string>& newLines, string lineOrig)
 {
     size_t found;
     found = lineOrig.find("[...]");
     if (found != string::npos)
+    {
         return; //string found
+    }
+
     found = lineOrig.find("[");
     if (found != string::npos)
     {
@@ -144,6 +153,7 @@ void TReact::getLines(vector<string>& newLines, string& lineOrig)
         if (key.find("%") != string::npos)
         {
             vector<string> valK = sm->explodeChar(key, '%');
+            keyOri = valK[0];
             key = keyOri;
             plus = valK[1];
             int n;
@@ -158,22 +168,28 @@ void TReact::getLines(vector<string>& newLines, string& lineOrig)
 
             return;
         }
-        long int var_end;
-        long int var_start;
-        if(keyOri == "")
+        int var_end;
+        int var_start;
+        if(keyOri.length() == 0)
         {
-            var_start = constants[key + "_start"];
-            var_end = constants[key + "_end"];
+            string kp = key + "_start";
+            var_start = constants.find(kp)->second;
+            kp = key + "_end";
+            var_end = constants.find(kp)->second;
         }
         else
         {
-            var_start = constants[keyOri + "_start"];
-            var_end = constants[keyOri + "_end"];
+            string kp = keyOri + "_start";
+            var_start = constants.find(kp)->second;
+            kp = keyOri + "_end";
+            var_end = constants.find(kp)->second;
         }
         string ori = lineOrig;
-        for(long int i = var_start; i<=var_end; i++)
+        //cout << "var_start: " << var_start << " var_end: " << var_end << endl;
+        for(int i = var_start; i<=var_end; i++)
         {
-            ori = sm->replaceString(lineOrig, "[" + key + "]", patch::to_string(i));
+            string temp = ('[' + key+ ']');
+            ori = sm->replaceString(lineOrig, temp, patch::to_string(i));
             ori = sm->replaceString(ori, "[" + key + "+", "[" + patch::to_string(i) + "+");
             ori = sm->replaceString(ori, "+" + key + "]", "+" + patch::to_string(i) + "]");
             getLines(newLines, ori);
@@ -187,7 +203,7 @@ void TReact::getLines(vector<string>& newLines, string& lineOrig)
     }
 
 }
-string TReact::getLineSum2(string& lineOrig)
+string TReact::getLineSum2(string lineOrig)
 {
     if (lineOrig.find("[") != string::npos)
     {
@@ -214,7 +230,7 @@ string TReact::getLineSum2(string& lineOrig)
     }
     return lineOrig;
 }
-string TReact::getLineSum(string& lineOrig)
+string TReact::getLineSum(string lineOrig)
 {
     if (lineOrig.find("{") != string::npos)
     {
@@ -236,14 +252,14 @@ string TReact::getLineSum(string& lineOrig)
             istringstream iss2(valK[1]);
             iss2 >> m;
             string tempString = ("{" + patch::to_string(n) + "+" + patch::to_string(m) + "}");
-            lineOrig = sm->replaceString(lineOrig, tempString, patch::to_string(n + m));
-            return lineOrig;
+
+            return sm->replaceString(lineOrig, tempString, patch::to_string(n + m));
         }
     }
     return lineOrig;
 }
 
-vector<SpecieQuantity*> TReact::getListOfSpeciesQuantity(string& speciesQuantityText)
+vector<SpecieQuantity*> TReact::getListOfSpeciesQuantity(string speciesQuantityText)
 {
     vector<SpecieQuantity*> ret;
     SpecieQuantity* specQ = new SpecieQuantity();
@@ -259,7 +275,7 @@ vector<SpecieQuantity*> TReact::getListOfSpeciesQuantity(string& speciesQuantity
     }
     return ret;
 }
-SpecieQuantity* TReact::getSpecieQuantity(string& specQText)
+SpecieQuantity* TReact::getSpecieQuantity(string specQText)
 {
     specQText = sm->trim(specQText);
     SpecieQuantity* spec = new SpecieQuantity();
@@ -323,7 +339,7 @@ SpecieQuantity* TReact::getSpecieQuantity(string& specQText)
     return spec;
 
 }
-Reaction* TReact::getTranslatedReaction(string& textReact)
+Reaction* TReact::getTranslatedReaction(string textReact)
 {
     Reaction* react = new Reaction();
     vector<string> reactionSplit;
@@ -332,16 +348,18 @@ Reaction* TReact::getTranslatedReaction(string& textReact)
     if(textReact.find(':') == string::npos)
     {
         cout << "Invalid reaction: " << textReact << endl;
+        return NULL;
     }
     reactionSplit = sm->explodeChar(textReact, ':');
     if(reactionSplit.size() != 2)
     {
         cout << "Invalid reaction: " << textReact << endl;
+        return NULL;
     }
     if(reactionSplit[0].find(',') != string::npos)
     {
         vector<string> reactNameAndRate = sm->explodeChar(reactionSplit[0], ',');
-        react->setName(sm->trim(reactionSplit[0]));
+        react->setName(sm->trim(reactNameAndRate[0]));
         react->setRate(constants[sm->trim(reactNameAndRate[1])]);
     }
     else
@@ -349,8 +367,9 @@ Reaction* TReact::getTranslatedReaction(string& textReact)
         react->setName("Reaction # " + patch::to_string(reactionCounter));
         react->setRate(constants[sm->trim(reactionSplit[0])]);
     }
+
     react->setTextRepresentation(sm->trim(reactionSplit[1]));
-    reactionSplit = sm->multExplodeString(react->getTextRepresentation(), "->", "=>");
+    reactionSplit = sm->explodeChar(react->getTextRepresentation(), '-');
     //reactants and products
     vector<SpecieQuantity*> r = getListOfSpeciesQuantity(reactionSplit[0]);
     vector<SpecieQuantity*> p = getListOfSpeciesQuantity(reactionSplit[1]);
@@ -358,7 +377,7 @@ Reaction* TReact::getTranslatedReaction(string& textReact)
     react->setProducts(p);
     return react;
 }
-void TReact::getSpecialNewLines(vector<string>& newLines, string& lineOrig)
+void TReact::getSpecialNewLines(vector<string>& newLines, string lineOrig)
 {
     const int nMax = 5;
     int n = 1;
