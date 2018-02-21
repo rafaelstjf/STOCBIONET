@@ -79,9 +79,9 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
         map<string, long int>::iterator itQ = speciesQuantity.begin();
         while(itQ != speciesQuantity.end())
         {
-            line << token << patch::to_string(it->second);
+            line << token << patch::to_string(itQ->second);
             token = ";";
-            it++;
+            itQ++;
         }
         sw << line.str() << "\n";
         sw << "_end\n";
@@ -94,7 +94,7 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
             line.clear();
             for(j = 0; j< specNumb; j++)
             {
-                line << token << patch::to_string(reactants[i][j]);
+                line << token << patch::to_string(reactants[i][j]) << "\n";
                 token = ";";
             }
             sw << line.str() << "\n";
@@ -109,7 +109,7 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
             line.clear();
             for(j = 0; j< specNumb; j++)
             {
-                line << token << patch::to_string(products[i][j]);
+                line << token << patch::to_string(products[i][j]) << "\n";
                 token = ";";
             }
             sw << line.str() << "\n";
@@ -159,7 +159,6 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
         }
         sw << "_end\n";
         outf << sw.str();
-        //cout << sw.str();
         outf.close();
     }
     else

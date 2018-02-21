@@ -28,7 +28,7 @@ int main()
         TReact* tr = new TReact();
         vector<Reaction*> reactions = tr->getReactions(buffer.str(), speciesNumber, speciesQuantity, modelRepresentation);
         ReactFile* wtf = new ReactFile();
-        //wtf->writeOutputFile(reactions, speciesNumber, speciesQuantity, "saida.txt", modelRepresentation);
+        wtf->writeOutputFile(reactions, speciesNumber, speciesQuantity, "saida.txt", modelRepresentation);
         cout << "Size: " << reactions.size() << endl;
         delete wtf;
         delete tr;

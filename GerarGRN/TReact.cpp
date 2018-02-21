@@ -60,7 +60,7 @@ vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long 
             line = sm->trim(line);
             if (line.size() > 0)
             {
-                if (line.find('-') != string::npos) //contains reaction
+                if (line.find('>') != string::npos) //contains reaction
                 {
                     react = getTranslatedReaction(line);
                     if(react != NULL)
@@ -84,7 +84,6 @@ vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long 
                     }
                     else
                     {
-                        cout << con[0] << " " << con[1] << endl;
                         constants.insert(make_pair(con[0], atof(con[1].c_str())));
                         modelRepresentation.push_back(sm->trim(line));
                     }
@@ -185,7 +184,6 @@ void TReact::getLines(vector<string>& newLines, string lineOrig)
             var_end = constants.find(kp)->second;
         }
         string ori = lineOrig;
-        //cout << "var_start: " << var_start << " var_end: " << var_end << endl;
         for(int i = var_start; i<=var_end; i++)
         {
             string temp = ('[' + key+ ']');
@@ -279,14 +277,15 @@ SpecieQuantity* TReact::getSpecieQuantity(string specQText)
 {
     specQText = sm->trim(specQText);
     SpecieQuantity* spec = new SpecieQuantity();
-    int position = -1;
-    stringstream sbNumber;
+    cout <<"SPECQTEXT: " << specQText << endl;
+    int position = 0;
+    string sbNumber;
     while(position < specQText.size() && sm->isdigit(specQText[position]))
     {
-        sbNumber << specQText[position];
+        sbNumber+=specQText[position];
         position++;
     }
-    string s = sbNumber.str();
+    string s = sbNumber;
     s = sm->trim(s);
     if(s.size() == 0)
     {
@@ -296,15 +295,14 @@ SpecieQuantity* TReact::getSpecieQuantity(string specQText)
     {
         spec->setQuantity(atoi(patch::to_string(s).c_str()));
     }
-    stringstream sbName;
-    position--;
+    string sbName;
     while(position < specQText.size() && specQText[position] != '(')
     {
-        sbName << specQText[position];
+        sbName.append(1,specQText[position]);
         position++;
     }
     Specie* sp = new Specie();
-    sp->setName(patch::to_string(sm->trim(sbName.str())));
+    sp->setName(patch::to_string(sm->trim(sbName)));
     spec->setSpecie(sp);
     if(speciesNumber.find(sp->getName()) == speciesNumber.end())
     {
@@ -369,7 +367,7 @@ Reaction* TReact::getTranslatedReaction(string textReact)
     }
 
     react->setTextRepresentation(sm->trim(reactionSplit[1]));
-    reactionSplit = sm->explodeChar(react->getTextRepresentation(), '-');
+    reactionSplit = sm->explodeString(react->getTextRepresentation(), "->");
     //reactants and products
     vector<SpecieQuantity*> r = getListOfSpeciesQuantity(reactionSplit[0]);
     vector<SpecieQuantity*> p = getListOfSpeciesQuantity(reactionSplit[1]);

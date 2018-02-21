@@ -34,7 +34,7 @@ string StringManager::replaceString(string& str, string r1, string r2)
             {
                 if((tempIndex-i) == r1.length()-1)
                     break;
-               tempIndex++;
+                tempIndex++;
             }
             if ((tempIndex-i) == (r1.length() - 1) && r1[tempIndex-i] == str[tempIndex])
             {
@@ -48,7 +48,7 @@ string StringManager::replaceString(string& str, string r1, string r2)
             }
             else
             {
-               outputString.append(1,str[i]);
+                outputString.append(1,str[i]);
             }
         }
         else
@@ -123,17 +123,23 @@ const vector<string> StringManager::explodeString(const string &str, const strin
         if(str[i]==s1[0])
         {
             int tempI = i;
-            while(str[tempI] == s1[(tempI-i)] && (tempI - i) < s1.size()){
+            while(str[tempI] == s1[tempI-i])
+            {
+                if((tempI - i) == s1.size()-1)
+                    break;
                 tempI++;
             }
-            if(tempI == s1[s1.size()-1] && s1[tempI] == str[tempI]){
-                v.push_back(buffer);
-                buffer = "";
+            if(tempI-i == s1.size()-1 && s1[tempI-i] == str[tempI])
+            {
+                    v.push_back(buffer);
+                    buffer = "";
+                    i = tempI;
             }
-            else{
-                buffer.append(1,str[i]);
-                i++;
+            else
+            {
+                    buffer.append(1,str[i]);
             }
+
         }
         else
         {
@@ -143,33 +149,41 @@ const vector<string> StringManager::explodeString(const string &str, const strin
     v.push_back(buffer);
     return v;
 }
-const vector<string> StringManager::multExplodeString(const string &str, const string &s1, const string &s2){
+const vector<string> StringManager::multExplodeString(const string &str, const string &s1, const string &s2)
+{
     vector<string> v1 = explodeString(str, s1);
     vector<string> v2;
     string buffer;
-    for(int i = 0; i < v1.size(); i++){
-        for(int j = 0; j < v1[i].size(); j++){
-            if(v1[i][j] == s2[0]){
+    for(int i = 0; i < v1.size(); i++)
+    {
+        for(int j = 0; j < v1[i].size(); j++)
+        {
+            if(v1[i][j] == s2[0])
+            {
                 int tempJ = j;
-                 while(v1[i][tempJ] == s2[(tempJ-j)] && (tempJ - j) < s2.size()){
-                tempJ++;
-            }
-            if(tempJ == s2[s2.size()-1]){
-                v2.push_back(buffer);
-                buffer = "";
-            }
-            else{
-                buffer.append(1,v1[i][j]);
-                i++;
-            }
+                while(v1[i][tempJ] == s2[(tempJ-j)] && (tempJ - j) < s2.size())
+                {
+                    tempJ++;
+                }
+                if(tempJ == s2[s2.size()-1])
+                {
+                    v2.push_back(buffer);
+                    buffer = "";
+                }
+                else
+                {
+                    buffer.append(1,v1[i][j]);
+                    i++;
+                }
             }
             v2.push_back(buffer);
             buffer = "";
         }
-    return v2;
+        return v2;
+    }
 }
-}
-bool StringManager::isdigit(char c){
+bool StringManager::isdigit(char c)
+{
     if(c >= 48 && c <= 57)
         return true;
     else
