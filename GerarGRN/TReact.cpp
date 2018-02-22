@@ -275,9 +275,9 @@ vector<SpecieQuantity*> TReact::getListOfSpeciesQuantity(string speciesQuantityT
 }
 SpecieQuantity* TReact::getSpecieQuantity(string specQText)
 {
+    cout << specQText << endl;
     specQText = sm->trim(specQText);
     SpecieQuantity* spec = new SpecieQuantity();
-    cout <<"SPECQTEXT: " << specQText << endl;
     int position = 0;
     string sbNumber;
     while(position < specQText.size() && sm->isdigit(specQText[position]))
@@ -303,7 +303,6 @@ SpecieQuantity* TReact::getSpecieQuantity(string specQText)
     }
     Specie* sp = new Specie();
     sp->setName(patch::to_string(sm->trim(sbName)));
-    spec->setSpecie(sp);
     if(speciesNumber.find(sp->getName()) == speciesNumber.end())
     {
         specieCounter++;
@@ -314,25 +313,31 @@ SpecieQuantity* TReact::getSpecieQuantity(string specQText)
     spec->setSpecie(sp);
     Delay* specQDelay = new Delay();
     stringstream sbDelay;
+    position++;
     while(position < specQText.size() && specQText[position] != ')')
     {
         sbDelay << specQText[position];
         position++;
     }
-    string delay  = sm->trim(patch::to_string(sbDelay));
+    string delay  = sm->trim(patch::to_string(sbDelay.str()));
     if(delay.size() > 0)
     {
         if(delay.find(',') != string::npos)
         {
             vector<string> delays = sm->explodeChar(delay, ',');
+
             specQDelay->setValue(constants[sm->trim(delays[0])]);
             specQDelay->setVariation(constants[sm->trim(delays[1])]);
         }
         else
         {
             specQDelay->setValue(constants[delay]);
+            cout << "constants[delay]: " << constants[delay] << endl;
+
         }
     }
+    else
+        specQDelay->setValue(0);
     spec->setDelay(specQDelay);
     return spec;
 

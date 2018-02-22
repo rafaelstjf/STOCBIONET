@@ -13,12 +13,13 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
 {
     int i;
     int j;
-    stringstream line;
+    string line;
     fstream outf;
     string token;
     int specNumb;
     int reacNumb;
     vector<SpecieQuantity*> sQ;
+    vector<SpecieQuantity*> sQ2;
     specNumb = speciesNumber.size();
     reacNumb = reactions.size();
     int reactants[reacNumb][specNumb];
@@ -37,14 +38,18 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
             {
                 reactants[i][sQ[l]->getSpecie()->getNumber()] = sQ[l]->getQuantity();
             }
-            sQ = r->getProducts();
-            for(int l = 0; l < sQ.size(); l++)
+            sQ2 = r->getProducts();
+            for(int l = 0; l < sQ2.size(); l++)
             {
-                products[i][sQ[l]->getSpecie()->getNumber()] = sQ[l]->getQuantity();
-                if(sQ[l]->getDelay()->getValue() > 0)
-                    delaysValues[i][sQ[l]->getSpecie()->getNumber()] = sQ[l]->getDelay()->getValue();
-                if(sQ[l]->getDelay()->getVariation() > 0)
-                    delaysVariations[i][sQ[l]->getSpecie()->getNumber()] = sQ[l]->getDelay()->getVariation();
+                products[i][sQ2[l]->getSpecie()->getNumber()] = sQ2[l]->getQuantity();
+                if(sQ2[l]->getDelay()->getValue() > 0)
+                    delaysValues[i][sQ2[l]->getSpecie()->getNumber()] = sQ2[l]->getDelay()->getValue();
+                else
+                    delaysValues[i][sQ2[l]]->getSpecie()->getNumber()] = 0;
+                if(sQ2[l]->getDelay()->getVariation() > 0)
+                    delaysVariations[i][sQ2[l]->getSpecie()->getNumber()] = sQ2[l]->getDelay()->getVariation();
+                else
+                    delaysVariations[i][sQ2[l]->getSpecie()->getNumber()] = 0;
             }
         }
         stringstream sw;
@@ -65,25 +70,25 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
         token = "";
         while(it != speciesNumber.end())
         {
-            line << token << it->first;
+            line += (token + it->first);
             token = ";";
             it++;
         }
-        sw << line.str() << "\n";
+        sw << line << "\n";
         sw << "_end\n";
         sw << "#Species quantity.\n";
         sw << "_spec_qty:\n";
         sw << "_begin\n";
-        line.clear();
+        line = "";
         token = "";
         map<string, long int>::iterator itQ = speciesQuantity.begin();
         while(itQ != speciesQuantity.end())
         {
-            line << token << patch::to_string(itQ->second);
+            line += (token + patch::to_string(itQ->second));
             token = ";";
             itQ++;
         }
-        sw << line.str() << "\n";
+        sw << line << "\n";
         sw << "_end\n";
         sw << "#Reagents. Lines = reactions. Columns = species\n";
         sw << "_reagents:\n";
@@ -91,13 +96,13 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
         for(i = 0; i<reacNumb; i++)
         {
             token = "";
-            line.clear();
+            line = "";
             for(j = 0; j< specNumb; j++)
             {
-                line << token << patch::to_string(reactants[i][j]) << "\n";
+                line += (token + patch::to_string(reactants[i][j]));
                 token = ";";
             }
-            sw << line.str() << "\n";
+            sw << line << "\n";
         }
         sw << "_end\n";
         sw << "#Products. Lines = reactions. Columns = species\n";
@@ -106,41 +111,44 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
         for(i = 0; i<reacNumb; i++)
         {
             token = "";
-            line.clear();
+            line = "";
             for(j = 0; j< specNumb; j++)
             {
-                line << token << patch::to_string(products[i][j]) << "\n";
+                line += (token + patch::to_string(products[i][j]));
                 token = ";";
             }
-            sw << line.str() << "\n";
+            sw << line << "\n";
         }
         sw << "_end\n";
         sw << "#Reaction constants for each reaction.\n";
         sw << "_rt_const:\n";
         sw << "_begin\n";
         token = "";
-        line.clear();
+        line = "";
         for(i = 0; i<reactions.size(); i++)
         {
-            line << token + patch::to_string(reactions[i]->getRate());
+            line += (token + patch::to_string(reactions[i]->getRate()));
             token = ";";
         }
-        sw << line.str() << "\n";
+        sw << line << "\n";
         sw << "_end\n";
 
         sw << "#Delays for each product. Lines = reactions. Columns = species.\n";
         sw << "_p_delays:\n";
         sw << "_begin\n";
+        cout << "DELAY: " << endl;
         for(i = 0; i < reacNumb; i++)
         {
             token = "";
-            line.clear();
+            line = "";
             for(j = 0; j< specNumb; j++)
             {
-                line << token + patch::to_string(delaysValues[i][j]);
+                cout << delaysValues[i][j] << " ";
+                line += (token + patch::to_string(delaysValues[i][j]));
                 token = ";";
             }
-            sw << line.str() << "\n";
+            cout << endl;
+            sw << line << "\n";
         }
         sw << "_end\n";
         sw << "#Delays variations for each product. Lines = reactions. Columns = species.\n";
@@ -149,13 +157,13 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
         for(i = 0; i < reacNumb; i++)
         {
             token = "";
-            line.clear();
+            line = "";
             for(j = 0; j< specNumb; j++)
             {
-                line << token + patch::to_string(delaysVariations[i][j]);
+                line += (token + patch::to_string(delaysVariations[i][j]));
                 token = ";";
             }
-            sw << line.str() << "\n";
+            sw << line << "\n";
         }
         sw << "_end\n";
         outf << sw.str();
