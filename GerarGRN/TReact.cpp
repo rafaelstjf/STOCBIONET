@@ -281,9 +281,9 @@ vector<SpecieQuantity*> TReact::getListOfSpeciesQuantity(string speciesQuantityT
 }
 SpecieQuantity* TReact::getSpecieQuantity(string specQText)
 {
+    cout << specQText << endl;
     specQText = sm->trim(specQText);
     SpecieQuantity* spec = new SpecieQuantity();
-    cout <<"SPECQTEXT: " << specQText << endl;
     int position = 0;
     string sbNumber;
     while(position < specQText.size() && sm->isdigit(specQText[position]))
@@ -309,7 +309,6 @@ SpecieQuantity* TReact::getSpecieQuantity(string specQText)
     }
     Specie* sp = new Specie();
     sp->setName(patch::to_string(sm->trim(sbName)));
-    spec->setSpecie(sp);
     if(speciesNumber.find(sp->getName()) == speciesNumber.end())
     {
         speciesNumber.insert(make_pair(sp->getName(), specieCounter));
@@ -320,7 +319,11 @@ SpecieQuantity* TReact::getSpecieQuantity(string specQText)
     spec->setSpecie(sp);
     Delay* specQDelay = new Delay();
     stringstream sbDelay;
+<<<<<<< HEAD
     position++; //last character was '('
+=======
+    position++;
+>>>>>>> origin/Without-SBML
     while(position < specQText.size() && specQText[position] != ')')
     {
         sbDelay << specQText[position];
@@ -332,14 +335,28 @@ SpecieQuantity* TReact::getSpecieQuantity(string specQText)
         if(delay.find(',') != string::npos)
         {
             vector<string> delays = sm->explodeChar(delay, ',');
+<<<<<<< HEAD
             specQDelay->setValue(constants.find(sm->trim(delays[0]))->second);
             specQDelay->setVariation(constants.find(sm->trim(delays[1]))->second);
         }
         else
         {
             specQDelay->setValue(constants.find(delay)->second);
+=======
+
+            specQDelay->setValue(constants[sm->trim(delays[0])]);
+            specQDelay->setVariation(constants[sm->trim(delays[1])]);
+        }
+        else
+        {
+            specQDelay->setValue(constants[delay]);
+            cout << "constants[delay]: " << constants[delay] << endl;
+
+>>>>>>> origin/Without-SBML
         }
     }
+    else
+        specQDelay->setValue(0);
     spec->setDelay(specQDelay);
     return spec;
 

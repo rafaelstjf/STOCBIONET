@@ -19,6 +19,7 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
     int specNumb;
     int reacNumb;
     vector<SpecieQuantity*> sQ;
+    vector<SpecieQuantity*> sQ2;
     specNumb = speciesNumber.size();
     reacNumb = reactions.size();
     int reactants[reacNumb][specNumb];
@@ -47,6 +48,7 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
             {
                 reactants[i][sQ[j]->getSpecie()->getNumber()] = sQ[j]->getQuantity();
             }
+<<<<<<< HEAD
             sQ = r->getProducts();
             for(j = 0; j < sQ.size(); j++)
             {
@@ -55,6 +57,20 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
                     delaysValues[i][sQ[j]->getSpecie()->getNumber()] = sQ[j]->getDelay()->getValue();
                 if(sQ[j]->getDelay()->getVariation() > 0.0)
                     delaysVariations[i][sQ[j]->getSpecie()->getNumber()] = sQ[j]->getDelay()->getVariation();
+=======
+            sQ2 = r->getProducts();
+            for(int l = 0; l < sQ2.size(); l++)
+            {
+                products[i][sQ2[l]->getSpecie()->getNumber()] = sQ2[l]->getQuantity();
+                if(sQ2[l]->getDelay()->getValue() > 0)
+                    delaysValues[i][sQ2[l]->getSpecie()->getNumber()] = sQ2[l]->getDelay()->getValue();
+                else
+                    delaysValues[i][sQ2[l]]->getSpecie()->getNumber()] = 0;
+                if(sQ2[l]->getDelay()->getVariation() > 0)
+                    delaysVariations[i][sQ2[l]->getSpecie()->getNumber()] = sQ2[l]->getDelay()->getVariation();
+                else
+                    delaysVariations[i][sQ2[l]->getSpecie()->getNumber()] = 0;
+>>>>>>> origin/Without-SBML
             }
         }
         stringstream sw;
@@ -90,7 +106,11 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
         map<string, long int>::iterator itQ = speciesQuantity.begin();
         while(itQ != speciesQuantity.end())
         {
+<<<<<<< HEAD
             line +=(token + patch::to_string(itQ->second));
+=======
+            line += (token + patch::to_string(itQ->second));
+>>>>>>> origin/Without-SBML
             token = ";";
             itQ++;
         }
@@ -106,7 +126,11 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
             line = "";
             for(j = 0; j< specNumb; j++)
             {
+<<<<<<< HEAD
                 line +=(token + patch::to_string(reactants[i][j]));
+=======
+                line += (token + patch::to_string(reactants[i][j]));
+>>>>>>> origin/Without-SBML
                 token = ";";
             }
             sw << line << "\n";
@@ -121,10 +145,16 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
             line = "";
             for(j = 0; j< specNumb; j++)
             {
+<<<<<<< HEAD
                 line +=(token + patch::to_string(products[i][j]));
                 token = ";";
             }
 
+=======
+                line += (token + patch::to_string(products[i][j]));
+                token = ";";
+            }
+>>>>>>> origin/Without-SBML
             sw << line << "\n";
         }
         sw << "_end\n";
@@ -135,7 +165,11 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
         line = "";
         for(i = 0; i<reactions.size(); i++)
         {
+<<<<<<< HEAD
             line +=(token + patch::to_string(reactions[i]->getRate()));
+=======
+            line += (token + patch::to_string(reactions[i]->getRate()));
+>>>>>>> origin/Without-SBML
             token = ";";
         }
         sw << line << "\n";
@@ -144,15 +178,24 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
         sw << "#Delays for each product. Lines = reactions. Columns = species.\n";
         sw << "_p_delays:\n";
         sw << "_begin\n";
+        cout << "DELAY: " << endl;
         for(i = 0; i < reacNumb; i++)
         {
             token = "";
             line = "";
             for(j = 0; j< specNumb; j++)
             {
+<<<<<<< HEAD
                 line +=(token + patch::to_string(delaysValues[i][j]));
                 token = ";";
             }
+=======
+                cout << delaysValues[i][j] << " ";
+                line += (token + patch::to_string(delaysValues[i][j]));
+                token = ";";
+            }
+            cout << endl;
+>>>>>>> origin/Without-SBML
             sw << line << "\n";
         }
         sw << "_end\n";
@@ -165,7 +208,11 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
             line = "";
             for(j = 0; j< specNumb; j++)
             {
+<<<<<<< HEAD
                 line +=(token + patch::to_string(delaysVariations[i][j]));
+=======
+                line += (token + patch::to_string(delaysVariations[i][j]));
+>>>>>>> origin/Without-SBML
                 token = ";";
             }
             sw << line << "\n";
