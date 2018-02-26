@@ -9,15 +9,37 @@
 #include "ReactFile.h"
 #include "StringManager.h"
 using namespace std;
+string getOutputFilename(string filename)
+{
+    string outputName = "";
+    int fileFormat = 0;
+    for(int i = 0; i < filename.size(); i++)
+    {
+        if(filename[i] != '.')
+            outputName.append(1, filename[i]);
+        else
+        {
+            fileFormat = i;
+            break;
+        }
 
+    }
+    outputName += "_output";
+    if(fileFormat > 0)
+    {
+        for(int i = fileFormat; i < filename.size(); i++)
+            outputName+= filename[i];
+    }
+    return outputName;
+}
 int main()
 {
     fstream inputfile;
-    string filename;
+    string inFilename;
     stringstream buffer;
     cout << "Type the name of the file:" << endl;
-    cin >> filename;
-    inputfile.open(filename, fstream::in);
+    cin >> inFilename;
+    inputfile.open(inFilename, fstream::in);
     if(inputfile.is_open())
     {
         cout << "Reading the file..." << endl;
@@ -28,8 +50,8 @@ int main()
         TReact* tr = new TReact();
         vector<Reaction*> reactions = tr->getReactions(buffer.str(), speciesNumber, speciesQuantity, modelRepresentation);
         ReactFile* wtf = new ReactFile();
-        wtf->writeOutputFile(reactions, speciesNumber, speciesQuantity, "saida.txt", modelRepresentation);
-        cout << "Size: " << reactions.size() << endl;
+        string outFilename = getOutputFilename(inFilename);
+        wtf->writeOutputFile(reactions, speciesNumber, speciesQuantity, outFilename, modelRepresentation);
         delete wtf;
         delete tr;
 

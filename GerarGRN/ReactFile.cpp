@@ -27,8 +27,10 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
     double delaysValues[reacNumb][specNumb];
     double delaysVariations[reacNumb][specNumb];
     //cleaning the arrays
-    for(i = 0; i < reacNumb; i++){
-        for(j = 0; j< specNumb; j++){
+    for(i = 0; i < reacNumb; i++)
+    {
+        for(j = 0; j< specNumb; j++)
+        {
             reactants[i][j] = 0.0;
             products[i][j] = 0.0;
             delaysValues[i][j] = 0.0;
@@ -144,7 +146,6 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
         sw << "#Delays for each product. Lines = reactions. Columns = species.\n";
         sw << "_p_delays:\n";
         sw << "_begin\n";
-        cout << "DELAY: " << endl;
         for(i = 0; i < reacNumb; i++)
         {
             token = "";
@@ -172,6 +173,12 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
             sw << line << "\n";
         }
         sw << "_end\n";
+        cout << "Output saved on " << outputfile << endl;
+        cout << "Display output? type y for yes or n" << endl;
+        char c;
+        cin >> c;
+        if(c == 'y' or c== 'Y')
+            cout << sw.str() << endl;
         outf << sw.str();
         outf.close();
     }

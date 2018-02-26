@@ -280,7 +280,6 @@ vector<SpecieQuantity*> TReact::getListOfSpeciesQuantity(string speciesQuantityT
 }
 SpecieQuantity* TReact::getSpecieQuantity(string specQText)
 {
-    cout << specQText << endl;
     specQText = sm->trim(specQText);
     SpecieQuantity* spec = new SpecieQuantity();
     int position = 0;
