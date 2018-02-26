@@ -19,6 +19,8 @@ TReact::TReact()
 }
 TReact::~TReact()
 {
+    constants.clear();
+    speciesNumber.clear();
     delete sm;
 }
 vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long int>& speciesAndNumbers, map<string, long int>& speciesQuantity, vector<string>& modelRepresentation)
@@ -84,7 +86,11 @@ vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long 
                     }
                     else
                     {
-                        constants.insert(make_pair(con[0], atof(con[1].c_str())));
+                        istringstream iss(con[1]);
+                        double n;
+                        iss >> n;
+                        constants.insert(make_pair(con[0], n));
+                        cout << constants.find(con[0])->first << "->" << constants.find(con[0])->second << endl;
                         modelRepresentation.push_back(sm->trim(line));
                     }
                 }
@@ -99,7 +105,7 @@ vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long 
         //searches for the iterator's key
         if (constants.find(it->first) != constants.end())
         {
-            long int temp = (long int) constants[it->first];
+            long int temp = (long int) constants.find(it->first)->second;
             speciesQuantity.insert(make_pair(it->first, temp));
         }
         else
@@ -306,31 +312,32 @@ SpecieQuantity* TReact::getSpecieQuantity(string specQText)
     spec->setSpecie(sp);
     if(speciesNumber.find(sp->getName()) == speciesNumber.end())
     {
-        specieCounter++;
         speciesNumber.insert(make_pair(sp->getName(), specieCounter));
+        specieCounter++;
 
     }
-    sp->setNumber(speciesNumber[sp->getName()]);
+    sp->setNumber(speciesNumber.find(sp->getName())->second);
     spec->setSpecie(sp);
     Delay* specQDelay = new Delay();
     stringstream sbDelay;
+    position++; //last character was '('
     while(position < specQText.size() && specQText[position] != ')')
     {
         sbDelay << specQText[position];
         position++;
     }
-    string delay  = sm->trim(patch::to_string(sbDelay));
+    string delay  = sm->trim(patch::to_string(sbDelay.str()));
     if(delay.size() > 0)
     {
         if(delay.find(',') != string::npos)
         {
             vector<string> delays = sm->explodeChar(delay, ',');
-            specQDelay->setValue(constants[sm->trim(delays[0])]);
-            specQDelay->setVariation(constants[sm->trim(delays[1])]);
+            specQDelay->setValue(constants.find(sm->trim(delays[0]))->second);
+            specQDelay->setVariation(constants.find(sm->trim(delays[1]))->second);
         }
         else
         {
-            specQDelay->setValue(constants[delay]);
+            specQDelay->setValue(constants.find(delay)->second);
         }
     }
     spec->setDelay(specQDelay);
@@ -358,12 +365,12 @@ Reaction* TReact::getTranslatedReaction(string textReact)
     {
         vector<string> reactNameAndRate = sm->explodeChar(reactionSplit[0], ',');
         react->setName(sm->trim(reactNameAndRate[0]));
-        react->setRate(constants[sm->trim(reactNameAndRate[1])]);
+        react->setRate(constants.find(sm->trim(reactNameAndRate[1]))->second);
     }
     else
     {
         react->setName("Reaction # " + patch::to_string(reactionCounter));
-        react->setRate(constants[sm->trim(reactionSplit[0])]);
+        react->setRate(constants.find(sm->trim(reactionSplit[0]))->second);
     }
 
     react->setTextRepresentation(sm->trim(reactionSplit[1]));
