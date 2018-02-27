@@ -173,6 +173,7 @@ void ReactFile::writeOutputFile(vector<Reaction*>& reactions, map<string, long i
             sw << line << "\n";
         }
         sw << "_end\n";
+        cout << "--------------------------------------------------------" << endl;
         cout << "Output saved on " << outputfile << endl;
         cout << "Display output? type y for yes or n" << endl;
         char c;

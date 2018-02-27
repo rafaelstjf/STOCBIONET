@@ -21,6 +21,7 @@ private:
     map<string, long int> speciesNumber;
     int specieCounter;
     bool even;
+    bool debug;
     StringManager* sm;
     //functions
     void getSpecialNewLines(vector<string>& newLines, string lineOrig);
@@ -32,7 +33,7 @@ private:
     vector<SpecieQuantity*> getListOfSpeciesQuantity(string speciesQuantityText);
     SpecieQuantity* getSpecieQuantity(string specQText);
 public:
-    TReact();
+    TReact(bool debug);
     ~TReact();
     vector<Reaction*> getReactions(string textToTranslate, map<string, long int>& speciesAndNumbers,map<string, long int>& speciesQuantity, vector<string>& modelRepresentation);
 

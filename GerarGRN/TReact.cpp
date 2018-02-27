@@ -10,12 +10,15 @@ template < typename T > std::string to_string( const T& n )
     return stm.str() ;
 }
 }
-TReact::TReact()
+TReact::TReact(bool debug)
 {
     reactionCounter = 0;
     specieCounter = 0;
     even = false;
     sm = new StringManager();
+    this->debug = debug;
+    if(debug)
+        cout << "DEBUG MODE: ON" << endl;
 }
 TReact::~TReact()
 {
@@ -25,6 +28,8 @@ TReact::~TReact()
 }
 vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long int>& speciesAndNumbers, map<string, long int>& speciesQuantity, vector<string>& modelRepresentation)
 {
+    if(debug)
+        cout << "getReactions" << endl;
     //receives the raw text in textToTranslate string and saves it in the data structures
     Reaction* react;
     vector<Reaction*> ret;
@@ -48,10 +53,14 @@ vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long 
         string lineOrig = lines[i];
         newLines.clear();
         newLinesX.clear();
-        getLines(newLinesX, lineOrig);
+        getLines(newLinesX, lineOrig); //split the reaction in subreactions
+        if(debug)
+            cout << "lines: " << i << " " << lines[i] << endl;
         for (int j = 0; j < newLinesX.size(); j++)
         {
             string x = newLinesX[j];
+            if(debug)
+                cout << "   NEWLINES: " << j << " " << x << endl;
             x = sm ->replaceChar(x, '{', '[');
             x = sm->replaceChar(x, '}', ']');
             getLines(newLines, x);
@@ -105,20 +114,32 @@ vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long 
         if (constants.find(it->first) != constants.end())
         {
             long int temp = (long int) constants.find(it->first)->second;
+            if(debug)
+                cout << "Insert on speciesQuantity map: " << it->first << " " << temp << endl;
             speciesQuantity.insert(make_pair(it->first, temp));
         }
         else
         {
 
             speciesQuantity.insert(make_pair(it->first, 0));
+            cout << "Insert on speciesQuantity map: " << it->first << " " << 0 << endl;
         }
         it++;
+    }
+    if(debug){
+        map<string, double>::iterator it = constants.begin();
+        cout <<"    Constants:" << endl;
+        while(it != constants.end()){
+            cout << it->first << " " << it->second << endl;
+            it++;
+        }
     }
     cout << "Reactions sucessfuly imported" << endl;
     return ret;
 }
 void TReact::getLines(vector<string>& newLines, string lineOrig)
 {
+    //check if there is a reaction in the current line, if there is, return insert them on the structure
     size_t found;
     found = lineOrig.find("[...]");
     if (found != string::npos)
@@ -264,6 +285,7 @@ string TReact::getLineSum(string lineOrig)
 
 vector<SpecieQuantity*> TReact::getListOfSpeciesQuantity(string speciesQuantityText)
 {
+    //return a vector with the species quantity
     vector<SpecieQuantity*> ret;
     SpecieQuantity* specQ = new SpecieQuantity();
     speciesQuantityText = sm->trim(speciesQuantityText);
@@ -276,6 +298,16 @@ vector<SpecieQuantity*> TReact::getListOfSpeciesQuantity(string speciesQuantityT
             ret.push_back(specQ);
         }
     }
+
+    if(debug)
+    {
+        cout << "getListOfSpeciesQuantity: "<< speciesQuantityText << endl;
+        for(int i = 0; i < ret.size(); i++)
+        {
+            cout <<"    " << i << ": " << ret[i]->getSpecie()->getName() << " " << ret[i]->getQuantity() << endl;
+        }
+    }
+
     return ret;
 }
 SpecieQuantity* TReact::getSpecieQuantity(string specQText)
@@ -340,6 +372,14 @@ SpecieQuantity* TReact::getSpecieQuantity(string specQText)
     else
         specQDelay->setValue(0);
     spec->setDelay(specQDelay);
+    if(debug)
+    {
+        cout << "getSpecieQuantity: " << specQText << endl;
+        cout << "   Specie name: " << spec->getSpecie()->getName() << endl;
+        cout << "   Specie number: " << spec->getSpecie()->getNumber() << endl;
+        cout << "   Delay value: " << spec->getDelay()->getValue() << endl;
+        cout << "   Delay variation: " << spec->getDelay()->getVariation() << endl;
+    }
     return spec;
 
 }

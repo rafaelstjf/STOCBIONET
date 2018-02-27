@@ -47,7 +47,7 @@ int main()
         map<string, long int> speciesNumber;
         map<string, long int>speciesQuantity;
         vector<string> modelRepresentation;
-        TReact* tr = new TReact();
+        TReact* tr = new TReact(true);
         vector<Reaction*> reactions = tr->getReactions(buffer.str(), speciesNumber, speciesQuantity, modelRepresentation);
         ReactFile* wtf = new ReactFile();
         string outFilename = getOutputFilename(inFilename);
