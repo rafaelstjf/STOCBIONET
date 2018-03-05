@@ -17,11 +17,5 @@ Methods in development:
 
 Requirements:
 
- * [libsbml 5.14](http://sbml.org/Software/libSBML)
+ * C++11
 
-Example of use:
-
-```c++
-SSA* dm = new DirectMethod();
-dm->peform("filename");
-```
