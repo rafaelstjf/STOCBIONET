@@ -4,8 +4,7 @@
 #include <iostream>
 #include <random>
 #include <fstream>
-#include <time.h>
-
+#include <ctime>
 using namespace std;
 
 class Utils

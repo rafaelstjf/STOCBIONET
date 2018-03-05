@@ -19,6 +19,8 @@ void Model::loadModel(string filename)
 {
     cout << "Loading model" << endl;
     fstream inFile;
+    vector<SpecieQuantity*> sQ;
+    vector<SpecieQuantity*> sQ2;
     TReact *tr;
     char debug;
     stringstream text;
@@ -35,9 +37,10 @@ void Model::loadModel(string filename)
             tr = new TReact(true);
         else
             tr = new TReact(false);
-        vector<Reaction> reactions = tr->getReactions(text.str(), speciesNumber, specQuantity, modelRepresentation);
-        specNumber = speciesNumber.size();
+        vector<Reaction*> reactions = tr->getReactions(text.str(), specNameNumber, specQuantity, modelRepresentation);
+        specNumber = specNameNumber.size();
         reacNumber = reactions.size();
+        //Lines = reactions. Columns = species.
         reactants = new int *[reacNumber];
         products = new int *[reacNumber];
         delaysValue = new double *[reacNumber];
@@ -101,7 +104,7 @@ double **Model::getDelaysVariation()
 }
 int Model::getSpecNumber()
 {
-    return speciesNumber;
+    return specNumber;
 }
 int Model::getReacNumber()
 {
@@ -114,4 +117,10 @@ vector<string> Model::getModelRepresentation()
 bool Model::isModelLoaded()
 {
     return modelLoaded;
+}
+map<string, long int> Model::getSpecNameNumber(){
+    return specNameNumber;
+}
+map<string, long int> Model::getSpecQuantity(){
+    return specQuantity;
 }

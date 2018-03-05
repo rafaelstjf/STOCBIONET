@@ -3,14 +3,11 @@
 
 #include <iostream>
 #include "DGVertex.h"
-#include <sbml/SBMLTypes.h> //sbml external library
-#include <sbml/common/extern.h>
-
 using namespace std;
 class DependencyGraph
 {
 public:
-    DependencyGraph(int numReactions, double** r, double** p, int numElements);
+    DependencyGraph(int numReactions, int** reactants, int** products, int numSpecies);
     int* getDependencies(int id);
     void insertDependency(int id, int val);
     void printGraph();
@@ -20,11 +17,10 @@ public:
 
 private:
     int numReactions; //size of the vector
-    int numElements;
+    int numSpecies;
     DGVertex** vertex;
     int* unionSet(int* a, int* b);
     int* intersectionSet(int* a, int*b);
-    int* extractElements(int** a, int c);
 
 };
 

@@ -4,16 +4,18 @@
 #include <map>
 #include <vector>
 #include <string>
-#include <stringstream>
+#include <strstream>
+#include <fstream>
 #include "Model/TReact.h"
 #include "Model/Reaction.h"
+
 using namespace std;
 
 class Model {
 public:
     Model();
     ~Model();
-    void loadModel();
+    void loadModel(string filename);
     int** getReactants();
     int** getProducts();
     double** getDelaysValue();
@@ -22,6 +24,8 @@ public:
     int getReacNumber();
     vector<string> getModelRepresentation();
     bool isModelLoaded();
+    map<string, long int> getSpecNameNumber();
+    map<string, long int> getSpecQuantity();
 private:
     int** reactants; //reactants matrix
     int** products; //products matrix

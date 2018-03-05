@@ -1,15 +1,13 @@
 #include "DependencyGraph.h"
 
-DependencyGraph::DependencyGraph(int numReactions, double **reactants, double **products, int numElements)
+DependencyGraph::DependencyGraph(int numReactions, int **reactants, int **products, int numSpecies)
 {
+    int **affects; //set of substances that change quantity when the reaction i is executed
     int **react;
     int **prod;
-    int **affects;
-    int *r;
-    int *p;
     //graph struct
     this->numReactions = numReactions;
-    this->numElements = numElements;
+    this->numSpecies = numSpecies;
     vertex = new DGVertex *[numReactions];
     for (int i = 0; i < numReactions; i++)
     {
@@ -18,46 +16,44 @@ DependencyGraph::DependencyGraph(int numReactions, double **reactants, double **
         vertex[i]->setN(numReactions);
     }
     //creating 2 matrix with 0-1 elements
-    react = new int *[numElements];
-    prod = new int *[numElements];
-    for (int i = 0; i < numElements; i++)
+    react = new int *[numReactions];
+    prod = new int *[numReactions];
+    for (int i = 0; i < numReactions; i++)
     {
-        react[i] = new int[numReactions];
-        prod[i] = new int[numReactions];
+        react[i] = new int[numSpecies];
+        prod[i] = new int[numSpecies];
     }
-    for (int i = 0; i < numElements; i++)
+    for (int i = 0; i < numReactions; i++)
     {
-        for (int j = 0; j < numReactions; j++)
+        for (int j = 0; j < numSpecies; j++)
         {
-            if (reactants[i][j] != 0.0)
+            if (reactants[i][j] != 0)
                 react[i][j] = 1;
             else
                 react[i][j] = 0;
 
-            if (products[i][j] != 0.0)
+            if (products[i][j] != 0)
                 prod[i][j] = 1;
             else
                 prod[i][j] = 0;
         }
     }
     //inserting dependencies
-
     affects = new int *[numReactions];
     for (int i = 0; i < numReactions; i++)
     {
-        r = extractElements(react, i);
-        p = extractElements(prod, i);
-        affects[i] = unionSet(r, p);
+        //affects = reactants U products
+        affects[i] = unionSet(react[i], products[i]);
     }
 
     for (int i = 0; i < numReactions; i++)
     {
         for (int j = 0; j < numReactions; j++)
         {
-            r = extractElements(react, j);
             int count = 0;
-            int *inter = intersectionSet(affects[i], r);
-            for (int k = 0; k < numElements; k++)
+            int *inter = intersectionSet(affects[i], react[j]);
+            //if the intersection isn't an empty set so there is a dependency
+            for (int k = 0; k < numSpecies; k++)
             {
                 if (inter[k] == 1)
                     count++;
@@ -65,6 +61,7 @@ DependencyGraph::DependencyGraph(int numReactions, double **reactants, double **
 
             if (count > 0)
                 insertDependency(i, j);
+                //j depends on i
         }
     }
     delete react;
@@ -112,8 +109,8 @@ DependencyGraph::~DependencyGraph()
 int *DependencyGraph::unionSet(int *a, int *b)
 //return a vector with the union of the arrays a and b
 {
-    int *un = new int[numElements];
-    for (int i = 0; i < numElements; i++)
+    int *un = new int[numSpecies];
+    for (int i = 0; i < numSpecies; i++)
     {
         if (b[i] != a[i])
         {
@@ -124,21 +121,11 @@ int *DependencyGraph::unionSet(int *a, int *b)
     }
     return un;
 }
-int *DependencyGraph::extractElements(int **a, int c)
-{
-    //return an array with the elements of a determined reaction
-    int *ar = new int[numElements];
-    for (int i = 0; i < numElements; i++)
-    {
-        ar[i] = a[i][c];
-    }
-    return ar;
-}
 int *DependencyGraph::intersectionSet(int *a, int *b)
 //return a vector with the intersection of the arrays a and b
 {
-    int *in = new int[numElements];
-    for (int i = 0; i < numElements; i++)
+    int *in = new int[numSpecies];
+    for (int i = 0; i < numSpecies; i++)
     {
         if (b[i] == a[i])
         {

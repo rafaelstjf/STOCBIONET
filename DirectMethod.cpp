@@ -15,12 +15,12 @@ void DirectMethod::perform(string filename)
 
 void DirectMethod::initialize(string filename)
 {
-    readModel(filename);
+    loadModel(filename);
 }
 
 void DirectMethod::calcPropensity()
 {
-    
+
 }
 
 void DirectMethod::genReactionTime()
