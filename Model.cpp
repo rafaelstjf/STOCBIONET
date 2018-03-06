@@ -48,7 +48,7 @@ void Model::loadModel(string filename)
         for (i = 0; i < reacNumber; i++)
         {
             reactants[i] = new int[specNumber];
-            reactants[i] = new int[specNumber];
+            products[i] = new int[specNumber];
             delaysValue[i] = new double[specNumber];
             delaysVariation[i] = new double[specNumber];
         }
@@ -57,7 +57,7 @@ void Model::loadModel(string filename)
             for (j = 0; j < specNumber; j++)
             {
                 reactants[i][j] = 0;
-                reactants[i][j] = 0;
+                products[i][j] = 0;
                 delaysValue[i][j] = 0.0;
                 delaysVariation[i][j] = 0.0;
             }
@@ -68,14 +68,14 @@ void Model::loadModel(string filename)
             sQ = r->getReactants();
             for (j = 0; j < sQ.size(); j++)
                 reactants[i][sQ[j]->getSpecie()->getNumber()] = sQ[j]->getQuantity();
-            sQ = r->getProducts();
-            for (j = 0; j < sQ.size(); j++)
+            sQ2 = r->getProducts();
+            for (j = 0; j < sQ2.size(); j++)
             {
-                products[i][sQ[j]->getSpecie()->getNumber()] = sQ[j]->getQuantity();
-                if (sQ[j]->getDelay()->getValue() > 0.0)
-                    delaysValue[i][sQ[j]->getSpecie()->getNumber()] = sQ[j]->getDelay()->getValue();
-                if (sQ[j]->getDelay()->getVariation() > 0.0)
-                    delaysValue[i][sQ[j]->getSpecie()->getNumber()] = sQ[j]->getDelay()->getVariation();
+                products[i][sQ2[j]->getSpecie()->getNumber()] = sQ2[j]->getQuantity();
+                if (sQ2[j]->getDelay()->getValue() > 0.0)
+                    delaysValue[i][sQ2[j]->getSpecie()->getNumber()] = sQ2[j]->getDelay()->getValue();
+                if (sQ2[j]->getDelay()->getVariation() > 0.0)
+                    delaysValue[i][sQ2[j]->getSpecie()->getNumber()] = sQ2[j]->getDelay()->getVariation();
             }
         }
         cout << "Model loaded" << endl;

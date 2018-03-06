@@ -19,7 +19,7 @@ conversor
 .Trashes
 ehthumbs.db
 Thumbs.db
-
+.vscode
 # specific to CodeBlocks IDE #
 ##############################
 *.cbp
