@@ -118,9 +118,19 @@ bool Model::isModelLoaded()
 {
     return modelLoaded;
 }
-map<string, long int> Model::getSpecNameNumber(){
+map<string, long int> Model::getSpecNameNumber()
+{
     return specNameNumber;
 }
-map<string, long int> Model::getSpecQuantity(){
+map<string, long int> Model::getSpecQuantity()
+{
     return specQuantity;
+}
+int Model::getReacRateNumber()
+{
+    return reacRateNumber;
+}
+double* Model::getReacRateArray()
+{
+    return reacRate;
 }

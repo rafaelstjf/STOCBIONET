@@ -2,16 +2,16 @@
 #define DIRECTMETHOD_H
 
 #include <iostream>
-#include "WithoutDelay.h"
+#include "SSA.h"
 
 using namespace std;
 
-class DirectMethod : public WithoutDelay
+class DirectMethod : public SSA
 {
 public:
-    DirectMethod();
-    virtual ~DirectMethod();
+
     void perform(string filename);
+    virtual ~DirectMethod();
 
 private:
     void initialize(string filename); //read the model and initialize data structures

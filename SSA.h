@@ -14,6 +14,7 @@ public:
     virtual void perform(string filename) = 0;
     virtual ~SSA();
 protected:
+    DependencyGraph* dg;
     Model* model;
     float* propArray; //propensity array
     double simulTime; //simulation time

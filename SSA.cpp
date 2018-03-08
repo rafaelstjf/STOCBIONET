@@ -1,4 +1,5 @@
 #include "SSA.h"
-void SSA::loadModel(string filename)
+SSA::~SSA()
 {
+    delete model;
 }

@@ -1,11 +1,10 @@
 #ifndef FIRSTREACTIONMETHOD_H
 #define FIRSTREACTIONMETHOD_H
 #include <iostream>
-#include "WithoutDelay.h"
-
+#include "SSA.h"
 using namespace std;
 
-class FirstReactionMethod : public WithoutDelay
+class FirstReactionMethod : public SSA
 {
     public:
         FirstReactionMethod();

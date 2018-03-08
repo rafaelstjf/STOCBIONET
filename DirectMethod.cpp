@@ -1,15 +1,10 @@
 #include "DirectMethod.h"
-
-DirectMethod::DirectMethod()
-{
-    model = new Model();
-}
-
 DirectMethod::~DirectMethod()
 {
 }
 void DirectMethod::perform(string filename)
 {
+    model = new model;
     initialize(filename);
 }
 
