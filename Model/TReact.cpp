@@ -35,7 +35,9 @@ vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long 
     vector<Reaction*> ret;
     vector<string> newLinesX;
     vector<string> newLines;
+    map<string, double>::iterator itConstants;
     vector<string> con;
+    int constCounter = 0;
     //resets everything
     constants.clear();
     reactionCounter = 0;
@@ -126,12 +128,14 @@ vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long 
         }
         it++;
     }
-    if(debug){
-        map<string, double>::iterator it = constants.begin();
+    if(debug)
+    {
+        itConstants = constants.begin();
         cout <<"    Constants:" << endl;
-        while(it != constants.end()){
-            cout << it->first << " " << it->second << endl;
-            it++;
+        while(itConstants != constants.end())
+        {
+            cout << itConstants->first << " " << itConstants->second << endl;
+            itConstants++;
         }
     }
     cout << "Reactions sucessfuly imported" << endl;

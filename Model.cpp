@@ -78,6 +78,22 @@ void Model::loadModel(string filename)
                     delaysValue[i][sQ2[j]->getSpecie()->getNumber()] = sQ2[j]->getDelay()->getVariation();
             }
         }
+         reacRate = new double[reacNumber];
+        for(i = 0; i < reacNumber; i++){
+            reacRate[i] = reactions[i]->getRate();
+        }
+        cout << "Reactants" << endl;
+        for(i = 0; i < reacNumber; i++){
+            for(j = 0; j < specNumber; j++)
+                cout << reactants[i][j] << " ";
+            cout << endl;
+        }
+        cout << "Products" << endl;
+        for(i = 0; i < reacNumber; i++){
+            for(j = 0; j < specNumber; j++)
+                cout << products[i][j] << " ";
+            cout << endl;
+        }
         cout << "Model loaded" << endl;
         modelLoaded = true;
     }
@@ -125,10 +141,6 @@ map<string, long int> Model::getSpecNameNumber()
 map<string, long int> Model::getSpecQuantity()
 {
     return specQuantity;
-}
-int Model::getReacRateNumber()
-{
-    return reacRateNumber;
 }
 double* Model::getReacRateArray()
 {

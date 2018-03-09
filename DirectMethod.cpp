@@ -4,13 +4,14 @@ DirectMethod::~DirectMethod()
 }
 void DirectMethod::perform(string filename)
 {
-    model = new model;
+    model = new Model();
     initialize(filename);
 }
 
 void DirectMethod::initialize(string filename)
 {
     model->loadModel(filename);
+
 }
 
 void DirectMethod::calcPropensity()

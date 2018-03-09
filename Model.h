@@ -18,8 +18,7 @@ public:
     void loadModel(string filename);
     int** getReactants();
     int** getProducts();
-    int* getReacRateArray();
-    int getReacRateNumber();
+    double* getReacRateArray();
     double** getDelaysValue();
     double** getDelaysVariation();
     int getSpecNumber();
@@ -35,8 +34,7 @@ private:
     double** delaysVariation; //delay variation matrix
     int specNumber; //number of species in the model
     int reacNumber; //number of reactions in the model
-    int reacRateNumber;
-    int* reacRate;
+    double* reacRate; //array with the rate used in each reaction
     bool modelLoaded; //boolean to show if the model is loaded or not
     map<string, long int>specNameNumber; //associative container with the species' name and number
     map<string, long int>specQuantity; //associative container with the species' initial quantity
