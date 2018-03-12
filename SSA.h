@@ -11,7 +11,7 @@ using namespace std;
 class SSA
 {
 public:
-    virtual void perform(string filename) = 0;
+    virtual void perform(string filename, double simulTime) = 0;
     virtual ~SSA();
 protected:
     DependencyGraph* dg;

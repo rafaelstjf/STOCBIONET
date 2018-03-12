@@ -2,9 +2,10 @@
 DirectMethod::~DirectMethod()
 {
 }
-void DirectMethod::perform(string filename)
+void DirectMethod::perform(string filename, simulTime)
 {
     model = new Model();
+    this->simulTime = simulTime;
     initialize(filename);
 }
 

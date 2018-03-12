@@ -10,7 +10,7 @@ class DirectMethod : public SSA
 {
 public:
 
-    void perform(string filename);
+    void perform(string filename, double simulTime);
     virtual ~DirectMethod();
 
 private:

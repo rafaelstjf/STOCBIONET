@@ -21,12 +21,12 @@ public:
     double* getReacRateArray();
     double** getDelaysValue();
     double** getDelaysVariation();
+    int* getInitialQuantity();
     int getSpecNumber();
     int getReacNumber();
     vector<string> getModelRepresentation();
     bool isModelLoaded();
     map<string, long int> getSpecNameNumber();
-    map<string, long int> getSpecQuantity();
 private:
     int** reactants; //reactants matrix
     int** products; //products matrix
@@ -36,8 +36,8 @@ private:
     int reacNumber; //number of reactions in the model
     double* reacRate; //array with the rate used in each reaction
     bool modelLoaded; //boolean to show if the model is loaded or not
+    int* initialQuantity;//array with the species' initial quantities
     map<string, long int>specNameNumber; //associative container with the species' name and number
-    map<string, long int>specQuantity; //associative container with the species' initial quantity
     vector<string> modelRepresentation;
 };
 

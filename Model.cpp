@@ -9,7 +9,6 @@ Model::Model()
     specNumber = 0;
     reacNumber = 0;
     specNameNumber.clear();
-    specQuantity.clear();
     modelLoaded = false;
 }
 Model::~Model()
@@ -21,6 +20,7 @@ void Model::loadModel(string filename)
     fstream inFile;
     vector<SpecieQuantity*> sQ;
     vector<SpecieQuantity*> sQ2;
+    map<string, long int>specQuantity;
     TReact *tr;
     char debug;
     stringstream text;
@@ -94,8 +94,20 @@ void Model::loadModel(string filename)
                 cout << products[i][j] << " ";
             cout << endl;
         }
+        cout << "Species quantities" << endl;
+        initialQuantity = new int[specNumber];
+        map<string, long int>::iterator itQ = specNameNumber.begin();
+        while(itQ != specNameNumber.end()){
+            initialQuantity[itQ->second] = specQuantity.find(itQ->first)->second; //search the specie with the same name and set the quantity
+            itQ++;
+        }
+        for(i = 0; i < specNumber; i++){
+            cout << "[" << initialQuantity[i] << "]";
+        }
+        cout << endl;
         cout << "Model loaded" << endl;
         modelLoaded = true;
+        reactions.clear();
     }
     else
     {
@@ -138,9 +150,9 @@ map<string, long int> Model::getSpecNameNumber()
 {
     return specNameNumber;
 }
-map<string, long int> Model::getSpecQuantity()
+int* Model::getInitialQuantity()
 {
-    return specQuantity;
+    return initialQuantity;
 }
 double* Model::getReacRateArray()
 {
