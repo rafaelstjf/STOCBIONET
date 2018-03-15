@@ -78,18 +78,21 @@ void Model::loadModel(string filename)
                     delaysValue[i][sQ2[j]->getSpecie()->getNumber()] = sQ2[j]->getDelay()->getVariation();
             }
         }
-         reacRate = new double[reacNumber];
-        for(i = 0; i < reacNumber; i++){
+        reacRate = new double[reacNumber];
+        for(i = 0; i < reacNumber; i++)
+        {
             reacRate[i] = reactions[i]->getRate();
         }
         cout << "Reactants" << endl;
-        for(i = 0; i < reacNumber; i++){
+        for(i = 0; i < reacNumber; i++)
+        {
             for(j = 0; j < specNumber; j++)
                 cout << reactants[i][j] << " ";
             cout << endl;
         }
         cout << "Products" << endl;
-        for(i = 0; i < reacNumber; i++){
+        for(i = 0; i < reacNumber; i++)
+        {
             for(j = 0; j < specNumber; j++)
                 cout << products[i][j] << " ";
             cout << endl;
@@ -97,14 +100,26 @@ void Model::loadModel(string filename)
         cout << "Species quantities" << endl;
         initialQuantity = new int[specNumber];
         map<string, long int>::iterator itQ = specNameNumber.begin();
-        while(itQ != specNameNumber.end()){
+        while(itQ != specNameNumber.end())
+        {
             initialQuantity[itQ->second] = specQuantity.find(itQ->first)->second; //search the specie with the same name and set the quantity
             itQ++;
         }
-        for(i = 0; i < specNumber; i++){
+        for(i = 0; i < specNumber; i++)
+        {
             cout << "[" << initialQuantity[i] << "]";
         }
+        /*for(i = 0; i< modelRepresentation.size(); i++){
+            cout << modelRepresentation[i] << endl;
+        }*/
         cout << endl;
+        buildStoichiometryMatrix();
+        cout << "Soichiometry matrix" << endl;
+        for(i = 0; i < reacNumber; i++){
+            for(j = 0; j < specNumber; j++)
+                cout << stoiMatrix[i][j] <<" ";
+            cout << endl;
+        }
         cout << "Model loaded" << endl;
         modelLoaded = true;
         reactions.clear();
@@ -157,4 +172,20 @@ int* Model::getInitialQuantity()
 double* Model::getReacRateArray()
 {
     return reacRate;
+}
+void Model::buildStoichiometryMatrix()
+{
+    stoiMatrix = new int*[reacNumber];
+    for(int i = 0; i < reacNumber; i++)
+        stoiMatrix[i] = new int[specNumber];
+    for(int i = 0; i < reacNumber; i++)
+    {
+        for(int j = 0; j < specNumber; j++)
+        {
+            stoiMatrix[i][j] = -1*reactants[i][j] + products[i][j];
+        }
+    }
+}
+int** Model::getStoiMatrix(){
+    return stoiMatrix;
 }

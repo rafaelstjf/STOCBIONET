@@ -21,6 +21,7 @@ public:
     double* getReacRateArray();
     double** getDelaysValue();
     double** getDelaysVariation();
+    int** getStoiMatrix();
     int* getInitialQuantity();
     int getSpecNumber();
     int getReacNumber();
@@ -36,9 +37,11 @@ private:
     int reacNumber; //number of reactions in the model
     double* reacRate; //array with the rate used in each reaction
     bool modelLoaded; //boolean to show if the model is loaded or not
+    int** stoiMatrix;
     int* initialQuantity;//array with the species' initial quantities
     map<string, long int>specNameNumber; //associative container with the species' name and number
     vector<string> modelRepresentation;
+    void buildStoichiometryMatrix();
 };
 
 

@@ -2,19 +2,22 @@
 #define UTILS_H
 
 #include <iostream>
-#include <random>
-#include <fstream>
-#include <ctime>
+#include <math.h>
+#define E 2.71828182845904523536
 using namespace std;
+
+
 
 class Utils
 {
   public:
   Utils();
-  Utils(double seed);
   double getRandomNumber();
+  double binomialCoefficient(int k, int n);
+  double ln(int n);
   ~Utils();
   private:
-  ofstream lastSeed;
+  int calcFactorial(int n);
+  int fat[11];
 };
 #endif

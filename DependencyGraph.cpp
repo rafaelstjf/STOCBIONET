@@ -87,6 +87,7 @@ int *DependencyGraph::unionSet(int *a, int *b)
     int *un = new int[numSpecies];
     for (int i = 0; i < numSpecies; i++)
     {
+        //lado direito para o esquerdo
         if (b[i] != a[i] && b[i] > a[i]) //a = 1
             un[i] = b[i] - a[i];
         else if(b[i] != a[i] && b[i] < a[i]) // a = 0
