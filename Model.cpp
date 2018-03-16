@@ -109,12 +109,14 @@ void Model::loadModel(string filename)
         {
             cout << "[" << initialQuantity[i] << "]";
         }
-        /*for(i = 0; i< modelRepresentation.size(); i++){
+        /* print model representation
+        for(i = 0; i< modelRepresentation.size(); i++){
             cout << modelRepresentation[i] << endl;
-        }*/
+        }
+        */
         cout << endl;
         buildStoichiometryMatrix();
-        cout << "Soichiometry matrix" << endl;
+        cout << "Stoichiometry matrix" << endl;
         for(i = 0; i < reacNumber; i++){
             for(j = 0; j < specNumber; j++)
                 cout << stoiMatrix[i][j] <<" ";

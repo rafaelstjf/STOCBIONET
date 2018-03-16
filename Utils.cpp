@@ -13,7 +13,8 @@ Utils::Utils()
      fat[8] = 40320;
      fat[9] = 362880;
      fat[10] = 3628800;
-
+     double seed = rd();
+     srand(seed);
 
 }
 Utils::~Utils()
@@ -22,10 +23,14 @@ Utils::~Utils()
 
 double Utils::getRandomNumber()
 {
+    return rand() / (float)RAND_MAX;
 }
 double Utils::binomialCoefficient(int k, int n)
 {
-    int fatn, fatk, fatnk;
+    // k!/n!*(k-n)!
+    if(k <=0)
+        return 0;
+    int fatn, fatk, fatkn;
     if (n > 10)
         fatn = calcFactorial(n);
     else
@@ -34,11 +39,11 @@ double Utils::binomialCoefficient(int k, int n)
         fatk = calcFactorial(k);
     else
         fatk = fat[k];
-    if (n - k > 10)
-        fatnk = calcFactorial(n - k);
+    if (k - n > 10)
+        fatkn = calcFactorial(k - n);
     else
-        fatnk = fat[n - k];
-    return (double) (fatn/(fatn*fatnk));
+        fatkn = fat[k - n];
+    return (double) (fatk/(fatn*fatkn));
 }
 int Utils::calcFactorial(int n)
 {
@@ -46,6 +51,6 @@ int Utils::calcFactorial(int n)
     return 1;
    else return n*calcFactorial(n-1);
 }
-double Utils::ln(int n){
-    return log(n)/log(E);
+double Utils::ln(double n){
+    return (double)log(n)/log(E);
 }

@@ -11,7 +11,7 @@ public:
     int* getDependencies(int id);
     void insertDependency(int id, int val);
     void printGraph();
-    int* getDependenciesSize(int id);
+    int getDependenciesSize(int id);
     virtual ~DependencyGraph();
 
 private:

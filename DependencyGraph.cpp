@@ -3,8 +3,6 @@
 DependencyGraph::DependencyGraph(int numReactions, int **reactants, int **products, int numSpecies)
 {
     int **affects; //set of substances that change quantity when the reaction i is executed
-    int **react;
-    int **prod;
     //graph struct
     this->numReactions = numReactions;
     this->numSpecies = numSpecies;
@@ -38,7 +36,7 @@ DependencyGraph::DependencyGraph(int numReactions, int **reactants, int **produc
 
             if (count > 0)
                 insertDependency(i, j);
-                //j depends on i
+            //j depends on i
         }
     }
 }
@@ -54,7 +52,7 @@ int *DependencyGraph::getDependencies(int id)
 {
     return vertex[id]->getDependencies();
 }
-int *DependencyGraph::getDependenciesSize(int id)
+int DependencyGraph::getDependenciesSize(int id)
 {
     return vertex[id]->getSize();
 }
@@ -64,9 +62,9 @@ void DependencyGraph::printGraph()
     cout << "DEPENDENCY GRAPH " << endl;
     for (int i = 0; i < numReactions; i++)
     {
-        cout << *vertex[i]->getId() << " ->";
+        cout << vertex[i]->getId() << " ->";
         dp = vertex[i]->getDependencies();
-        for (int k = 0; k < *vertex[i]->getSize(); k++)
+        for (int k = 0; k < vertex[i]->getSize(); k++)
             cout << " " << dp[k];
         cout << endl;
     }
@@ -103,10 +101,8 @@ int *DependencyGraph::intersectionSet(int *a, int *b)
     int *in = new int[numSpecies];
     for (int i = 0; i < numSpecies; i++)
     {
-        if (b[i] == a[i] && a[i] > 0)
-        {
-            in[i] = 1;
-        }
+        if (b[i] == 0 && a[i] == 0)
+            in[i] = 0;
         else if(b[i]!= 0 && a[i] != 0)
             in[i] = 1;
         else

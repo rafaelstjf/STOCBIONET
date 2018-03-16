@@ -16,8 +16,8 @@ public:
     void setId(int id);
     void setN(int n);
     int* getDependencies();
-    int* getSize();
-    int* getId();
+    int getSize();
+    int getId();
 protected:
 
 private:

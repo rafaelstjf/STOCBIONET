@@ -55,52 +55,60 @@ vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long 
         string lineOrig = lines[i];
         newLines.clear();
         newLinesX.clear();
-        getLines(newLinesX, lineOrig); //split the reaction in subreactions
-        if(debug)
-            cout << "lines: " << i << " " << lines[i] << endl;
-        for (int j = 0; j < newLinesX.size(); j++)
+        if(lines[i][0] == '#')
         {
-            string x = newLinesX[j];
             if(debug)
-                cout << "   NEWLINES: " << j << " " << x << endl;
-            x = sm ->replaceChar(x, '{', '[');
-            x = sm->replaceChar(x, '}', ']');
-            getLines(newLines, x);
+                cout << "Comment line" << endl;
         }
-        for (int j = 0; j < newLines.size(); j++)
+        else
         {
-            string line = newLines[j];
-            line = sm->trim(line);
-            if (line.size() > 0)
+            getLines(newLinesX, lineOrig); //split the reaction in subreactions
+            if(debug)
+                cout << "lines: " << i << " " << lines[i] << endl;
+            for (int j = 0; j < newLinesX.size(); j++)
             {
-                if (line.find('>') != string::npos) //contains reaction
+                string x = newLinesX[j];
+                if(debug)
+                    cout << "   NEWLINES: " << j << " " << x << endl;
+                x = sm ->replaceChar(x, '{', '[');
+                x = sm->replaceChar(x, '}', ']');
+                getLines(newLines, x);
+            }
+            for (int j = 0; j < newLines.size(); j++)
+            {
+                string line = newLines[j];
+                line = sm->trim(line);
+                if (line.size() > 0)
                 {
-                    react = getTranslatedReaction(line);
-                    if(react != NULL)
+                    if (line.find('>') != string::npos) //contains reaction
                     {
-                        ret.push_back(react);
-                    }
+                        react = getTranslatedReaction(line);
+                        if(react != NULL)
+                        {
+                            ret.push_back(react);
+                        }
 
-                    modelRepresentation.push_back(sm->trim(line));
-                }
-                else
-                {
-                    con = sm->explodeChar(line, '=');
-                    if (con.size() != 2)
-                    {
-                        cout << "Invalid constant: " << line << endl;
-                    }
-                    else if (constants.find(con[0]) != constants.end())
-                    {
-                        cout << "Duplicate constant:" << con[0] << endl;
+                        modelRepresentation.push_back(sm->trim(line));
                     }
                     else
                     {
-                        istringstream iss(con[1]);
-                        double n;
-                        iss >> n;
-                        constants.insert(make_pair(con[0], n));
-                        modelRepresentation.push_back(sm->trim(line));
+                        con = sm->explodeChar(line, '=');
+                        if (con.size() != 2)
+                        {
+                            cout << "Invalid constant: " << line << endl;
+                        }
+                        else if (constants.find(con[0]) != constants.end())
+                        {
+                            cout << "Duplicate constant:" << con[0] << endl;
+                        }
+                        else
+                        {
+                            istringstream iss(con[1]);
+                            double n;
+                            iss >> n;
+                            constants.insert(make_pair(con[0], n));
+                            modelRepresentation.push_back(sm->trim(line));
+                        }
                     }
                 }
             }

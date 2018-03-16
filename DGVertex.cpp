@@ -38,14 +38,14 @@ int* DGVertex::getDependencies()//return the size of the array
         temp[i] = dependencies[i];
     return temp;
 }
-int* DGVertex::getSize()//return the dependencies' array
+int DGVertex::getSize()//return the dependencies' array
 {
 
-    return &m;
+    return m;
 }
-int* DGVertex::getId()
+int DGVertex::getId()
 {
-    return &id;
+    return id;
 }
 void DGVertex::setId(int id)
 {
