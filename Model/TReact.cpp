@@ -55,60 +55,54 @@ vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long 
         string lineOrig = lines[i];
         newLines.clear();
         newLinesX.clear();
-        if(lines[i][0] == '#')
+        if(debug)
+            cout << "Comment line" << endl;
+        getLines(newLinesX, lineOrig); //split the reaction in subreactions
+        if(debug)
+            cout << "lines: " << i << " " << lines[i] << endl;
+        for (int j = 0; j < newLinesX.size(); j++)
         {
+            string x = newLinesX[j];
             if(debug)
-                cout << "Comment line" << endl;
+                cout << "   NEWLINES: " << j << " " << x << endl;
+            x = sm ->replaceChar(x, '{', '[');
+            x = sm->replaceChar(x, '}', ']');
+            getLines(newLines, x);
         }
-        else
+        for (int j = 0; j < newLines.size(); j++)
         {
-            getLines(newLinesX, lineOrig); //split the reaction in subreactions
-            if(debug)
-                cout << "lines: " << i << " " << lines[i] << endl;
-            for (int j = 0; j < newLinesX.size(); j++)
+            string line = newLines[j];
+            line = sm->trim(line);
+            if (line.size() > 0)
             {
-                string x = newLinesX[j];
-                if(debug)
-                    cout << "   NEWLINES: " << j << " " << x << endl;
-                x = sm ->replaceChar(x, '{', '[');
-                x = sm->replaceChar(x, '}', ']');
-                getLines(newLines, x);
-            }
-            for (int j = 0; j < newLines.size(); j++)
-            {
-                string line = newLines[j];
-                line = sm->trim(line);
-                if (line.size() > 0)
+                if (line.find('>') != string::npos) //contains reaction
                 {
-                    if (line.find('>') != string::npos) //contains reaction
+                    react = getTranslatedReaction(line);
+                    if(react != NULL)
                     {
-                        react = getTranslatedReaction(line);
-                        if(react != NULL)
-                        {
-                            ret.push_back(react);
-                        }
+                        ret.push_back(react);
+                    }
 
-                        modelRepresentation.push_back(sm->trim(line));
+                    modelRepresentation.push_back(sm->trim(line));
+                }
+                else
+                {
+                    con = sm->explodeChar(line, '=');
+                    if (con.size() != 2)
+                    {
+                        cout << "Invalid constant: " << line << endl;
+                    }
+                    else if (constants.find(con[0]) != constants.end())
+                    {
+                        cout << "Duplicate constant:" << con[0] << endl;
                     }
                     else
                     {
-                        con = sm->explodeChar(line, '=');
-                        if (con.size() != 2)
-                        {
-                            cout << "Invalid constant: " << line << endl;
-                        }
-                        else if (constants.find(con[0]) != constants.end())
-                        {
-                            cout << "Duplicate constant:" << con[0] << endl;
-                        }
-                        else
-                        {
-                            istringstream iss(con[1]);
-                            double n;
-                            iss >> n;
-                            constants.insert(make_pair(con[0], n));
-                            modelRepresentation.push_back(sm->trim(line));
-                        }
+                        istringstream iss(con[1]);
+                        double n;
+                        iss >> n;
+                        constants.insert(make_pair(con[0], n));
+                        modelRepresentation.push_back(sm->trim(line));
                     }
                 }
             }

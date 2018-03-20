@@ -4,6 +4,10 @@
 #include <iostream>
 #include <math.h>
 #include <random>
+#include <ctime>
+#include <string>
+#include <sstream>
+#include <fstream>
 #define E 2.71828182845904523536
 using namespace std;
 
@@ -16,6 +20,8 @@ class Utils
   double getRandomNumber();
   double binomialCoefficient(int k, int n);
   double ln(double n);
+  double getCurrentTime();
+  void saveToCSV(string buffer);
   ~Utils();
   private:
   int calcFactorial(int n);

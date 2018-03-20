@@ -28,9 +28,9 @@ double Utils::getRandomNumber()
 double Utils::binomialCoefficient(int k, int n)
 {
     // k!/n!*(k-n)!
+    int fatn, fatk, fatkn;
     if(k <=0)
         return 0;
-    int fatn, fatk, fatkn;
     if (n > 10)
         fatn = calcFactorial(n);
     else
@@ -53,4 +53,19 @@ int Utils::calcFactorial(int n)
 }
 double Utils::ln(double n){
     return (double)log(n)/log(E);
+}
+double Utils::getCurrentTime(){
+    clock_t t;
+    t = clock();
+    return (double)t/(CLOCKS_PER_SEC);
+}
+void Utils::saveToCSV(string buffer){
+    fstream file;
+    file.open("output.csv", fstream::out | fstream::trunc);
+    if(file.is_open()){
+        file << buffer;
+        file.close();
+    }
+    else
+        cout << "Impossible to save file!" << endl;
 }

@@ -1,6 +1,7 @@
 #include "DirectMethod.h"
 DirectMethod::~DirectMethod()
 {
+    delete ut;
 }
 void DirectMethod::perform(string filename, double simulTime)
 {
@@ -17,13 +18,17 @@ void DirectMethod::perform(string filename, double simulTime)
         specQuantity[i] = model->getInitialQuantity()[i];
     }
     totalPropensity = 0;
+    double beg = ut->getCurrentTime();
     initialize(filename);
+    double en = ut->getCurrentTime();
+    cout << "\nFinished with " << en-beg << " seconds." << endl;
 
 }
 
 void DirectMethod::initialize(string filename)
 {
     double currentTime = 0.0;
+    stringstream buffer;
     double t = 0.0;
     double selector = 0.0;
     int* x = new int[model->getSpecNumber()];
@@ -49,7 +54,6 @@ void DirectMethod::initialize(string filename)
                 break;
             }
         }
-        cout << "Selected reaction: " << selectedReaction << endl;
         //reaction execution
         for(int i = 0; i < model->getSpecNumber(); i++)
         {
@@ -61,16 +65,24 @@ void DirectMethod::initialize(string filename)
         int depSize = dg->getDependenciesSize(selectedReaction);
         for(int i = 0; i< depSize; i++)
         {
-            cout << "   -> " << i << endl;
             double propOld = propArray[i];
             calcPropOne(i);
             totalPropensity = totalPropensity - propOld + propArray[i];
         }
+        buffer <<currentTime << ";";
+        for(int i = 0; i < model->getSpecNumber(); i++){
+            buffer << x[i];
+            if(i < model->getSpecNumber() - 1)
+                buffer << ";";
+        }
+        buffer << "\n";
     }
+    ut->saveToCSV(buffer.str());
     for(int i = 0; i < model->getSpecNumber(); i++)
     {
-        cout << x[i] << " : ";
+      cout << x[i] << " : ";
     }
+
 }
 
 void DirectMethod::calcPropensity()
@@ -80,10 +92,10 @@ void DirectMethod::calcPropensity()
     totalPropensity = 0;
     for(int i = 0; i < model->getReacNumber(); i++)
     {
-        sum = 0;
+        sum = 1;
         for(int j = 0; j < model->getSpecNumber(); j++)
         {
-            sum+= ut->binomialCoefficient(specQuantity[j], model->getReactants()[i][j]);
+            sum*= ut->binomialCoefficient(specQuantity[j], model->getReactants()[i][j]);
         }
         propArray[i] = sum;
         totalPropensity+=  propArray[i];
