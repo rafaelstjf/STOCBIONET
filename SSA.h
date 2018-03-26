@@ -7,6 +7,7 @@
 #include "Model.h"
 #include "DependencyGraph.h"
 #include "Utils.h"
+#include <map>
 using namespace std;
 
 class SSA
@@ -18,6 +19,7 @@ protected:
     Utils* ut;
     DependencyGraph* dg;
     Model* model;
+    map<double, int*> x;
     float* propArray; //propensity array
     double simulTime; //simulation time
     int* specQuantity; //species quantity
@@ -25,7 +27,6 @@ protected:
     //functions
     virtual void initialize(string filename) = 0; //read the model and initialize data structures
     virtual void calcPropensity() = 0; //calculate the propensity function for each reaction
-    virtual void selectReaction() = 0; //select which reaction will occur next
 
 };
 
