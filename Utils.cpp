@@ -28,8 +28,14 @@ double Utils::getRandomNumber()
 double Utils::binomialCoefficient(int k, int n)
 {
     // k!/n!*(k-n)!
+<<<<<<< HEAD
     int fatn = 1, fatk = 1;
     if(k < n)
+=======
+    int fatn, fatk=1, fatkn;
+    /* it's not necessary to calculate all the fatorials
+    if(k <=0 || n <= 0)
+>>>>>>> c543737a23a288a06c5fb728460e3a21c497ed21
         return 0;
     for(int i = k; i <k-n; i--)
     {
@@ -39,6 +45,28 @@ double Utils::binomialCoefficient(int k, int n)
         fatn = calcFactorial(n);
     else
         fatn = fat[n];
+<<<<<<< HEAD
+=======
+    if (k > 10)
+        fatk = calcFactorial(k);
+    else
+        fatk = fat[k];
+    if (k - n > 10)
+        fatkn = calcFactorial(k - n);
+    else
+        fatkn = fat[k - n];
+    return (double) (fatk/(fatn*fatkn));
+    */
+    if(k <=0 || n <= 0 || n > k)
+        return 0;
+    if (n > 10)
+        fatn = calcFactorial(n);
+    else
+        fatn = fat[n];
+    for(int i = k; i < k-n;i--){
+        fatk*=i;
+    }
+>>>>>>> c543737a23a288a06c5fb728460e3a21c497ed21
     return (double) (fatk/fatn);
 }
 int Utils::calcFactorial(int n)

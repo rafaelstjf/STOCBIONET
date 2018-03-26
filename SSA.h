@@ -23,7 +23,7 @@ protected:
     float* propArray; //propensity array
     double simulTime; //simulation time
     int* specQuantity; //species quantity
-    float totalPropensity; //sum of all the propensities
+    double totalPropensity; //sum of all the propensities
     //functions
     virtual void initialize(string filename) = 0; //read the model and initialize data structures
     virtual void calcPropensity() = 0; //calculate the propensity function for each reaction

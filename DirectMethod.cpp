@@ -8,7 +8,7 @@ void DirectMethod::perform(string filename, double simulTime)
     model = new Model(); //instantiate the model
     ut = new Utils(); //instantiate the utility class
     specQuantity = new int[model->getSpecNumber()];
-    propArray = new float[model->getReacNumber()];
+    propArray = new double[model->getReacNumber()];
     this->simulTime = simulTime;
     model->loadModel(filename);
     dg = new DependencyGraph(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
@@ -52,7 +52,6 @@ void DirectMethod::initialize(string filename)
         t = (1.0/totalPropensity)*ut->ln(1.0/u1); //next time increase
         cout << (totalPropensity) << " : " << ut->ln(1.0/u1)  << "T: " << t<< " C: " << currentTime << endl;
         //reaction selection
-        u2 = ut->getRandomNumber();
         selector = totalPropensity*u2;
         for(int i = 0; i < model->getReacNumber(); i++)
         {
@@ -68,7 +67,7 @@ void DirectMethod::initialize(string filename)
         {
             specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[selectedReaction][i];
         }
-        currentTime = currentTime + t; //change current time
+        currentTime = currentTime + t;
         //check the dependencies of the selected reaction and update the propensity array
         int* deparray = dg->getDependencies(selectedReaction);
         int depSize = dg->getDependenciesSize(selectedReaction);
@@ -86,14 +85,16 @@ void DirectMethod::initialize(string filename)
 void DirectMethod::calcPropensity()
 {
     //updates the entire array of propensities
-    int sum = 0;
+    //propensity of a reaction i is: reaction rate * multiplicand(n=0; n=numSpecies) of binomialcoefficient(SpecQuantity[n],reactants[i][n]
+    int sum = 1;
     totalPropensity = 0;
     for(int i = 0; i < model->getReacNumber(); i++)
     {
         sum = 1;
         for(int j = 0; j < model->getSpecNumber(); j++)
         {
-            sum*= ut->binomialCoefficient(specQuantity[j], model->getReactants()[i][j]);
+            if(model->getReactants()[i][j]!=0)
+                sum*= ut->binomialCoefficient(specQuantity[j], model->getReactants()[i][j]);
         }
         propArray[i] = model->getReacRateArray()[i]*sum;
         totalPropensity+= propArray[i];
