@@ -49,6 +49,7 @@ void DirectMethod::initialize(string filename)
         //generate simulation time
         double u1, u2;
         u1 = ut->getRandomNumber();
+        u2 = ut->getRandomNumber();
         t = (1.0/totalPropensity)*ut->ln(1.0/u1); //next time increase
         cout << (totalPropensity) << " : " << ut->ln(1.0/u1)  << "T: " << t<< " C: " << currentTime << endl;
         //reaction selection
