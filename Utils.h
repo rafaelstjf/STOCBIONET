@@ -21,7 +21,8 @@ class Utils
   double binomialCoefficient(int k, int n);
   double ln(double n);
   double getCurrentTime();
-  void saveToCSV(string buffer);
+  void saveToCSV(string buffer, string filename);
+  void saveToTXT(string buffer, string filename);
   ~Utils();
   private:
   int calcFactorial(int n);

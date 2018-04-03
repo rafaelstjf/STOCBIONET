@@ -14,6 +14,9 @@ Utils::Utils()
     fat[9] = 362880;
     fat[10] = 3628800;
     double seed = rd();
+    stringstream s;
+    s << seed;
+    saveToTXT(s.str(), "seed");
     srand(seed);
 
 }
@@ -23,41 +26,16 @@ Utils::~Utils()
 
 double Utils::getRandomNumber()
 {
-    return rand() / (float)RAND_MAX;
+    double i = 0.0;
+    while(i==0.0)
+        i = rand() / (float)(RAND_MAX);
+    return i;
 }
 double Utils::binomialCoefficient(int k, int n)
 {
     // k!/n!*(k-n)!
-<<<<<<< HEAD
-    int fatn = 1, fatk = 1;
-    if(k < n)
-=======
-    int fatn, fatk=1, fatkn;
-    /* it's not necessary to calculate all the fatorials
-    if(k <=0 || n <= 0)
->>>>>>> c543737a23a288a06c5fb728460e3a21c497ed21
-        return 0;
-    for(int i = k; i <k-n; i--)
-    {
-        fatk *= i;
-    }
-    if (n > 10)
-        fatn = calcFactorial(n);
-    else
-        fatn = fat[n];
-<<<<<<< HEAD
-=======
-    if (k > 10)
-        fatk = calcFactorial(k);
-    else
-        fatk = fat[k];
-    if (k - n > 10)
-        fatkn = calcFactorial(k - n);
-    else
-        fatkn = fat[k - n];
-    return (double) (fatk/(fatn*fatkn));
-    */
-    if(k <=0 || n <= 0 || n > k)
+    int fatn=1, fatk=1;
+    if(n > k || (k==0 && n!=0))
         return 0;
     if (n > 10)
         fatn = calcFactorial(n);
@@ -66,7 +44,6 @@ double Utils::binomialCoefficient(int k, int n)
     for(int i = k; i < k-n;i--){
         fatk*=i;
     }
->>>>>>> c543737a23a288a06c5fb728460e3a21c497ed21
     return (double) (fatk/fatn);
 }
 int Utils::calcFactorial(int n)
@@ -86,10 +63,10 @@ double Utils::getCurrentTime()
     t = clock();
     return (double)t/(CLOCKS_PER_SEC);
 }
-void Utils::saveToCSV(string buffer)
+void Utils::saveToCSV(string buffer, string filename)
 {
     fstream file;
-    file.open("output.csv", fstream::out | fstream::trunc);
+    file.open(filename + ".csv", fstream::out | fstream::trunc);
     if(file.is_open())
     {
         file << buffer;
@@ -97,4 +74,12 @@ void Utils::saveToCSV(string buffer)
     }
     else
         cout << "Impossible to save file!" << endl;
+}
+void Utils::saveToTXT(string buffer, string filename){
+    fstream file;
+    file.open(filename + ".txt", fstream::out | fstream::trunc);
+    if(file.is_open()){
+        file << buffer;
+        file.close();
+    }
 }

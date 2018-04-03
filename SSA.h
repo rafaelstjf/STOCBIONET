@@ -19,8 +19,8 @@ protected:
     Utils* ut;
     DependencyGraph* dg;
     Model* model;
-    map<double, int*> x;
-    float* propArray; //propensity array
+    map<double, int*> x; //state dynamics
+    double* propArray; //propensity array
     double simulTime; //simulation time
     int* specQuantity; //species quantity
     double totalPropensity; //sum of all the propensities
