@@ -53,3 +53,4 @@ transcription,k4:F -> D + G;
 transcription,k5:E + G -> A;
 #IMPORTANT: Comments not supported
 ```
+:+1: Credits for the input file structure: Camillo de Lellis Falcão da Silva
