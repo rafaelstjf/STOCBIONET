@@ -8,8 +8,8 @@ Avaiable methods:
  
 Methods in development:
  
- * Direct method (__85%__ )
- * First reaction method (__0%__ )
+ * Direct method (__95%__ )
+ * First reaction method (__5%__ )
  * Next reaction method (__0%__ )
  * Modified next reaction method (__0%__ )
  * Rejection method (__0%__ )
@@ -51,4 +51,5 @@ transcription,k2:B + C -> D;
 transcription,k3:D + E -> E + F;
 transcription,k4:F -> D + G;
 transcription,k5:E + G -> A;
+#IMPORTANT: Comments not supported
 ```
