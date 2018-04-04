@@ -12,11 +12,13 @@ public:
 
     void perform(string filename, double simulTime);
     virtual ~DirectMethod();
+    void saveToFile();
 
 private:
     void initialize(string filename); //read the model and initialize data structures
     void calcPropensity(); //calculate the propensity function for all the reactions
     void calcPropOne(int index);
+
 
 };
 

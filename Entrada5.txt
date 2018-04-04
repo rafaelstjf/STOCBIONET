@@ -1,0 +1,3 @@
+k1=1;
+A = 10;
+transcription,k1: A-> ;

@@ -1,30 +1,9 @@
 #include "DirectMethod.h"
 void DirectMethod::perform(string filename, double simulTime)
 {
-    //instantiate variables
-    model = new Model(); //instantiate the model
-    ut = new Utils();    //instantiate the utility class
-    specQuantity = new int[model->getSpecNumber()];
-    propArray = new double[model->getReacNumber()];
-    this->simulTime = simulTime;
-    totalPropensity = 0;
-    //load both model and its depedency graph
-    model->loadModel(filename);
-    dg = new DependencyGraph(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
-    dg->printGraph();
-    for (int i = 0; i < model->getSpecNumber(); i++)
-    {
-        specQuantity[i] = model->getInitialQuantity()[i];
-    }
-    //peform simulation
+    initialize(filename);     //instantiate the variables
     double beg = ut->getCurrentTime(); //begin
-    initialize(filename);
-    double en = ut->getCurrentTime(); //end
-    cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
-}
-
-void DirectMethod::initialize(string filename)
-{
+    //peform the simulation
     double currentTime = 0.0;
     double t = 0.0;
     double selector = 0.0;
@@ -39,17 +18,16 @@ void DirectMethod::initialize(string filename)
         xArray = new int[model->getSpecNumber()];
         for (int i = 0; i < model->getSpecNumber(); i++)
         {
-           // xArray[i] = 0;
+            // xArray[i] = 0;
             xArray[i] = specQuantity[i];
         }
         x.insert(make_pair(currentTime, xArray));
-
         //generate simulation time
         double u1, u2;
         u1 = ut->getRandomNumber();
         u2 = ut->getRandomNumber();
         t = (1.0 / totalPropensity) * ut->ln(1.0 / u1); //next time increase
-        cout << (totalPropensity) << " : " << ut->ln(1.0 / u1) << "T: " << t << " C: " << currentTime << endl;
+        //cout << (totalPropensity) << " : " << ut->ln(1.0 / u1) << "T: " << t << " C: " << currentTime << endl;
         //reaction selection
         selector = totalPropensity * u2;
         for (int i = 0; i < model->getReacNumber(); i++)
@@ -75,18 +53,27 @@ void DirectMethod::initialize(string filename)
             calcPropOne(deparray[i]);
         }
     }
+    double en = ut->getCurrentTime(); //end
+    saveToFile();
+    cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
+}
 
-    map<double, int*>::iterator it = x.begin();
-    while(it != x.end())
+void DirectMethod::initialize(string filename)
+{
+    //instantiate the variables
+    model = new Model(); //instantiate the model
+    ut = new Utils();    //instantiate the utility class
+    specQuantity = new int[model->getSpecNumber()];
+    propArray = new double[model->getReacNumber()];
+    this->simulTime = simulTime;
+    totalPropensity = 0;
+    //load both model and its depedency graph
+    model->loadModel(filename);
+    dg = new DependencyGraph(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
+    //dg->printGraph();
+    for (int i = 0; i < model->getSpecNumber(); i++)
     {
-        int* a = it->second;
-        cout << "Tempo: " << it->first << endl;
-        for(int i = 0; i < model->getSpecNumber(); i++)
-        {
-            cout << a[i] << " : ";
-        }
-        cout << endl;
-        it++;
+        specQuantity[i] = model->getInitialQuantity()[i];
     }
 
 }
@@ -94,7 +81,7 @@ void DirectMethod::initialize(string filename)
 void DirectMethod::calcPropensity()
 {
     //updates the entire array of propensities
-    //propensity of a reaction i is: reaction rate * multiplicand(n=0; n=numSpecies) of binomialcoefficient(SpecQuantity[n],reactants[i][n]
+    //propensity of a reaction i is: reaction rate * productory(n=0; n=numSpecies) of binomialcoefficient(SpecQuantity[n],reactants[i][n]
     int sum = 1;
     totalPropensity = 0;
     for (int i = 0; i < model->getReacNumber(); i++)
@@ -120,7 +107,45 @@ void DirectMethod::calcPropOne(int index)
     propArray[index] = model->getReacRateArray()[index] * sum;
     totalPropensity = totalPropensity - propOld + propArray[index];
 }
-DirectMethod::~DirectMethod(){
+void DirectMethod::saveToFile()
+{
+    stringstream buffer;
+    map<string, long int> speciesNameNumber = model->getSpecNameNumber();
+    map<double, int*>::iterator itX = x.begin();
+    map<string, long int>::iterator itSpecies = speciesNameNumber.begin();
+    //get the name of the species
+    string names[speciesNameNumber.size()];
+    while(itSpecies!= speciesNameNumber.end())
+    {
+        names[itSpecies->second] = itSpecies->first;
+        itSpecies++;
+    }
+    buffer.clear();
+    buffer << "Time; ";
+    for(int i = 0; i < speciesNameNumber.size(); i++)
+    {
+        buffer << names[i];
+        if(i<speciesNameNumber.size()-1)
+            buffer << "; ";
+    }
+    buffer << '\n';
+    while(itX != x.end())
+    {
+        int* a = itX->second;
+        buffer << itX->first << "; ";
+        for(int i = 0; i < model->getSpecNumber(); i++)
+        {
+            buffer << a[i];
+            if(i< model->getSpecNumber()-1)
+                buffer << "; ";
+        }
+        buffer << '\n';
+        itX++;
+    }
+    ut->saveToCSV(buffer.str(), "DM_output");
+}
+DirectMethod::~DirectMethod()
+{
     delete dg;
     delete model;
     delete ut;

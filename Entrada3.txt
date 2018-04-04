@@ -1,0 +1,7 @@
+k1=1;
+k2=1;
+A = 1000;
+B = 100;
+C = 10;
+transcription,k1:A + B-> C;
+transcription,k2:C-> ;

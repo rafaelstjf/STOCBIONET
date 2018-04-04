@@ -7,7 +7,7 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     SSA* s = new DirectMethod();
-    s->perform("Entrada2.txt", 10.0);
-    delete s;
+    s->perform("Entrada3.txt", 500.0);
+    //delete s;
     return 0;
 }
