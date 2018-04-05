@@ -27,6 +27,5 @@ class Utils
   private:
   int calcFactorial(int n);
   int fat[11];
-  random_device rd; //obtain a seed
 };
 #endif

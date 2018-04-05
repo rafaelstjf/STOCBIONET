@@ -9,6 +9,9 @@
 makefile
 main
 conversor
+# Algorithm generated files #
+#############################
+*.csv
 # OS generated files #
 ######################
 .DS_Store
@@ -19,7 +22,6 @@ conversor
 .Trashes
 ehthumbs.db
 Thumbs.db
-.vscode
 # specific to CodeBlocks IDE #
 ##############################
 *.cbp

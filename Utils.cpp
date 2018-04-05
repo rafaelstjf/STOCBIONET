@@ -1,4 +1,19 @@
 #include "Utils.h"
+//used to mix the seed
+// http://www.concentric.net/~Ttwang/tech/inthash.htm
+unsigned long mix(unsigned long a, unsigned long b, unsigned long c)
+{
+    a=a-b;  a=a-c;  a=a^(c >> 13);
+    b=b-c;  b=b-a;  b=b^(a << 8);
+    c=c-a;  c=c-b;  c=c^(b >> 13);
+    a=a-b;  a=a-c;  a=a^(c >> 12);
+    b=b-c;  b=b-a;  b=b^(a << 16);
+    c=c-a;  c=c-b;  c=c^(b >> 5);
+    a=a-b;  a=a-c;  a=a^(c >> 3);
+    b=b-c;  b=b-a;  b=b^(a << 10);
+    c=c-a;  c=c-b;  c=c^(b >> 15);
+    return c;
+}
 
 Utils::Utils()
 {
@@ -13,10 +28,10 @@ Utils::Utils()
     fat[8] = 40320;
     fat[9] = 362880;
     fat[10] = 3628800;
-    double seed = rd();
+    unsigned long seed = mix(clock(), time(NULL), getpid());
     stringstream s;
     s << seed;
-    saveToTXT(s.str(), "seed");
+    saveToTXT(s.str(), "last_seed");
     srand(seed);
 
 }

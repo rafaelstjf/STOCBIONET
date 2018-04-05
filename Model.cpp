@@ -105,9 +105,20 @@ void Model::loadModel(string filename)
             initialQuantity[itQ->second] = specQuantity.find(itQ->first)->second; //search the specie with the same name and set the quantity
             itQ++;
         }
+
+
+
+
         for(i = 0; i < specNumber; i++)
         {
-            cout << "[" << initialQuantity[i] << "]";
+            itQ = specNameNumber.begin();
+            while(itQ != specNameNumber.end())
+            {
+                if(itQ->second == i)
+                    break;
+                itQ++;
+            }
+            cout << itQ->first << " [" << initialQuantity[i] << "]" << endl;
         }
         /* print model representation
         for(i = 0; i< modelRepresentation.size(); i++){
@@ -117,7 +128,8 @@ void Model::loadModel(string filename)
         cout << endl;
         buildStoichiometryMatrix();
         cout << "Stoichiometry matrix" << endl;
-        for(i = 0; i < reacNumber; i++){
+        for(i = 0; i < reacNumber; i++)
+        {
             for(j = 0; j < specNumber; j++)
                 cout << stoiMatrix[i][j] <<" ";
             cout << endl;
@@ -188,6 +200,7 @@ void Model::buildStoichiometryMatrix()
         }
     }
 }
-int** Model::getStoiMatrix(){
+int** Model::getStoiMatrix()
+{
     return stoiMatrix;
 }

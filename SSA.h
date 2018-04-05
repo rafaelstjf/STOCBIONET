@@ -27,6 +27,8 @@ protected:
     //functions
     virtual void initialize(string filename) = 0; //read the model and initialize data structures
     virtual void calcPropensity() = 0; //calculate the propensity function for each reaction
+    virtual void printResult() = 0;
+    virtual void saveToFile() = 0;
 
 };
 

@@ -55,6 +55,7 @@ void DirectMethod::perform(string filename, double simulTime)
     }
     double en = ut->getCurrentTime(); //end
     saveToFile();
+    printResult();
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
 }
 
@@ -143,6 +144,23 @@ void DirectMethod::saveToFile()
         itX++;
     }
     ut->saveToCSV(buffer.str(), "DM_output");
+}
+void DirectMethod::printResult()
+{
+    map<double, int*>::iterator it = x.begin();
+    while(it != x.end())
+    {
+        int* a = it->second;
+        cout << "Time: " << it->first << endl;
+        for(int i = 0; i < model->getSpecNumber(); i++)
+        {
+            cout << a[i];
+            if(i<model->getSpecNumber() - 1)
+                cout << ": ";
+        }
+        cout << endl;
+        it++;
+    }
 }
 DirectMethod::~DirectMethod()
 {
