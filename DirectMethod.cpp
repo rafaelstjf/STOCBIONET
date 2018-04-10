@@ -1,4 +1,23 @@
 #include "DirectMethod.h"
+void DirectMethod::initialize(string filename)
+{
+    //instantiate the variables
+    model = new Model(); //instantiate the model
+    ut = new Utils();    //instantiate the utility class
+    specQuantity = new int[model->getSpecNumber()];
+    propArray = new double[model->getReacNumber()];
+    this->simulTime = simulTime;
+    totalPropensity = 0;
+    //load both model and its depedency graph
+    model->loadModel(filename);
+    dg = new DependencyGraph(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
+    dg->printGraph();
+    for (int i = 0; i < model->getSpecNumber(); i++)
+    {
+        specQuantity[i] = model->getInitialQuantity()[i];
+    }
+
+}
 void DirectMethod::perform(string filename, double simulTime)
 {
     initialize(filename);     //instantiate the variables
@@ -55,30 +74,9 @@ void DirectMethod::perform(string filename, double simulTime)
     }
     double en = ut->getCurrentTime(); //end
     saveToFile();
-    printResult();
+    //printResult();
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
 }
-
-void DirectMethod::initialize(string filename)
-{
-    //instantiate the variables
-    model = new Model(); //instantiate the model
-    ut = new Utils();    //instantiate the utility class
-    specQuantity = new int[model->getSpecNumber()];
-    propArray = new double[model->getReacNumber()];
-    this->simulTime = simulTime;
-    totalPropensity = 0;
-    //load both model and its depedency graph
-    model->loadModel(filename);
-    dg = new DependencyGraph(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
-    //dg->printGraph();
-    for (int i = 0; i < model->getSpecNumber(); i++)
-    {
-        specQuantity[i] = model->getInitialQuantity()[i];
-    }
-
-}
-
 void DirectMethod::calcPropensity()
 {
     //updates the entire array of propensities

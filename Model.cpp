@@ -32,7 +32,8 @@ void Model::loadModel(string filename)
         cout << "Reading the file..." << endl;
         text << inFile.rdbuf();
         cout << "Read in debug mode?(y or n)" << endl;
-        cin >> debug;
+        //cin >> debug;
+        debug == 'n';
         if (debug == 'y' or debug == 'Y')
             tr = new TReact(true);
         else
