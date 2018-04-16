@@ -8,8 +8,8 @@ Avaiable methods:
  
 Methods in development:
  
- * Direct method (__95%__ )
- * First reaction method (__5%__ )
+ * Direct method (__99%__ )
+ * First reaction method (__80%__ )
  * Next reaction method (__0%__ )
  * Modified next reaction method (__0%__ )
  * Rejection method (__0%__ )

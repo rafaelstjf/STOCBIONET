@@ -1,17 +1,17 @@
 #include "DirectMethod.h"
-void DirectMethod::initialize(string filename)
+void DirectMethod::initialize(string filename, double simultime)
 {
     //instantiate the variables
     model = new Model(); //instantiate the model
     ut = new Utils();    //instantiate the utility class
+    model->loadModel(filename);
     specQuantity = new int[model->getSpecNumber()];
     propArray = new double[model->getReacNumber()];
     this->simulTime = simulTime;
     totalPropensity = 0;
     //load both model and its depedency graph
-    model->loadModel(filename);
     dg = new DependencyGraph(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
-    dg->printGraph();
+    //dg->printGraph();
     for (int i = 0; i < model->getSpecNumber(); i++)
     {
         specQuantity[i] = model->getInitialQuantity()[i];
@@ -20,7 +20,8 @@ void DirectMethod::initialize(string filename)
 }
 void DirectMethod::perform(string filename, double simulTime)
 {
-    initialize(filename);     //instantiate the variables
+    cout << "DIRECT METHOD" << endl;
+    initialize(filename, simulTime);     //instantiate the variables
     double beg = ut->getCurrentTime(); //begin
     //peform the simulation
     double currentTime = 0.0;
@@ -28,6 +29,7 @@ void DirectMethod::perform(string filename, double simulTime)
     double selector = 0.0;
     int *xArray;
     int selectedReaction = 0;
+    double u1, u2;
     x.clear();
     //calculate the reactions propensity
     calcPropensity();
@@ -42,7 +44,6 @@ void DirectMethod::perform(string filename, double simulTime)
         }
         x.insert(make_pair(currentTime, xArray));
         //generate simulation time
-        double u1, u2;
         u1 = ut->getRandomNumber();
         u2 = ut->getRandomNumber();
         t = (1.0 / totalPropensity) * ut->ln(1.0 / u1); //next time increase
