@@ -4,12 +4,12 @@ Stochastic simulation algorithms for Gene Regulatory Networks for delayed and no
 
 Avaiable methods:
 
- *
+ * Direct method
  
 Methods in development:
  
- * Direct method (__99%__ )
- * First reaction method (__80%__ )
+ * First reaction method (__95%__ )
+ * First reaction method using dependency graph (__90%__ )
  * Next reaction method (__0%__ )
  * Modified next reaction method (__0%__ )
  * Rejection method (__0%__ )

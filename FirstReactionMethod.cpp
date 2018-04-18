@@ -13,9 +13,7 @@ void FirstReactionMethod::initialize(string filename, double simulTime)
     propArray = new double[model->getReacNumber()];
     this->simulTime = simulTime;
     totalPropensity = 0;
-    dg = new DependencyGraph(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
-    //dg->printGraph();
-    for(int i = 0; i< model->getSpecNumber(); i++)
+    for (int i = 0; i < model->getSpecNumber(); i++)
     {
         specQuantity[i] = model->getInitialQuantity()[i];
     }
@@ -33,38 +31,37 @@ void FirstReactionMethod::perform(string filename, double simulTime)
     int selectedReaction = 0;
     x.clear();
     calcPropensity();
-    while(currentTime <= simulTime)
+    while (currentTime <= simulTime)
     {
         xArray = new int[model->getSpecNumber()];
-        for(int i = 0; i < model->getSpecNumber(); i++)
+        for (int i = 0; i < model->getSpecNumber(); i++)
         {
             xArray[i] = specQuantity[i];
         }
         x.insert(make_pair(currentTime, xArray));
         //reaction selection
-        for(int i = 0; i < model->getReacNumber(); i++)
+        for (int i = 0; i < model->getReacNumber(); i++)
         {
             calcPropOne(i);
             u = ut->getRandomNumber();
-            t[i] = (-1.0)*log10(u)/propArray[i];
+            t[i] = (-1.0) * log10(u) / propArray[i];
         }
         double minT = t[0];
-        int minIndex = 0;
-        for(int i = 1; i < model->getReacNumber(); i++)
+        selectedReaction = 0;
+        for (int i = 1; i < model->getReacNumber(); i++)
         {
-            if(minT > t[i])
+            if (minT > t[i])
             {
                 minT = t[i];
-                minIndex = i;
+                selectedReaction = i;
             }
         }
         currentTime = currentTime + minT;
         //reaction execution
-        for(int i = 0; i < model->getSpecNumber(); i++)
+        for (int i = 0; i < model->getSpecNumber(); i++)
         {
-            specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[minIndex][i];
+            specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[selectedReaction][i];
         }
-
     }
     double en = ut->getCurrentTime(); //end
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
@@ -74,14 +71,14 @@ void FirstReactionMethod::perform(string filename, double simulTime)
 void FirstReactionMethod::calcPropensity()
 {
     int sum = 1;
-    for(int i = 0; i < model->getReacNumber(); i++)
+    for (int i = 0; i < model->getReacNumber(); i++)
     {
         sum = 1;
-        for(int j = 0; j < model->getSpecNumber(); j++)
+        for (int j = 0; j < model->getSpecNumber(); j++)
         {
-            sum*= ut->binomialCoefficient(specQuantity[j], model->getReactants()[i][j]);
+            sum *= ut->binomialCoefficient(specQuantity[j], model->getReactants()[i][j]);
         }
-        propArray[i] = model->getReacRateArray()[i]*sum;
+        propArray[i] = model->getReacRateArray()[i] * sum;
     }
 }
 void FirstReactionMethod::calcPropOne(int index)
@@ -97,32 +94,32 @@ void FirstReactionMethod::saveToFile()
 {
     stringstream buffer;
     map<string, long int> speciesNameNumber = model->getSpecNameNumber();
-    map<double, int*>::iterator itX = x.begin();
+    map<double, int *>::iterator itX = x.begin();
     map<string, long int>::iterator itSpecies = speciesNameNumber.begin();
     //get the name of the species
     string names[speciesNameNumber.size()];
-    while(itSpecies!= speciesNameNumber.end())
+    while (itSpecies != speciesNameNumber.end())
     {
         names[itSpecies->second] = itSpecies->first;
         itSpecies++;
     }
     buffer.clear();
     buffer << "Time; ";
-    for(int i = 0; i < speciesNameNumber.size(); i++)
+    for (int i = 0; i < speciesNameNumber.size(); i++)
     {
         buffer << names[i];
-        if(i<speciesNameNumber.size()-1)
+        if (i < speciesNameNumber.size() - 1)
             buffer << "; ";
     }
     buffer << '\n';
-    while(itX != x.end())
+    while (itX != x.end())
     {
-        int* a = itX->second;
+        int *a = itX->second;
         buffer << itX->first << "; ";
-        for(int i = 0; i < model->getSpecNumber(); i++)
+        for (int i = 0; i < model->getSpecNumber(); i++)
         {
             buffer << a[i];
-            if(i< model->getSpecNumber()-1)
+            if (i < model->getSpecNumber() - 1)
                 buffer << "; ";
         }
         buffer << '\n';
@@ -132,15 +129,15 @@ void FirstReactionMethod::saveToFile()
 }
 void FirstReactionMethod::printResult()
 {
-    map<double, int*>::iterator it = x.begin();
-    while(it != x.end())
+    map<double, int *>::iterator it = x.begin();
+    while (it != x.end())
     {
-        int* a = it->second;
+        int *a = it->second;
         cout << "Time: " << it->first << endl;
-        for(int i = 0; i < model->getSpecNumber(); i++)
+        for (int i = 0; i < model->getSpecNumber(); i++)
         {
             cout << a[i];
-            if(i<model->getSpecNumber() - 1)
+            if (i < model->getSpecNumber() - 1)
                 cout << ": ";
         }
         cout << endl;
