@@ -3,26 +3,40 @@
 FirstReactionMethod::~FirstReactionMethod()
 {
     //dtor
+    delete dg;
+    delete model;
+    delete ut;
+    delete[] specQuantity;
+    delete[] propArray;
+    delete[] t;
 }
 void FirstReactionMethod::initialize(string filename, double simulTime)
 {
     model = new Model();
     ut = new Utils();
     model->loadModel(filename);
-    specQuantity = new int[model->getSpecNumber()];
-    propArray = new double[model->getReacNumber()];
     this->simulTime = simulTime;
-    totalPropensity = 0;
-    for (int i = 0; i < model->getSpecNumber(); i++)
+    if(model->isModelLoaded())
     {
-        specQuantity[i] = model->getInitialQuantity()[i];
+        specQuantity = new int[model->getSpecNumber()];
+        propArray = new double[model->getReacNumber()];
+        for (int i = 0; i < model->getSpecNumber(); i++)
+        {
+            specQuantity[i] = model->getInitialQuantity()[i];
+        }
+        t = new double[model->getReacNumber()];
     }
-    t = new double[model->getReacNumber()];
+
 }
 void FirstReactionMethod::perform(string filename, double simulTime)
 {
     cout << "FIRST REACTION METHOD" << endl;
     initialize(filename, simulTime);
+    if(!model->isModelLoaded())
+    {
+        cout << "Error! Invalid model." << endl;
+        return ;
+    }
     double beg = ut->getCurrentTime();
     double currentTime = 0.0;
     double selector = 0.0;

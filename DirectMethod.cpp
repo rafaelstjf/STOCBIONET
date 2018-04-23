@@ -5,16 +5,20 @@ void DirectMethod::initialize(string filename, double simultime)
     model = new Model(); //instantiate the model
     ut = new Utils();    //instantiate the utility class
     model->loadModel(filename);
-    specQuantity = new int[model->getSpecNumber()];
-    propArray = new double[model->getReacNumber()];
+
     this->simulTime = simulTime;
     totalPropensity = 0;
     //load both model and its depedency graph
-    dg = new DependencyGraph(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
-    //dg->printGraph();
-    for (int i = 0; i < model->getSpecNumber(); i++)
+    if(model->isModelLoaded())
     {
-        specQuantity[i] = model->getInitialQuantity()[i];
+        specQuantity = new int[model->getSpecNumber()];
+        propArray = new double[model->getReacNumber()];
+        dg = new DependencyGraph(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
+        //dg->printGraph();
+        for (int i = 0; i < model->getSpecNumber(); i++)
+        {
+            specQuantity[i] = model->getInitialQuantity()[i];
+        }
     }
 
 }
@@ -22,6 +26,11 @@ void DirectMethod::perform(string filename, double simulTime)
 {
     cout << "DIRECT METHOD" << endl;
     initialize(filename, simulTime);     //instantiate the variables
+    if(!model->isModelLoaded())
+    {
+        cout << "Error! Invalid model." << endl;
+        return ;
+    }
     double beg = ut->getCurrentTime(); //begin
     //peform the simulation
     double currentTime = 0.0;
@@ -166,6 +175,6 @@ DirectMethod::~DirectMethod()
     delete dg;
     delete model;
     delete ut;
-    //delete[] specQuantity;
-    //delete[] propArray;
+    delete[] specQuantity;
+    delete[] propArray;
 }

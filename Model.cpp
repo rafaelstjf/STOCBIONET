@@ -142,6 +142,7 @@ void Model::loadModel(string filename)
     else
     {
         cout << "file missing or incorrect!" << endl;
+        modelLoaded = false;
     }
 }
 int **Model::getReactants()

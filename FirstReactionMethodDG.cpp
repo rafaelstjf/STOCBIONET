@@ -3,28 +3,42 @@
 FirstReactionMethodDG::~FirstReactionMethodDG()
 {
     //dtor
+    delete dg;
+    delete model;
+    delete ut;
+    delete[] specQuantity;
+    delete[] propArray;
+    delete[] t;
 }
 void FirstReactionMethodDG::initialize(string filename, double simulTime)
 {
     model = new Model();
     ut = new Utils();
     model->loadModel(filename);
-    specQuantity = new int[model->getSpecNumber()];
-    propArray = new double[model->getReacNumber()];
     this->simulTime = simulTime;
-    totalPropensity = 0;
-    dg = new DependencyGraph(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
-    //dg->printGraph();
-    for (int i = 0; i < model->getSpecNumber(); i++)
+    if(model->isModelLoaded())
     {
-        specQuantity[i] = model->getInitialQuantity()[i];
+        specQuantity = new int[model->getSpecNumber()];
+        propArray = new double[model->getReacNumber()];
+        dg = new DependencyGraph(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
+        //dg->printGraph();
+        for (int i = 0; i < model->getSpecNumber(); i++)
+        {
+            specQuantity[i] = model->getInitialQuantity()[i];
+        }
+        t = new double[model->getReacNumber()];
     }
-    t = new double[model->getReacNumber()];
+
 }
 void FirstReactionMethodDG::perform(string filename, double simulTime)
 {
     cout << "FIRST REACTION METHOD USING DG" << endl;
     initialize(filename, simulTime);
+    if(!model->isModelLoaded())
+    {
+        cout << "Error! Invalid model." << endl;
+        return ;
+    }
     double beg = ut->getCurrentTime();
     double currentTime = 0.0;
     double selector = 0.0;
@@ -43,7 +57,8 @@ void FirstReactionMethodDG::perform(string filename, double simulTime)
         x.insert(make_pair(currentTime, xArray));
         //reaction selection
         if (currentTime == 0)
-        { //first execution
+        {
+            //first execution
             for (int i = 0; i < model->getReacNumber(); i++)
             {
                 calcPropOne(i);
