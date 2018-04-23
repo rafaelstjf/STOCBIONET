@@ -1,13 +1,13 @@
-#ifndef MODEL_H
-#define MODEL_H
+#ifndef MODEL_HPP
+#define MODEL_HPP
 #include <iostream>
 #include <map>
 #include <vector>
 #include <string>
 #include <strstream>
 #include <fstream>
-#include "Model/TReact.h"
-#include "Model/Reaction.h"
+#include "Model/TReact.hpp"
+#include "Model/Reaction.hpp"
 
 using namespace std;
 

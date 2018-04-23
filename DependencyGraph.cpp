@@ -1,4 +1,4 @@
-#include "DependencyGraph.h"
+#include "DependencyGraph.hpp"
 
 DependencyGraph::DependencyGraph(int numReactions, int **reactants, int **products, int numSpecies)
 {

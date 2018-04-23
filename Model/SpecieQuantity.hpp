@@ -1,9 +1,9 @@
-#ifndef SPECIEQUANTITIY_H
-#define SPECIEQUANTITIY_H
+#ifndef SPECIEQUANTITIY_HPP
+#define SPECIEQUANTITIY_HPP
 
 #include <iostream>
-#include "Specie.h"
-#include "Delay.h"
+#include "Specie.hpp"
+#include "Delay.hpp"
 
 using namespace std;
 class SpecieQuantity

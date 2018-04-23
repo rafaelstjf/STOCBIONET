@@ -1,5 +1,5 @@
-#ifndef DELAY_H
-#define DELAY_H
+#ifndef DELAY_HPP
+#define DELAY_HPP
 
 #include <iostream>
 using namespace std;

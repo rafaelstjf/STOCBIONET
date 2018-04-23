@@ -1,4 +1,4 @@
-#include "FirstReactionMethodDG.h"
+#include "FirstReactionMethodDG.hpp"
 
 FirstReactionMethodDG::~FirstReactionMethodDG()
 {

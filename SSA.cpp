@@ -1,4 +1,4 @@
-#include "SSA.h"
+#include "SSA.hpp"
 SSA::~SSA()
 {
     delete model;

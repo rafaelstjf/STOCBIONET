@@ -1,4 +1,4 @@
-#include "FirstReactionMethod.h"
+#include "FirstReactionMethod.hpp"
 
 FirstReactionMethod::~FirstReactionMethod()
 {

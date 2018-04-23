@@ -1,8 +1,8 @@
-#ifndef DEPENDENCYGRAPH_H
-#define DEPENDENCYGRAPH_H
+#ifndef DEPENDENCYGRAPH_HPP
+#define DEPENDENCYGRAPH_HPP
 
 #include <iostream>
-#include "DGVertex.h"
+#include "DGVertex.hpp"
 using namespace std;
 class DependencyGraph
 {

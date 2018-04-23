@@ -1,8 +1,8 @@
 #include <iostream>
-#include "DependencyGraph.h"
+#include "DependencyGraph.hpp"
 //#include "SSA.h"
-#include "DirectMethod.h"
-#include "FirstReactionMethod.h"
+#include "DirectMethod.hpp"
+#include "FirstReactionMethod.hpp"
 using namespace std;
 
 int main(int argc, char *argv[])

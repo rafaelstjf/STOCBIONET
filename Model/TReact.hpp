@@ -1,5 +1,5 @@
-#ifndef TREACT_H
-#define TREACT_H
+#ifndef TREACT_HPP
+#define TREACT_HPP
 
 #include <iostream>
 #include <map>
@@ -7,9 +7,9 @@
 #include <sstream>
 #include <vector>
 #include <stdlib.h>
-#include "SpecieQuantity.h"
-#include "Reaction.h"
-#include "StringManager.h"
+#include "SpecieQuantity.hpp"
+#include "Reaction.hpp"
+#include "StringManager.hpp"
 
 using namespace std;
 

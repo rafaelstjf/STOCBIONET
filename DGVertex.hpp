@@ -1,5 +1,5 @@
-#ifndef DGVERTEX_H
-#define DGVERTEX_H
+#ifndef DGVERTEX_HPP
+#define DGVERTEX_HPP
 
 #include <iostream>
 #include <vector>

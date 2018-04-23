@@ -1,10 +1,10 @@
-#ifndef REACTION_H
-#define REACTION_H
+#ifndef REACTION_HPP
+#define REACTION_HPP
 
 #include <iostream>
 #include <string>
 #include <vector>
-#include "SpecieQuantity.h"
+#include "SpecieQuantity.hpp"
 using namespace std;
 
 class Reaction

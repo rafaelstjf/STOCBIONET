@@ -1,5 +1,5 @@
-#ifndef MINHEAP_H
-#define MINHEAP_H
+#ifndef MINHEAP_HPP
+#define MINHEAP_HPP
 
 #include <iostream>
 using namespace std;

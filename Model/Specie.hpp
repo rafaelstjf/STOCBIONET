@@ -1,5 +1,5 @@
-#ifndef SPECIE_H
-#define SPECIE_H
+#ifndef SPECIE_HPP
+#define SPECIE_HPP
 
 #include <iostream>
 #include <string>

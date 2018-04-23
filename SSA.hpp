@@ -1,12 +1,12 @@
-#ifndef SSA_H
-#define SSA_H
+#ifndef SSA_HPP
+#define SSA_HPP
 
 #include<string>
 #include <iostream>
 #include <stdlib.h>
-#include "Model.h"
-#include "DependencyGraph.h"
-#include "Utils.h"
+#include "Model.hpp"
+#include "DependencyGraph.hpp"
+#include "Utils.hpp"
 #include <map>
 using namespace std;
 

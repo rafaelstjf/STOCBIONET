@@ -1,4 +1,4 @@
-#include "DirectMethod.h"
+#include "DirectMethod.hpp"
 void DirectMethod::initialize(string filename, double simultime)
 {
     //instantiate the variables

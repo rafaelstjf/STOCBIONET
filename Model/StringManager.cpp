@@ -1,4 +1,4 @@
-#include "StringManager.h"
+#include "StringManager.hpp"
 
 StringManager::StringManager()
 {

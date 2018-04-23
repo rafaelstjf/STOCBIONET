@@ -1,8 +1,8 @@
-#ifndef DIRECTMETHOD_H
-#define DIRECTMETHOD_H
+#ifndef DIRECTMETHOD_HPP
+#define DIRECTMETHOD_HPP
 
 #include <iostream>
-#include "SSA.h"
+#include "SSA.hpp"
 
 using namespace std;
 

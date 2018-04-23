@@ -1,8 +1,8 @@
-#ifndef FIRSTREACTIONMETHOD_H
-#define FIRSTREACTIONMETHOD_H
+#ifndef FIRSTREACTIONMETHOD_HPP
+#define FIRSTREACTIONMETHOD_HPP
 
 #include <iostream>
-#include "SSA.h"
+#include "SSA.hpp"
 
 using namespace std;
 

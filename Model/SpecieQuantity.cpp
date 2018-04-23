@@ -1,4 +1,4 @@
-#include "SpecieQuantity.h"
+#include "SpecieQuantity.hpp"
 
 SpecieQuantity::SpecieQuantity(){
 quantity = 0;

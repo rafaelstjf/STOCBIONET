@@ -1,5 +1,5 @@
-#ifndef STRINGMANAGER_H
-#define STRINGMANAGER_H
+#ifndef STRINGMANAGER_HPP
+#define STRINGMANAGER_HPP
 
 #include <iostream>
 #include <string>
