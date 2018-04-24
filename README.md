@@ -1,15 +1,17 @@
 # Stochastic simulation algorithms
 
+[![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
+
 Stochastic simulation algorithms for Gene Regulatory Networks for delayed and non-delayed reactions.
 
 Avaiable methods:
 
  * Direct method
+ * First reaction method
  
 Methods in development:
  
- * First reaction method (__95%__ )
- * First reaction method using dependency graph (__90%__ )
+ * First reaction method using dependency graph (__99%__ )
  * Next reaction method (__0%__ )
  * Modified next reaction method (__0%__ )
  * Rejection method (__0%__ )
