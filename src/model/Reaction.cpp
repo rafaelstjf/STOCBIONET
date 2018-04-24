@@ -1,4 +1,4 @@
-#include "Reaction.hpp"
+#include "../../include/model/Reaction.hpp"
 
 Reaction::Reaction(){
     name = '\0';

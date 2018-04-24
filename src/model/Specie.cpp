@@ -1,4 +1,4 @@
-#include "Specie.hpp"
+#include "../../include/model/Specie.hpp"
 
 Specie::Specie(){
     number = 0;

@@ -1,4 +1,4 @@
-#include "TReact.hpp"
+#include "../../include/model/TReact.hpp"
 
 //patch necessary to use to_string function
 namespace patch

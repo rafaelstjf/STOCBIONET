@@ -1,4 +1,4 @@
-#include "Model.hpp"
+#include "../include/Model.hpp"
 
 Model::Model()
 {

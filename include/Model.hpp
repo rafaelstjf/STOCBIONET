@@ -6,8 +6,8 @@
 #include <string>
 #include <strstream>
 #include <fstream>
-#include "Model/TReact.hpp"
-#include "Model/Reaction.hpp"
+#include "../include/model/TReact.hpp"
+#include "../include/model/Reaction.hpp"
 
 using namespace std;
 

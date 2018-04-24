@@ -1,4 +1,4 @@
-#include "MinHeap.hpp"
+#include "../include/MinHeap.hpp"
 void swap(double *x, double *y)
 {
     double temp = *x;
