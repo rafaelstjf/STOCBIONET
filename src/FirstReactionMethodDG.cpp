@@ -21,7 +21,6 @@ void FirstReactionMethodDG::initialize(string filename, double simulTime)
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
         dg = new DependencyGraph(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
-        //dg->printGraph();
         for (int i = 0; i < model->getSpecNumber(); i++)
         {
             specQuantity[i] = model->getInitialQuantity()[i];
@@ -32,7 +31,7 @@ void FirstReactionMethodDG::initialize(string filename, double simulTime)
 }
 void FirstReactionMethodDG::perform(string filename, double simulTime)
 {
-    cout << "FIRST REACTION METHOD USING DG" << endl;
+    cout << "FIRST REACTION METHOD USING DEPENDENCY GRAPH" << endl;
     initialize(filename, simulTime);
     if(!model->isModelLoaded())
     {

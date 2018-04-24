@@ -1,7 +1,7 @@
 #include "../include/MinHeap.hpp"
-void swap(double *x, double *y)
+void swap(HeapNode *x, HeapNode *y)
 {
-    double temp = *x;
+    HeapNode* temp = *x;
     *x = *y;
     *y = temp;
 }
@@ -9,7 +9,7 @@ MinHeap::MinHeap(int capacity)
 {
     heapSize = 0;
     this->capacity = capacity;
-    harr = new double[capacity];
+    harr = new HeapNode[capacity];
 }
 int MinHeap::parent(int i)
 {
@@ -23,33 +23,34 @@ int MinHeap::right(int i)
 {
     return (2 * i + 2);
 }
-void MinHeap::insertKey(double val)
+void MinHeap::insertKey(int index, double time)
 {
     if (heapSize < capacity)
     {
         //insert the new key at the end
         heapSize++;
         int i = heapSize - 1;
-        harr[i] = val;
+        harr[i]->setIndex(index);
+        harr[i]->setTime(time)
         //fix the min heap property if it's violated
-        while (i != 0 && harr[parent(i)] > harr[i])
+        while (i != 0 && harr[parent(i)]->getTime() > harr[i]->getTime())
         {
             swap(&harr[i], &harr[parent(i)]);
             i = parent(i);
         }
     }
 }
-double MinHeap::extractMin()
+HeapNode* MinHeap::extractMin()
 {
     if (heapSize <= 0)
-        return INT_MAX;
+        return nullptr;
     if (heapSize == 1)
     {
         heapSize--;
         return harr[0];
     }
     //store the minimum value and remove it from the heap
-    double root = harr[0];
+    HeapNode* root = harr[0];
     harr[0] = harr[heapSize - 1];
     heapSize--;
     minHeapify(0);
@@ -65,9 +66,9 @@ void MinHeap::minHeapify(int i)
     int l = left(i);
     int r = right(i);
     int smallest = i;
-    if (l < heapSize && harr[l] < harr[i])
+    if (l < heapSize && harr[l]->getTime() < harr[i]->getTime())
         smallest = l;
-    if (r < heapSize && harr[r] < harr[smallest])
+    if (r < heapSize && harr[r]->getTime() < harr[smallest]->getTime())
         smallest = r;
     if (smallest != i)
     {
@@ -75,10 +76,12 @@ void MinHeap::minHeapify(int i)
         minHeapify(smallest);
     }
 }
-void MinHeap::decreaseKey(int i, double newVal)
+void MinHeap::decreaseKey(int i, double newTime, int newIndex)
 {
-    harr[i] = newVal;
-    while(i != 0 && harr[parent(i)] > harr[i])
+    harr[i]->setTime(newTime);
+    harr[i]->setIndex(newIndex);
+
+    while(i != 0 && harr[parent(i)]->getTime() > harr[i]->getTime())
     {
         swap(&harr[i], &harr[parent(i)]);
         i = parent(i);

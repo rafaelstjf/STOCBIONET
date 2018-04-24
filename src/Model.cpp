@@ -13,6 +13,17 @@ Model::Model()
 }
 Model::~Model()
 {
+    for(int i = 0; i < reacNumber; i++)
+    {
+        delete[] reactants[i];
+        delete[] products[i];
+        delete[] delaysValue[i];
+        delete[] delaysVariation[i];
+    }
+    delete[] reactants;
+    delete[] products;
+    delete[] delaysValue;
+    delete[] delaysVariation;
 }
 void Model::loadModel(string filename)
 {

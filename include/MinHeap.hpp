@@ -3,12 +3,13 @@
 
 #include <iostream>
 #include <climits>
+#include "../include/HeapNode.hpp"
 using namespace std;
 
 class MinHeap
 {
   private:
-  double *harr; //poninter to array of elements in heap
+  HeapNode *harr; //pointer to array of elements in heap
   int capacity; //maximum possible size of min heap
   int heapSize; //current number of elements in min heap
   public:
@@ -17,11 +18,11 @@ class MinHeap
   int parent(int i);
   int left(int i);
   int right(int i);
-  double extractMin();
-  void decreaseKey(int i, double newVal);
+  HeapNode* extractMin();
+  void decreaseKey(int i, double newTime, int newIndex);
   double getMini();
   void deleteKey(int i);
-  void insertKey(double val);
+  void insertKey(int index, double t);
   
 };
 #endif
