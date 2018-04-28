@@ -13,7 +13,7 @@ class NextReactionMethod : public SSA
   void peform(string filename, double simulTime);
   virtual ~NextReactionMethod();
   private:
-  void initialize(string filename, double simulTime);
+  void initialization(string filename, double simulTime);
   void calcPropensity();
   void printResult();
   void saveToFile();

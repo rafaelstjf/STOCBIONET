@@ -1,15 +1,16 @@
 #include "../include/DirectMethod.hpp"
-void DirectMethod::initialize(string filename, double simultime)
+void DirectMethod::initialization(string filename, double simultime)
 {
     //instantiate the variables
     model = new Model(); //instantiate the model
     ut = new Utils();    //instantiate the utility class
     model->loadModel(filename);
-
+    t = 0.0;        //tal
+    selectedReaction = 0;
     this->simulTime = simulTime;
     totalPropensity = 0;
     //load both model and its depedency graph
-    if(model->isModelLoaded())
+    if (model->isModelLoaded())
     {
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
@@ -20,25 +21,57 @@ void DirectMethod::initialize(string filename, double simultime)
             specQuantity[i] = model->getInitialQuantity()[i];
         }
     }
-
+}
+void DirectMethod::reacTimeGeneration()
+{
+    double u1;
+    u1 = ut->getRandomNumber();
+    t = (1.0 / totalPropensity) * ut->ln(1.0 / u1); //next time increase
+}
+void DirectMethod::reacSelection()
+{
+     double selector;
+    double u2;
+    u2 = ut->getRandomNumber();
+    selector = totalPropensity * u2;
+    for (int i = 0; i < model->getReacNumber(); i++)
+    {
+        selector = selector - propArray[i];
+        if (selector <= 0.0)
+        {
+            selectedReaction = i;
+            break;
+        }
+    }
+}
+void DirectMethod::reacExecution()
+{
+    for (int i = 0; i < model->getSpecNumber(); i++)
+    {
+        specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[selectedReaction][i];
+    }
+    //check the dependencies of the selected reaction and update the propensity array
+    int *deparray = dg->getDependencies(selectedReaction);
+    int depSize = dg->getDependenciesSize(selectedReaction);
+    for (int i = 0; i < depSize; i++)
+    {
+        calcPropOne(deparray[i]);
+    }
 }
 void DirectMethod::perform(string filename, double simulTime)
 {
     cout << "DIRECT METHOD" << endl;
-    initialize(filename, simulTime);     //instantiate the variables
-    if(!model->isModelLoaded())
+    initialization(filename, simulTime); //instantiate the variables
+    if (!model->isModelLoaded())
     {
         cout << "Error! Invalid model." << endl;
-        return ;
+        return;
     }
     double beg = ut->getCurrentTime(); //begin
     //peform the simulation
-    double currentTime = 0.0;
-    double t = 0.0;
-    double selector = 0.0;
+    currentTime = 0.0;
+    t = 0.0;
     int *xArray;
-    int selectedReaction = 0;
-    double u1, u2;
     x.clear();
     //calculate the reactions propensity
     calcPropensity();
@@ -53,34 +86,12 @@ void DirectMethod::perform(string filename, double simulTime)
         }
         x.insert(make_pair(currentTime, xArray));
         //generate simulation time
-        u1 = ut->getRandomNumber();
-        u2 = ut->getRandomNumber();
-        t = (1.0 / totalPropensity) * ut->ln(1.0 / u1); //next time increase
-        //cout << (totalPropensity) << " : " << ut->ln(1.0 / u1) << "T: " << t << " C: " << currentTime << endl;
+        reacTimeGeneration();
         //reaction selection
-        selector = totalPropensity * u2;
-        for (int i = 0; i < model->getReacNumber(); i++)
-        {
-            selector = selector - propArray[i];
-            if (selector <= 0.0)
-            {
-                selectedReaction = i;
-                break;
-            }
-        }
+        reacSelection();
         //reaction execution
-        for (int i = 0; i < model->getSpecNumber(); i++)
-        {
-            specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[selectedReaction][i];
-        }
+        reacExecution();
         currentTime = currentTime + t;
-        //check the dependencies of the selected reaction and update the propensity array
-        int *deparray = dg->getDependencies(selectedReaction);
-        int depSize = dg->getDependenciesSize(selectedReaction);
-        for (int i = 0; i < depSize; i++)
-        {
-            calcPropOne(deparray[i]);
-        }
     }
     double en = ut->getCurrentTime(); //end
     saveToFile();
@@ -120,32 +131,32 @@ void DirectMethod::saveToFile()
 {
     stringstream buffer;
     map<string, long int> speciesNameNumber = model->getSpecNameNumber();
-    map<double, int*>::iterator itX = x.begin();
+    map<double, int *>::iterator itX = x.begin();
     map<string, long int>::iterator itSpecies = speciesNameNumber.begin();
     //get the name of the species
     string names[speciesNameNumber.size()];
-    while(itSpecies!= speciesNameNumber.end())
+    while (itSpecies != speciesNameNumber.end())
     {
         names[itSpecies->second] = itSpecies->first;
         itSpecies++;
     }
     buffer.clear();
     buffer << "Time; ";
-    for(int i = 0; i < speciesNameNumber.size(); i++)
+    for (int i = 0; i < speciesNameNumber.size(); i++)
     {
         buffer << names[i];
-        if(i<speciesNameNumber.size()-1)
+        if (i < speciesNameNumber.size() - 1)
             buffer << "; ";
     }
     buffer << '\n';
-    while(itX != x.end())
+    while (itX != x.end())
     {
-        int* a = itX->second;
+        int *a = itX->second;
         buffer << itX->first << "; ";
-        for(int i = 0; i < model->getSpecNumber(); i++)
+        for (int i = 0; i < model->getSpecNumber(); i++)
         {
             buffer << a[i];
-            if(i< model->getSpecNumber()-1)
+            if (i < model->getSpecNumber() - 1)
                 buffer << "; ";
         }
         buffer << '\n';
@@ -155,15 +166,15 @@ void DirectMethod::saveToFile()
 }
 void DirectMethod::printResult()
 {
-    map<double, int*>::iterator it = x.begin();
-    while(it != x.end())
+    map<double, int *>::iterator it = x.begin();
+    while (it != x.end())
     {
-        int* a = it->second;
+        int *a = it->second;
         cout << "Time: " << it->first << endl;
-        for(int i = 0; i < model->getSpecNumber(); i++)
+        for (int i = 0; i < model->getSpecNumber(); i++)
         {
             cout << a[i];
-            if(i<model->getSpecNumber() - 1)
+            if (i < model->getSpecNumber() - 1)
                 cout << ": ";
         }
         cout << endl;

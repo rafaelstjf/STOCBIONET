@@ -15,7 +15,7 @@ public:
 protected:
 
 private:
-    void initialize(string filename, double simulTime); //read the model and initialize data structures
+    void initialization(string filename, double simulTime); //read the model and initialization data structures
     void calcPropensity(); //calculate the propensity function for all the reactions
     void printResult();
     void saveToFile();

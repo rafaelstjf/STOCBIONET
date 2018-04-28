@@ -10,7 +10,7 @@ FirstReactionMethodDG::~FirstReactionMethodDG()
     delete[] propArray;
     delete[] t;
 }
-void FirstReactionMethodDG::initialize(string filename, double simulTime)
+void FirstReactionMethodDG::initialization(string filename, double simulTime)
 {
     model = new Model();
     ut = new Utils();
@@ -32,7 +32,7 @@ void FirstReactionMethodDG::initialize(string filename, double simulTime)
 void FirstReactionMethodDG::perform(string filename, double simulTime)
 {
     cout << "FIRST REACTION METHOD USING DEPENDENCY GRAPH" << endl;
-    initialize(filename, simulTime);
+    initialization(filename, simulTime);
     if(!model->isModelLoaded())
     {
         cout << "Error! Invalid model." << endl;

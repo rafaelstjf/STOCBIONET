@@ -14,12 +14,17 @@ public:
     virtual ~DirectMethod();
 
 private:
-    void initialize(string filename,  double simultime); //read the model and initialize data structures
+    double t;
+    double selector;
+    int selectedReaction;
+    void initialization(string filename,  double simultime); //read the model and initialization data structures
     void calcPropensity(); //calculate the propensity function for all the reactions
     void calcPropOne(int index);
     void printResult();
     void saveToFile();
-
+    void reacTimeGeneration();
+    void reacSelection();
+    void reacExecution();
 
 };
 

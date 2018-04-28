@@ -347,7 +347,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "#initialize(string filename)",
+											"text": "#initialization(string filename)",
 											"horizontalAlignment": 0,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -6081,7 +6081,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFeyLhmZoJIeLE="
 									},
-									"name": "initialize",
+									"name": "initialization",
 									"visibility": "protected",
 									"isStatic": false,
 									"isLeaf": false,

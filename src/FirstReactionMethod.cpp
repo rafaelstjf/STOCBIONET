@@ -10,7 +10,7 @@ FirstReactionMethod::~FirstReactionMethod()
     delete[] propArray;
     delete[] t;
 }
-void FirstReactionMethod::initialize(string filename, double simulTime)
+void FirstReactionMethod::initialization(string filename, double simulTime)
 {
     model = new Model();
     ut = new Utils();
@@ -31,7 +31,7 @@ void FirstReactionMethod::initialize(string filename, double simulTime)
 void FirstReactionMethod::perform(string filename, double simulTime)
 {
     cout << "FIRST REACTION METHOD" << endl;
-    initialize(filename, simulTime);
+    initialization(filename, simulTime);
     if(!model->isModelLoaded())
     {
         cout << "Error! Invalid model." << endl;
