@@ -15,7 +15,6 @@ public:
 
 private:
     double t;
-    double selector;
     int selectedReaction;
     void initialization(string filename,  double simultime); //read the model and initialization data structures
     void calcPropensity(); //calculate the propensity function for all the reactions
