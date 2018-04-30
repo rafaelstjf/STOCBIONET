@@ -6,21 +6,24 @@
 
 using namespace std;
 
-class FirstReactionMethod: public SSA
+class FirstReactionMethod : public SSA
 {
-public:
-    void perform(string filename, double simulTime);
+  public:
+    virtual void perform(string filename, double simulTime);
     virtual ~FirstReactionMethod();
 
-protected:
+  protected:
+      double *t;
+    virtual void initialization(string filename, double simulTime); //read the model and initialization data structures
+    virtual void calcPropensity();                                  //calculate the propensity function for all the reactions
+    virtual void printResult();
+    virtual void saveToFile();
+    virtual void calcPropOne(int index);
+    virtual void reacTimeGeneration();
+    virtual void reacSelection();
+    virtual void reacExecution();
 
-private:
-    void initialization(string filename, double simulTime); //read the model and initialization data structures
-    void calcPropensity(); //calculate the propensity function for all the reactions
-    void printResult();
-    void saveToFile();
-    void calcPropOne(int index);
-    double* t;
+  private:
 };
 
 #endif // FIRSTREACTIONMETHOD_H

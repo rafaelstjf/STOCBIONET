@@ -26,6 +26,7 @@ protected:
     int* specQuantity; //species quantity
     double totalPropensity; //sum of all the propensities
     double currentTime;
+    int selectedReaction;
     //functions
     virtual void initialization(string filename,  double simultime) = 0; //read the model and initialization data structures
     virtual void calcPropensity() = 0; //calculate the propensity function for each reaction

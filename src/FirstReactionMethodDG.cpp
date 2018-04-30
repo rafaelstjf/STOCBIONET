@@ -1,22 +1,11 @@
 #include "../include/FirstReactionMethodDG.hpp"
-
-FirstReactionMethodDG::~FirstReactionMethodDG()
-{
-    //dtor
-    delete dg;
-    delete model;
-    delete ut;
-    delete[] specQuantity;
-    delete[] propArray;
-    delete[] t;
-}
 void FirstReactionMethodDG::initialization(string filename, double simulTime)
 {
     model = new Model();
     ut = new Utils();
     model->loadModel(filename);
     this->simulTime = simulTime;
-    if(model->isModelLoaded())
+    if (model->isModelLoaded())
     {
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
@@ -27,23 +16,19 @@ void FirstReactionMethodDG::initialization(string filename, double simulTime)
         }
         t = new double[model->getReacNumber()];
     }
-
 }
 void FirstReactionMethodDG::perform(string filename, double simulTime)
 {
     cout << "FIRST REACTION METHOD USING DEPENDENCY GRAPH" << endl;
     initialization(filename, simulTime);
-    if(!model->isModelLoaded())
+    if (!model->isModelLoaded())
     {
         cout << "Error! Invalid model." << endl;
-        return ;
+        return;
     }
     double beg = ut->getCurrentTime();
-    double currentTime = 0.0;
-    double selector = 0.0;
-    double u = 0.0;
+    currentTime = 0.0;
     int *xArray;
-    int selectedReaction = 0;
     x.clear();
     calcPropensity();
     while (currentTime <= simulTime)
@@ -54,72 +39,17 @@ void FirstReactionMethodDG::perform(string filename, double simulTime)
             xArray[i] = specQuantity[i];
         }
         x.insert(make_pair(currentTime, xArray));
+        //generate simulation time
+        reacTimeGeneration();
         //reaction selection
-        if (currentTime == 0)
-        {
-            //first execution
-            for (int i = 0; i < model->getReacNumber(); i++)
-            {
-                calcPropOne(i);
-                u = ut->getRandomNumber();
-                t[i] = (-1.0) * log10(u) / propArray[i];
-            }
-        }
-        else
-        {
-            //after the first iteration, updates the tau only in the affected reactions using the DG
-            int *depArray = dg->getDependencies(selectedReaction);
-            int depSize = dg->getDependenciesSize(selectedReaction);
-            for (int i = 0; i < depSize; i++)
-            {
-                calcPropOne(depArray[i]);
-                u = ut->getRandomNumber();
-                t[depArray[i]] = (-1.0) * log10(u) / propArray[depArray[i]];
-            }
-        }
-        double minT = t[0];
-        selectedReaction = 0;
-        for (int i = 1; i < model->getReacNumber(); i++)
-        {
-            if (minT > t[i])
-            {
-                minT = t[i];
-                selectedReaction = i;
-            }
-        }
-        currentTime = currentTime + minT;
+        reacSelection();
         //reaction execution
-        for (int i = 0; i < model->getSpecNumber(); i++)
-        {
-            specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[selectedReaction][i];
-        }
+        reacExecution();
     }
     double en = ut->getCurrentTime(); //end
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
     //printResult();
     saveToFile();
-}
-void FirstReactionMethodDG::calcPropensity()
-{
-    int sum = 1;
-    for (int i = 0; i < model->getReacNumber(); i++)
-    {
-        sum = 1;
-        for (int j = 0; j < model->getSpecNumber(); j++)
-        {
-            sum *= ut->binomialCoefficient(specQuantity[j], model->getReactants()[i][j]);
-        }
-        propArray[i] = model->getReacRateArray()[i] * sum;
-    }
-}
-void FirstReactionMethodDG::calcPropOne(int index)
-{
-    int sum = 1;
-    for (int j = 0; j < model->getSpecNumber(); j++)
-    {
-        sum *= ut->binomialCoefficient(specQuantity[j], model->getReactants()[index][j]);
-    }
-    propArray[index] = model->getReacRateArray()[index] * sum;
 }
 void FirstReactionMethodDG::saveToFile()
 {
@@ -158,20 +88,21 @@ void FirstReactionMethodDG::saveToFile()
     }
     ut->saveToCSV(buffer.str(), "FRMDG_output");
 }
-void FirstReactionMethodDG::printResult()
+void FirstReactionMethodDG::reacSelection()
 {
-    map<double, int *>::iterator it = x.begin();
-    while (it != x.end())
+    double minT = t[0];
+    selectedReaction = 0;
+    for (int i = 1; i < model->getReacNumber(); i++)
     {
-        int *a = it->second;
-        cout << "Time: " << it->first << endl;
-        for (int i = 0; i < model->getSpecNumber(); i++)
+        if (minT > t[i])
         {
-            cout << a[i];
-            if (i < model->getSpecNumber() - 1)
-                cout << ": ";
+            minT = t[i];
+            selectedReaction = i;
         }
-        cout << endl;
-        it++;
     }
+    currentTime = currentTime + minT;
+}
+FirstReactionMethodDG::~FirstReactionMethodDG()
+{
+    //dtor
 }

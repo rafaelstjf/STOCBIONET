@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include "../include/SSA.hpp"
-#include "../include/MinHeap.hpp"
 
 using namespace std;
 

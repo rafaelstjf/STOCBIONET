@@ -1,22 +1,12 @@
 #include "../include/FirstReactionMethod.hpp"
 
-FirstReactionMethod::~FirstReactionMethod()
-{
-    //dtor
-    delete dg;
-    delete model;
-    delete ut;
-    delete[] specQuantity;
-    delete[] propArray;
-    delete[] t;
-}
 void FirstReactionMethod::initialization(string filename, double simulTime)
 {
     model = new Model();
     ut = new Utils();
     model->loadModel(filename);
     this->simulTime = simulTime;
-    if(model->isModelLoaded())
+    if (model->isModelLoaded())
     {
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
@@ -26,23 +16,19 @@ void FirstReactionMethod::initialization(string filename, double simulTime)
         }
         t = new double[model->getReacNumber()];
     }
-
 }
 void FirstReactionMethod::perform(string filename, double simulTime)
 {
     cout << "FIRST REACTION METHOD" << endl;
     initialization(filename, simulTime);
-    if(!model->isModelLoaded())
+    if (!model->isModelLoaded())
     {
         cout << "Error! Invalid model." << endl;
-        return ;
+        return;
     }
     double beg = ut->getCurrentTime();
-    double currentTime = 0.0;
-    double selector = 0.0;
-    double u = 0.0;
+    currentTime = 0.0;
     int *xArray;
-    int selectedReaction = 0;
     x.clear();
     calcPropensity();
     while (currentTime <= simulTime)
@@ -53,34 +39,49 @@ void FirstReactionMethod::perform(string filename, double simulTime)
             xArray[i] = specQuantity[i];
         }
         x.insert(make_pair(currentTime, xArray));
+        //generate simulation time
+        reacTimeGeneration();
         //reaction selection
-        for (int i = 0; i < model->getReacNumber(); i++)
-        {
-            calcPropOne(i);
-            u = ut->getRandomNumber();
-            t[i] = (-1.0) * log10(u) / propArray[i];
-        }
-        double minT = t[0];
-        selectedReaction = 0;
-        for (int i = 1; i < model->getReacNumber(); i++)
-        {
-            if (minT > t[i])
-            {
-                minT = t[i];
-                selectedReaction = i;
-            }
-        }
-        currentTime = currentTime + minT;
+        reacSelection();
         //reaction execution
-        for (int i = 0; i < model->getSpecNumber(); i++)
-        {
-            specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[selectedReaction][i];
-        }
+        reacExecution();
     }
     double en = ut->getCurrentTime(); //end
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
     //printResult();
     saveToFile();
+}
+void FirstReactionMethod::reacExecution()
+{
+    for (int i = 0; i < model->getSpecNumber(); i++)
+    {
+        specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[selectedReaction][i];
+    }
+}
+void FirstReactionMethod::reacTimeGeneration()
+{
+    //generates the absolute time 
+    double u = 0.0;
+    for (int i = 0; i < model->getReacNumber(); i++)
+    {
+        calcPropOne(i);
+        u = ut->getRandomNumber();
+        t[i] = (-1.0) * log10(u) / propArray[i];
+    }
+}
+void FirstReactionMethod::reacSelection()
+{
+    double minT = t[0];
+    selectedReaction = 0;
+    for (int i = 1; i < model->getReacNumber(); i++)
+    {
+        if (minT > t[i])
+        {
+            minT = t[i];
+            selectedReaction = i;
+        }
+    }
+    currentTime = currentTime + minT;
 }
 void FirstReactionMethod::calcPropensity()
 {
@@ -157,4 +158,14 @@ void FirstReactionMethod::printResult()
         cout << endl;
         it++;
     }
+}
+FirstReactionMethod::~FirstReactionMethod()
+{
+    //dtor
+    delete dg;
+    delete model;
+    delete ut;
+    delete[] specQuantity;
+    delete[] propArray;
+    delete[] t;
 }

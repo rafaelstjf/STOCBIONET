@@ -2,25 +2,22 @@
 #define FIRSTREACTIONMETHODDG_HPP
 
 #include <iostream>
-#include "SSA.hpp"
+#include "FirstReactionMethod.hpp"
 
 using namespace std;
 
-class FirstReactionMethodDG: public SSA
+class FirstReactionMethodDG : public FirstReactionMethod
 {
-public:
+  public:
     void perform(string filename, double simulTime);
     virtual ~FirstReactionMethodDG();
 
-protected:
-
-private:
+  protected:
     void initialization(string filename, double simulTime); //read the model and initialization data structures
-    void calcPropensity(); //calculate the propensity function for all the reactions
-    void printResult();
     void saveToFile();
-    void calcPropOne(int index);
-    double* t;
+    void reacSelection();
+
+  private:
 };
 
 #endif // FIRSTREACTIONMETHODDG_H

@@ -13,9 +13,8 @@ public:
     void perform(string filename, double simulTime);
     virtual ~DirectMethod();
 
-private:
+protected:
     double t;
-    int selectedReaction;
     void initialization(string filename,  double simultime); //read the model and initialization data structures
     void calcPropensity(); //calculate the propensity function for all the reactions
     void calcPropOne(int index);
@@ -24,6 +23,8 @@ private:
     void reacTimeGeneration();
     void reacSelection();
     void reacExecution();
+private:
+
 
 };
 
