@@ -19,7 +19,6 @@ protected:
     void calcPropensity(); //calculate the propensity function for all the reactions
     void calcPropOne(int index);
     void printResult();
-    void saveToFile();
     void reacTimeGeneration();
     void reacSelection();
     void reacExecution();

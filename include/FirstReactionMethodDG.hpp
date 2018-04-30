@@ -14,8 +14,8 @@ class FirstReactionMethodDG : public FirstReactionMethod
 
   protected:
     void initialization(string filename, double simulTime); //read the model and initialization data structures
-    void saveToFile();
     void reacSelection();
+    void reacTimeGeneration();
 
   private:
 };

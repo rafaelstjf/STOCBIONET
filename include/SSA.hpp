@@ -27,13 +27,14 @@ protected:
     double totalPropensity; //sum of all the propensities
     double currentTime;
     int selectedReaction;
+    string methodOutName;
     //functions
     virtual void initialization(string filename,  double simultime) = 0; //read the model and initialization data structures
     virtual void calcPropensity() = 0; //calculate the propensity function for each reaction
     virtual void reacTimeGeneration() = 0;
     virtual void reacSelection() = 0;
     virtual void printResult() = 0;
-    virtual void saveToFile() = 0;
+    virtual void saveToFile();
     virtual void reacExecution() = 0;
 
 };

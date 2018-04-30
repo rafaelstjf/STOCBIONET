@@ -4,6 +4,7 @@ void FirstReactionMethodDG::initialization(string filename, double simulTime)
     model = new Model();
     ut = new Utils();
     model->loadModel(filename);
+    methodOutName = "FRMDG_output";
     this->simulTime = simulTime;
     if (model->isModelLoaded())
     {
@@ -51,43 +52,6 @@ void FirstReactionMethodDG::perform(string filename, double simulTime)
     //printResult();
     saveToFile();
 }
-void FirstReactionMethodDG::saveToFile()
-{
-    stringstream buffer;
-    map<string, long int> speciesNameNumber = model->getSpecNameNumber();
-    map<double, int *>::iterator itX = x.begin();
-    map<string, long int>::iterator itSpecies = speciesNameNumber.begin();
-    //get the name of the species
-    string names[speciesNameNumber.size()];
-    while (itSpecies != speciesNameNumber.end())
-    {
-        names[itSpecies->second] = itSpecies->first;
-        itSpecies++;
-    }
-    buffer.clear();
-    buffer << "Time; ";
-    for (int i = 0; i < speciesNameNumber.size(); i++)
-    {
-        buffer << names[i];
-        if (i < speciesNameNumber.size() - 1)
-            buffer << "; ";
-    }
-    buffer << '\n';
-    while (itX != x.end())
-    {
-        int *a = itX->second;
-        buffer << itX->first << "; ";
-        for (int i = 0; i < model->getSpecNumber(); i++)
-        {
-            buffer << a[i];
-            if (i < model->getSpecNumber() - 1)
-                buffer << "; ";
-        }
-        buffer << '\n';
-        itX++;
-    }
-    ut->saveToCSV(buffer.str(), "FRMDG_output");
-}
 void FirstReactionMethodDG::reacSelection()
 {
     double minT = t[0];
@@ -101,6 +65,32 @@ void FirstReactionMethodDG::reacSelection()
         }
     }
     currentTime = currentTime + minT;
+}
+void FirstReactionMethodDG::reacTimeGeneration()
+{
+    double u = 0.0;
+    if (currentTime == 0)
+    {
+        //first execution
+        for (int i = 0; i < model->getReacNumber(); i++)
+        {
+            calcPropOne(i);
+            u = ut->getRandomNumber();
+            t[i] = (-1.0) * log10(u) / propArray[i];
+        }
+    }
+    else
+    {
+        //after the first iteration, updates the tau only in the affected reactions using the DG
+        int *depArray = dg->getDependencies(selectedReaction);
+        int depSize = dg->getDependenciesSize(selectedReaction);
+        for (int i = 0; i < depSize; i++)
+        {
+            calcPropOne(depArray[i]);
+            u = ut->getRandomNumber();
+            t[depArray[i]] = (-1.0) * log10(u) / propArray[depArray[i]];
+        }
+    }
 }
 FirstReactionMethodDG::~FirstReactionMethodDG()
 {
