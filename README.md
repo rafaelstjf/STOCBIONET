@@ -8,10 +8,10 @@ Avaiable methods:
 
  * Direct method
  * First reaction method
+ * First reaction method using dependency graph
  
 Methods in development:
  
- * First reaction method using dependency graph (__99%__ )
  * Next reaction method (__0%__ )
  * Modified next reaction method (__0%__ )
  * Rejection method (__0%__ )
