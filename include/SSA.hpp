@@ -20,14 +20,15 @@ protected:
     Utils* ut;
     DependencyGraph* dg;
     Model* model;
-    map<double, int*> x; //state dynamics
-    double* propArray; //propensity array
-    double simulTime; //simulation time
-    int* specQuantity; //species quantity
     double totalPropensity; //sum of all the propensities
     double currentTime;
     int selectedReaction;
     string methodOutName;
+    map<double, int*> x; //state dynamics
+    double* propArray; //propensity array
+    double simulTime; //simulation time
+    int* specQuantity; //species quantity
+    
     //functions
     virtual void initialization(string filename,  double simultime) = 0; //read the model and initialization data structures
     virtual void calcPropensity() = 0; //calculate the propensity function for each reaction
