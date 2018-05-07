@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "../include/SSA.hpp"
+#include "../include/HeapNode.hpp"
 
 using namespace std;
 
