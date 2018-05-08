@@ -9,13 +9,13 @@ using namespace std;
 class FirstReactionMethodDG : public FirstReactionMethod
 {
   public:
-    void perform(string filename, double simulTime);
+    virtual void perform(string filename, double simulTime);
     virtual ~FirstReactionMethodDG();
 
   protected:
-    void initialization(string filename, double simulTime); //read the model and initialization data structures
-    void reacSelection();
-    void reacTimeGeneration();
+    virtual void initialization(string filename, double simulTime); //read the model and initialization data structures
+    virtual void reacSelection();
+    virtual void reacTimeGeneration();
 
   private:
 };

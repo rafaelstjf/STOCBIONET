@@ -54,6 +54,7 @@ void FirstReactionMethod::perform(string filename, double simulTime)
 }
 void FirstReactionMethod::reacExecution()
 {
+    //updates the species quantities of the selected reaction
     for (int i = 0; i < model->getSpecNumber(); i++)
     {
         specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[selectedReaction][i];
@@ -72,6 +73,7 @@ void FirstReactionMethod::reacTimeGeneration()
 }
 void FirstReactionMethod::reacSelection()
 {
+    //selects the minimal time and updates the current time
     double minT = t[0];
     selectedReaction = 0;
     for (int i = 1; i < model->getReacNumber(); i++)
@@ -105,23 +107,6 @@ void FirstReactionMethod::calcPropOne(int index)
         sum *= ut->binomialCoefficient(specQuantity[j], model->getReactants()[index][j]);
     }
     propArray[index] = model->getReacRateArray()[index] * sum;
-}
-void FirstReactionMethod::printResult()
-{
-    map<double, int *>::iterator it = x.begin();
-    while (it != x.end())
-    {
-        int *a = it->second;
-        cout << "Time: " << it->first << endl;
-        for (int i = 0; i < model->getSpecNumber(); i++)
-        {
-            cout << a[i];
-            if (i < model->getSpecNumber() - 1)
-                cout << ": ";
-        }
-        cout << endl;
-        it++;
-    }
 }
 FirstReactionMethod::~FirstReactionMethod()
 {

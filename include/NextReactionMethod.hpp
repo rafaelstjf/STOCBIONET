@@ -4,19 +4,26 @@
 #include <iostream>
 #include "../include/SSA.hpp"
 #include "../include/HeapNode.hpp"
+#include "../include/IndexedPrioQueue.hpp"
 
 using namespace std;
 
 class NextReactionMethod : public SSA
 {
-  public:
-  void peform(string filename, double simulTime);
+public:
+  virtual void peform(string filename, double simulTime);
   virtual ~NextReactionMethod();
-  private:
-  void initialization(string filename, double simulTime);
-  void calcPropensity();
-  void printResult();
-  void saveToFile();
+
+protected:
+  virtual void initialization(string filename, double simulTime);
+  virtual void printResult();
+  virtual void saveToFile();
+  virtual void calcPropOne(int index);
+  virtual void reacTimeGeneration();
+  virtual void reacSelection();
+  virtual void reacExecution();
+  IndexedPrioQueue* queue; //priority queue used to store the absolute time of each reaction
+  HeapNode* selectedNode; //used to store the selected reaction index and time
 
 };
 #endif

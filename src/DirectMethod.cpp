@@ -128,24 +128,6 @@ void DirectMethod::calcPropOne(int index)
     propArray[index] = model->getReacRateArray()[index] * sum;
     totalPropensity = totalPropensity - propOld + propArray[index];
 }
-
-void DirectMethod::printResult()
-{
-    map<double, int *>::iterator it = x.begin();
-    while (it != x.end())
-    {
-        int *a = it->second;
-        cout << "Time: " << it->first << endl;
-        for (int i = 0; i < model->getSpecNumber(); i++)
-        {
-            cout << a[i];
-            if (i < model->getSpecNumber() - 1)
-                cout << ": ";
-        }
-        cout << endl;
-        it++;
-    }
-}
 DirectMethod::~DirectMethod()
 {
     delete dg;

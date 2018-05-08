@@ -39,3 +39,20 @@ void SSA::saveToFile()
     }
     ut->saveToCSV(buffer.str(), methodOutName);
 }
+void SSA::printResult()
+{
+    map<double, int *>::iterator it = x.begin();
+    while (it != x.end())
+    {
+        int *a = it->second;
+        cout << "Time: " << it->first << endl;
+        for (int i = 0; i < model->getSpecNumber(); i++)
+        {
+            cout << a[i];
+            if (i < model->getSpecNumber() - 1)
+                cout << ": ";
+        }
+        cout << endl;
+        it++;
+    }
+}
