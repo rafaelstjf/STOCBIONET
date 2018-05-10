@@ -18,7 +18,6 @@ protected:
     virtual void initialization(string filename,  double simultime); //read the model and initialization data structures
     virtual void calcPropensity(); //calculate the propensity function for all the reactions
     virtual void calcPropOne(int index);
-    virtual void printResult();
     virtual void reacTimeGeneration();
     virtual void reacSelection();
     virtual void reacExecution();

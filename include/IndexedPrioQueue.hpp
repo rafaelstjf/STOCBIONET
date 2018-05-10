@@ -11,19 +11,20 @@ class IndexedPrioQueue
     IndexedPrioQueue(int capacity);
     ~IndexedPrioQueue();
     void update(int index, double time);
+    HeapNode* getMin();
+    void insertKey(int index, double time);
+    void printQueue();
 
   private:
-    void swap(HeapNode* x, HeapNode* y, int ix, int iy);
+    void swap(int ix, int iy);
     void minHeapify(int i);
     void updateAux(int aux);
     int left(int i);
     int right(int i);
     int parent(int i);
-    void insertKey(int index, double time);
-    HeapNode* getMin();
     int capacity;
     int heapsize;
-    HeapNode *heapArray;
+    HeapNode **heapArray;
     int *indexArray;
 };
 #endif

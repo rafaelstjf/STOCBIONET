@@ -48,14 +48,16 @@ void NextReactionMethod::reacTimeGeneration()
     for (int i = 0; i < model->getReacNumber(); i++)
     {
         u = ut->getRandomNumber();
-        t1 = (1.0 / propArray[i]) * ln(1.0 / u);
+        t1 = (1.0 / propArray[i]) * ut->ln(1.0 / u);
         queue->insertKey(i, t1);
+
     }
 }
 void NextReactionMethod::reacSelection()
 {
     //selects the node with the minimal time and updates the time
     selectedNode = queue->getMin();
+    cout << "Min: " << selectedNode->getIndex() << " time: " << selectedNode->getTime() << endl;//
     currentTime = selectedNode->getTime();
 }
 void NextReactionMethod::reacExecution()
@@ -65,7 +67,7 @@ void NextReactionMethod::reacExecution()
     //updates the species quantities
     for (int i = 0; i < model->getSpecNumber(); i++)
     {
-        specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[selectedReaction][i];
+        specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[selectedNode->getIndex()][i];
     }
     //uses the DG to update the time of the selected reaction on the priority Queue
     int *depArray = dg->getDependencies(selectedNode->getIndex());
@@ -77,16 +79,20 @@ void NextReactionMethod::reacExecution()
         calcPropOne(depArray[i]);
         if (depArray[i] != selectedNode->getIndex())
         {
+            if(propArray[depArray[i]] > 0)
             nt = ((propOld / propArray[depArray[i]]) * (selectedNode->getTime() - currentTime) + currentTime);
+            else
+                 nt = ((propOld / )
         }
         else
         {
-            nt = (ln((1.0 / u) / propArray[depArray[i]]) + currentTime);
+            nt = (ut->ln((1.0 / u) / propArray[depArray[i]]) + currentTime);
         }
+        cout << nt << endl;
         queue->update(depArray[i], nt);
     }
 }
-void NextReactionMethod::peform(string filename, double simulTime)
+void NextReactionMethod::perform(string filename, double simulTime)
 {
     cout << "NEXT REACTION METHOD" << endl;
     initialization(filename, simulTime);
@@ -116,10 +122,10 @@ void NextReactionMethod::peform(string filename, double simulTime)
     }
     double en = ut->getCurrentTime(); //end
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
-    //printResult();
+    printResult();
     saveToFile();
 }
-void NextReactionMethod::~NextReactionMethod()
+NextReactionMethod::~NextReactionMethod()
 {
     delete dg;
     delete model;

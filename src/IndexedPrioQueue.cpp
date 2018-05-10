@@ -1,9 +1,10 @@
 #include "../include/IndexedPrioQueue.hpp"
 
+
 IndexedPrioQueue::IndexedPrioQueue(int capacity)
 {
     this->capacity = capacity;
-    heapArray = new HeapNode[capacity];
+    heapArray = new HeapNode*[capacity];
     indexArray = new int[capacity];
     heapsize = 0;
 }
@@ -18,31 +19,34 @@ int IndexedPrioQueue::left(int i)
 }
 int IndexedPrioQueue::right(int i)
 {
-    return (2 * i + 2)
+    return (2 * i + 2);
 }
 int IndexedPrioQueue::parent(int i)
 {
     return (i - 1) / 2;
 }
-void swap(HeapNode *x, HeapNode *y, int ix, int iy)
+void IndexedPrioQueue::swap(int ix, int iy)
 {
-    HeapNode *temp = x;
-    x = y;
-    y = temp;
-    indexArray[x->getIndex] = iy;
-    indexArray[y->getIndex] = ix;
+    int index = heapArray[ix]->getIndex();
+    double time = heapArray[ix]->getTime();
+    heapArray[ix]->setIndex(heapArray[iy]->getIndex());
+    heapArray[ix]->setTime(heapArray[iy]->getTime());
+    heapArray[iy]->setIndex(index);
+    heapArray[iy]->setTime(time);
+    indexArray[heapArray[ix]->getIndex()] = iy;
+    indexArray[heapArray[iy]->getIndex()] = ix;
 }
 void IndexedPrioQueue::minHeapify(int i)
 {
     int l = left(i);
     int r = right(i);
     int smallest = i;
-    if (l < heapsize && heapArray[l].getTime() < heapArray[i].getTime())
+    if (l < heapsize && heapArray[l]->getTime() < heapArray[i]->getTime())
         smallest = l;
-    if (r < heapsize && heapArray[r].getTime() < heapArray[smallest].getTime())
+    if (r < heapsize && heapArray[r]->getTime() < heapArray[smallest]->getTime())
         if (smallest != i)
         {
-            swap(&harr[i], &harr[smallest], i, smallest);
+            swap(i, smallest);
             minHeapify(smallest);
         }
 }
@@ -50,13 +54,15 @@ void IndexedPrioQueue::insertKey(int index, double time)
 {
     if (heapsize == capacity)
         return;
+    cout << "Inserting: " << index << "; " << time << endl;
     heapsize++;
-    int i = heapSize - 1;
-    heapArray[i] = new HeapNode(index, time);
+    int i = heapsize - 1;
+    HeapNode* n =  new HeapNode(index, time);
+    heapArray[i] = n;
     indexArray[index] = i;
-    while (i != 0 && heapArray[parent(i)].getTime() > heapArray[i].getTime())
+    while (i != 0 && heapArray[parent(i)]->getTime() > heapArray[i]->getTime())
     {
-        swap(&heapArray[i], &heapArray[parent(i)], i, parent(i));
+        swap(i, parent(i));
         i = parent(i);
     }
 }
@@ -75,22 +81,36 @@ void IndexedPrioQueue::update(int index, double time)
 void IndexedPrioQueue::updateAux(int index)
 {
     int p = parent(index);
-    if (heapArray[index]->getTime() < heapArray[p]->getTime())
+    if (p >= 0 && p < heapsize && heapArray[index]->getTime() < heapArray[p]->getTime())
     {
-        swap(&heapArray[index], &heapArray[p], index, p);
+        swap(index, p);
         updateAux(p);
     }
     else
     {
         int l = left(index);
         int r = right(index);
-        int smallest = l;
-        if (heapArray[l]->getTime() > heapArray[r] - getTime())
-            smallest = r;
-        if (heapArray[index]->getTime() > heapArray[smallest] - getTime())
+        if(l >=0 && r >= 0 && r < heapsize && l < heapsize)
         {
-            swap(&heapArray[index], &heapArray[smallest], index, smallest);
-            updateAux(smallest);
+            int smallest = l;
+            if (heapArray[l]->getTime() > heapArray[r]->getTime())
+                smallest = r;
+            if (heapArray[index]->getTime() > heapArray[smallest]->getTime())
+            {
+                swap(index, smallest);
+                updateAux(smallest);
+            }
         }
+
+    }
+}
+void IndexedPrioQueue::printQueue()
+{
+    for(int i = 0; i < heapsize; i++)
+    {
+        cout << "Current node: " << heapArray[i]->getIndex() << " | " << heapArray[i]->getTime() <<endl;
+        if(i>=1)cout << "Parent: " << heapArray[parent(i)]->getIndex() << " | " << heapArray[parent(i)]->getTime() <<endl;
+        if(left(i) >= 0 && left(i) < heapsize)cout << "Left child: " << heapArray[left(i)]->getIndex() << " | " << heapArray[left(i)]->getTime() <<endl;
+        if(right(i) >= 0 && right(i) < heapsize)cout << "Right child: " << heapArray[right(i)]->getIndex() << " | " << heapArray[right(i)]->getTime() <<endl;
     }
 }

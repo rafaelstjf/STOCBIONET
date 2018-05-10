@@ -4,6 +4,7 @@
 #include "../include/DirectMethod.hpp"
 #include "../include/FirstReactionMethod.hpp"
 #include "../include/FirstReactionMethodDG.hpp"
+#include "../include/NextReactionMethod.hpp"
 using namespace std;
 
 int main(int argc, char *argv[])
@@ -33,6 +34,8 @@ int main(int argc, char *argv[])
         simulation = new FirstReactionMethod();
     else if(op==3)
         simulation = new FirstReactionMethodDG();
+    else if(op==4)
+        simulation = new NextReactionMethod();
     else
     {
         cout << "Error. Invalid operation!" << endl;
