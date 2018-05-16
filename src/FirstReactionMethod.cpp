@@ -49,7 +49,7 @@ void FirstReactionMethod::perform(string filename, double simulTime)
     }
     double en = ut->getCurrentTime(); //end
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
-    //printResult();
+    printResult();
     saveToFile();
 }
 void FirstReactionMethod::reacExecution()
@@ -62,13 +62,13 @@ void FirstReactionMethod::reacExecution()
 }
 void FirstReactionMethod::reacTimeGeneration()
 {
-    //generates the absolute time 
+    //generates the absolute time
     double u = 0.0;
     for (int i = 0; i < model->getReacNumber(); i++)
     {
         calcPropOne(i);
         u = ut->getRandomNumber();
-        t[i] = (-1.0) * log10(u) / propArray[i];
+        t[i] = (-1.0) * ut->ln(u) / propArray[i];
     }
 }
 void FirstReactionMethod::reacSelection()

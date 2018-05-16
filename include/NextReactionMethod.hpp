@@ -5,6 +5,7 @@
 #include "../include/SSA.hpp"
 #include "../include/HeapNode.hpp"
 #include "../include/IndexedPrioQueue.hpp"
+#include "../include/List.hpp"
 
 using namespace std;
 
@@ -21,7 +22,9 @@ protected:
   virtual void reacTimeGeneration();
   virtual void reacSelection();
   virtual void reacExecution();
-  IndexedPrioQueue* queue; //priority queue used to store the absolute time of each reaction
+  List* queue; //priority queue used to store the absolute time of each reaction
+  double* propArrayNonZero;
+  double* timePropZero;
   HeapNode* selectedNode; //used to store the selected reaction index and time
 
 };

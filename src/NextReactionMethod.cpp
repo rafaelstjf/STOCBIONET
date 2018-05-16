@@ -11,12 +11,15 @@ void NextReactionMethod::initialization(string filename, double simulTime)
     {
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
+        propArrayNonZero = new double[model->getReacNumber()];
+        timePropZero = new double[model->getReacNumber()];
         for (int i = 0; i < model->getSpecNumber(); i++)
         {
             specQuantity[i] = model->getInitialQuantity()[i];
         }
-        queue = new IndexedPrioQueue(model->getReacNumber());
+        queue = new List(model->getReacNumber());
         dg = new DependencyGraph(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
+        dg->printGraph();
     }
 }
 void NextReactionMethod::calcPropensity()
@@ -30,6 +33,8 @@ void NextReactionMethod::calcPropensity()
             sum *= ut->binomialCoefficient(specQuantity[j], model->getReactants()[i][j]);
         }
         propArray[i] = model->getReacRateArray()[i] * sum;
+        if(propArray[i] > 0)
+            propArrayNonZero[i] = propArray[i];
     }
 }
 void NextReactionMethod::calcPropOne(int index)
@@ -49,21 +54,27 @@ void NextReactionMethod::reacTimeGeneration()
     {
         u = ut->getRandomNumber();
         t1 = (1.0 / propArray[i]) * ut->ln(1.0 / u);
+        if(propArray[i]==0)
+        {
+            timePropZero[i] = t1;
+        }
         queue->insertKey(i, t1);
 
+
     }
+    queue->print();
 }
 void NextReactionMethod::reacSelection()
 {
     //selects the node with the minimal time and updates the time
     selectedNode = queue->getMin();
-    cout << "Min: " << selectedNode->getIndex() << " time: " << selectedNode->getTime() << endl;//
     currentTime = selectedNode->getTime();
+
 }
 void NextReactionMethod::reacExecution()
 {
-    double u;
-    double nt;
+    double u; //random number
+    double nt; //new time
     //updates the species quantities
     for (int i = 0; i < model->getSpecNumber(); i++)
     {
@@ -77,20 +88,47 @@ void NextReactionMethod::reacExecution()
         double propOld = propArray[depArray[i]];
         u = ut->getRandomNumber();
         calcPropOne(depArray[i]);
+        HeapNode* actualNode = queue->getNode(depArray[i]);
         if (depArray[i] != selectedNode->getIndex())
         {
-            if(propArray[depArray[i]] > 0)
-            nt = ((propOld / propArray[depArray[i]]) * (selectedNode->getTime() - currentTime) + currentTime);
+            if(propArray[depArray[i]] > 0 && propOld == 0)
+                nt = ((propArrayNonZero[depArray[i]] / propArray[depArray[i]]) * (actualNode->getTime() - timePropZero[depArray[i]]) + currentTime);
             else
-                 nt = ((propOld / )
+            {
+                if(propArray[depArray[i]] == 0)
+                    nt = INT_MAX;
+                else
+                    nt = ((propOld / propArray[depArray[i]]) * (actualNode->getTime() - currentTime) + currentTime);
+            }
+
         }
         else
         {
-            nt = (ut->ln((1.0 / u) / propArray[depArray[i]]) + currentTime);
+            if(propArray[depArray[i]] == 0)
+                nt = INT_MAX;
+            else
+                nt = ((ut->ln(1.0 / u) / propArray[depArray[i]]) + currentTime);
         }
-        cout << nt << endl;
         queue->update(depArray[i], nt);
     }
+    /*for(int i = 0; i < model->getReacNumber(); i++){
+         double propOld = propArray[i];
+        u = ut->getRandomNumber();
+        calcPropOne(i);
+        HeapNode* actualNode = queue->getNode(i);
+        if (i != selectedNode->getIndex())
+        {
+            if(propArray[i] > 0 && propOld == 0)
+                nt = ((propArrayNonZero[i] / propArray[i]) * (actualNode->getTime() - timePropZero[i]) + currentTime);
+            else
+                nt = ((propOld / propArray[i]) * (actualNode->getTime() - currentTime) + currentTime);
+        }
+        else
+        {
+            nt = ((ut->ln(1.0 / u) / propArray[i]) + currentTime);
+        }
+        queue->update(i, nt);
+    }*/
 }
 void NextReactionMethod::perform(string filename, double simulTime)
 {
@@ -132,6 +170,8 @@ NextReactionMethod::~NextReactionMethod()
     delete ut;
     delete[] specQuantity;
     delete[] propArray;
+    delete[] propArrayNonZero;
+    delete[] timePropZero;
     delete queue;
     delete selectedNode;
 }

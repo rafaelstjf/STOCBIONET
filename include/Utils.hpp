@@ -21,7 +21,7 @@ class Utils
   double getRandomNumber();
   double binomialCoefficient(int k, int n);
   double ln(double n);
-  double log10(double n);
+  //double log10(double n);
   double getCurrentTime();
   double getMinDouble(double* array, int size);
   void saveToCSV(string buffer, string filename);

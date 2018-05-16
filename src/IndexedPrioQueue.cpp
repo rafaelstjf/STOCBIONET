@@ -27,14 +27,17 @@ int IndexedPrioQueue::parent(int i)
 }
 void IndexedPrioQueue::swap(int ix, int iy)
 {
+    //x = temp
     int index = heapArray[ix]->getIndex();
     double time = heapArray[ix]->getTime();
+    //x = y
+    indexArray[heapArray[ix]->getIndex()] = iy;
     heapArray[ix]->setIndex(heapArray[iy]->getIndex());
     heapArray[ix]->setTime(heapArray[iy]->getTime());
+    //y = x
+    indexArray[heapArray[iy]->getIndex()] = ix;
     heapArray[iy]->setIndex(index);
     heapArray[iy]->setTime(time);
-    indexArray[heapArray[ix]->getIndex()] = iy;
-    indexArray[heapArray[iy]->getIndex()] = ix;
 }
 void IndexedPrioQueue::minHeapify(int i)
 {
@@ -113,4 +116,7 @@ void IndexedPrioQueue::printQueue()
         if(left(i) >= 0 && left(i) < heapsize)cout << "Left child: " << heapArray[left(i)]->getIndex() << " | " << heapArray[left(i)]->getTime() <<endl;
         if(right(i) >= 0 && right(i) < heapsize)cout << "Right child: " << heapArray[right(i)]->getIndex() << " | " << heapArray[right(i)]->getTime() <<endl;
     }
+}
+HeapNode* IndexedPrioQueue::getNode(int index){
+    return heapArray[indexArray[index]];
 }

@@ -13,6 +13,7 @@ class IndexedPrioQueue
     void update(int index, double time);
     HeapNode* getMin();
     void insertKey(int index, double time);
+    HeapNode* getNode(int index);
     void printQueue();
 
   private:

@@ -90,10 +90,10 @@ double Utils::ln(double n)
 {
     return (double)log(n) / log(E);
 }
-double Utils::log10(double n)
+/*double Utils::log10(double n)
 {
     return (double)log(n) / log(10);
-}
+}*/
 double Utils::getCurrentTime()
 {
     clock_t t;
