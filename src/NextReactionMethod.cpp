@@ -19,7 +19,7 @@ void NextReactionMethod::initialization(string filename, double simulTime)
             specQuantity[i] = model->getInitialQuantity()[i];
         }
         queue = new List(model->getReacNumber());
-        dg = new DependencyGraph(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
+        dg = new DependencyGraphNRM(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
         dg->printGraph();
     }
 }

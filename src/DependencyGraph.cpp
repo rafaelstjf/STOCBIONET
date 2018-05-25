@@ -110,3 +110,9 @@ int *DependencyGraph::intersectionSet(int *a, int *b)
     }
     return in;
 }
+DependencyGraph::~DependencyGraph(){
+    for(int i = 0; i < numReactions; i++){
+        delete vertex[i];
+    }
+    delete [] vertex;
+}
