@@ -33,7 +33,6 @@ void List::insertKey(int index, double time)
     {
         inUse++;
         arr[inUse-1] = new HeapNode(index, time);
-        sort();
     }
 }
 void List::swap(int i, int j)

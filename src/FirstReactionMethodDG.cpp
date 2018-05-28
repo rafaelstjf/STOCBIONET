@@ -18,7 +18,7 @@ void FirstReactionMethodDG::initialization(string filename, double simulTime)
         t = new double[model->getReacNumber()];
     }
 }
-void FirstReactionMethodDG::perform(string filename, double simulTime)
+void FirstReactionMethodDG::perform(string filename, double simulTime, double beginTime)
 {
     cout << "FIRST REACTION METHOD USING DEPENDENCY GRAPH" << endl;
     initialization(filename, simulTime);
@@ -28,7 +28,7 @@ void FirstReactionMethodDG::perform(string filename, double simulTime)
         return;
     }
     double beg = ut->getCurrentTime();
-    currentTime = 0.0;
+    currentTime = beginTime;
     int *xArray;
     x.clear();
     calcPropensity();
@@ -76,7 +76,7 @@ void FirstReactionMethodDG::reacTimeGeneration()
         {
             calcPropOne(i);
             u = ut->getRandomNumber();
-            t[i] = (-1.0) * log10(u) / propArray[i];
+            t[i] = (-1.0) * ut->ln(u) / propArray[i];
         }
     }
     else

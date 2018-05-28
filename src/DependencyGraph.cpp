@@ -1,8 +1,12 @@
 #include "../include/DependencyGraph.hpp"
-
+DependencyGraph::DependencyGraph(){
+}
 DependencyGraph::DependencyGraph(int numReactions, int **reactants, int **products, int numSpecies)
 {
-    int **affects; //set of substances that change quantity when the reaction i is executed
+    createGraph(numReactions,reactants,products,numSpecies);
+}
+void DependencyGraph::createGraph(int numReactions, int **reactants, int **products, int numSpecies){
+ int **affects; //set of substances that change quantity when the reaction i is executed
     //graph struct
     this->numReactions = numReactions;
     this->numSpecies = numSpecies;
@@ -38,8 +42,7 @@ DependencyGraph::DependencyGraph(int numReactions, int **reactants, int **produc
                 insertDependency(i, j);
             //j depends on i
         }
-    }
-}
+    }}
 void DependencyGraph::insertDependency(int id, int val)
 {
 
@@ -69,16 +72,6 @@ void DependencyGraph::printGraph()
         cout << endl;
     }
 }
-DependencyGraph::~DependencyGraph()
-{
-    for (int i = 0; i < numReactions; i++)
-    {
-        DGVertex *v = vertex[i];
-        delete v;
-    }
-    delete[] vertex;
-}
-
 int *DependencyGraph::unionSet(int *a, int *b)
 //return a vector with the union of the arrays a and b
 {

@@ -14,12 +14,12 @@ public:
     bool isSort();
     void print();
     HeapNode* getNode(int index);
+    void sort();
 private:
     int capacity;
     int inUse;
     int* arrayIndex;
     HeapNode** arr;
-    void sort();
     void swap(int i, int j);
 
 };

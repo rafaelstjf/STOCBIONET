@@ -9,7 +9,7 @@ using namespace std;
 class FirstReactionMethodDG : public FirstReactionMethod
 {
   public:
-    virtual void perform(string filename, double simulTime);
+    virtual void perform(string filename, double simulTime, double beginTime);
     virtual ~FirstReactionMethodDG();
 
   protected:

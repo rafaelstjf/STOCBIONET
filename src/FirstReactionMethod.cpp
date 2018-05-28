@@ -18,7 +18,7 @@ void FirstReactionMethod::initialization(string filename, double simulTime)
         t = new double[model->getReacNumber()];
     }
 }
-void FirstReactionMethod::perform(string filename, double simulTime)
+void FirstReactionMethod::perform(string filename, double simulTime, double beginTime)
 {
     cout << "FIRST REACTION METHOD" << endl;
     initialization(filename, simulTime);
@@ -28,7 +28,7 @@ void FirstReactionMethod::perform(string filename, double simulTime)
         return;
     }
     double beg = ut->getCurrentTime();
-    currentTime = 0.0;
+    currentTime = beginTime;
     int *xArray;
     x.clear();
     calcPropensity();

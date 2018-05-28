@@ -7,10 +7,12 @@ using namespace std;
 class DependencyGraph
 {
   public:
+    DependencyGraph();
     DependencyGraph(int numReactions, int **reactants, int **products, int numSpecies);
-    int *getDependencies(int id);
+    virtual int *getDependencies(int id);
     virtual void insertDependency(int id, int val);
     virtual void printGraph();
+    virtual void createGraph(int numReactions, int **reactants, int **products, int numSpecies);
     virtual int getDependenciesSize(int id);
     virtual ~DependencyGraph();
 

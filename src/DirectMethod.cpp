@@ -59,7 +59,7 @@ void DirectMethod::reacExecution()
         calcPropOne(deparray[i]);
     }
 }
-void DirectMethod::perform(string filename, double simulTime)
+void DirectMethod::perform(string filename, double simulTime, double beginTime)
 {
     cout << "DIRECT METHOD" << endl;
     initialization(filename, simulTime); //instantiate the variables
@@ -70,7 +70,7 @@ void DirectMethod::perform(string filename, double simulTime)
     }
     double beg = ut->getCurrentTime(); //begin
     //peform the simulation
-    currentTime = 0.0;
+    currentTime = beginTime;
     t = 0.0;
     int *xArray;
     x.clear();

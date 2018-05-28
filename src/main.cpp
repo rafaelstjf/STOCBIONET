@@ -11,13 +11,15 @@ int main(int argc, char *argv[])
 {
     int op = 1;
     string filename;
-    double simulTime = 0.0;
+    double simulTime = 0.0, beginTime = 0.0;
     SSA* simulation;
-    if(argc == 4)
+    if(argc == 5)
     {
         filename = argv[1];
         op = atoi(argv[2]);
         simulTime = atof(argv[3]);
+        beginTime = atof(argv[4]);
+
     }
     else
     {
@@ -41,7 +43,7 @@ int main(int argc, char *argv[])
         cout << "Error. Invalid operation!" << endl;
         return -1;
     }
-    simulation->perform(filename, simulTime);
+    simulation->perform(filename, simulTime, beginTime);
     delete simulation;
     return 0;
 }

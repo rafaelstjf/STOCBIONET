@@ -14,7 +14,7 @@ using namespace std;
 class SSA
 {
 public:
-    virtual void perform(string filename, double simulTime) = 0;
+    virtual void perform(string filename, double simulTime, double beginTime) = 0;
     virtual ~SSA();
 protected:
     Utils* ut;
@@ -28,7 +28,7 @@ protected:
     double* propArray; //propensity array
     double simulTime; //simulation time
     int* specQuantity; //species quantity
-    
+
     //functions
     virtual void initialization(string filename,  double simultime) = 0; //read the model and initialization data structures
     virtual void calcPropensity() = 0; //calculate the propensity function for each reaction

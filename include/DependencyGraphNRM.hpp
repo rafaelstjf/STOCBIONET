@@ -1,22 +1,16 @@
-#ifndef DEPENDENCYGRAPH_HPP
-#define DEPENDENCYGRAPH_HPP
+#ifndef DEPENDENCYGRAPHNRM_HPP
+#define DEPENDENCYGRAPHNRM_HPP
 
 #include <iostream>
 #include "../include/DGVertex.hpp"
+#include "../include/DependencyGraph.hpp"
 using namespace std;
-class DependencyGraph : public DependencyGraph
+class DependencyGraphNRM : public DependencyGraph
 {
 public:
-    DependencyGraph(int numReactions, int** reactants, int** products, int numSpecies);
-    int* getDependencies(int id);
-    virtual void insertDependency(int id, int val);
-    virtual void printGraph();
-    virtual int getDependenciesSize(int id);
-    virtual ~DependencyGraph();
-
+    DependencyGraphNRM(int numReactions, int** reactants, int** products, int numSpecies);
+    virtual void createGraph(int numReactions, int **reactants, int **products, int numSpecies);
 protected:
-    virtual int* unionSet(int* a, int* b);
-    virtual int* intersectionSet(int* a, int*b);
 
 };
 
