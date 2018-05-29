@@ -11,9 +11,7 @@ void NextReactionMethod::initialization(string filename, double simulTime)
     {
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
-        propArrayNonZero = new double[model->getReacNumber()];
         RNArray = new double[model->getReacNumber()];
-        timePropZero = new double[model->getReacNumber()];
         for (int i = 0; i < model->getSpecNumber(); i++)
         {
             specQuantity[i] = model->getInitialQuantity()[i];
@@ -34,8 +32,6 @@ void NextReactionMethod::calcPropensity()
             sum *= ut->binomialCoefficient(specQuantity[j], model->getReactants()[i][j]);
         }
         propArray[i] = model->getReacRateArray()[i] * sum;
-        if(propArray[i] > 0)
-            propArrayNonZero[i] = propArray[i];
     }
 }
 void NextReactionMethod::calcPropOne(int index)
@@ -46,8 +42,6 @@ void NextReactionMethod::calcPropOne(int index)
         sum *= ut->binomialCoefficient(specQuantity[j], model->getReactants()[index][j]);
     }
     propArray[index] = model->getReacRateArray()[index] * sum;
-    if(propArray[index] > 0)
-        propArrayNonZero[index] = propArray[index];
 }
 void NextReactionMethod::reacTimeGeneration()
 {
@@ -55,9 +49,13 @@ void NextReactionMethod::reacTimeGeneration()
     double u, t1;
     for (int i = 0; i < model->getReacNumber(); i++)
     {
+
         u = ut->getRandomNumber();
         RNArray[i] = (-1.00)*ut->ln(u);
-        t1 = (RNArray[i] / propArray[i]) ;
+        if(propArray[i] != 0.0)
+            t1 = (RNArray[i] / propArray[i]) ;
+        else
+            t1 = inf;
         queue->insertKey(i, t1);
     }
     queue->sort();
@@ -80,9 +78,16 @@ void NextReactionMethod::reacExecution()
     }
     //calculate the next time of the selected reacion
     calcPropOne(selectedNode->getIndex());
-    u = ut->getRandomNumber();
-    RNArray[selectedNode->getIndex()] = (-1.00)*ut->ln(u);
-    nt = ((RNArray[selectedNode->getIndex()] / propArray[selectedNode->getIndex()]) + currentTime);
+
+    if(propArray[selectedNode->getIndex()] != 0.0)
+    {
+        u = ut->getRandomNumber();
+        RNArray[selectedNode->getIndex()] = (-1.00)*ut->ln(u);
+        nt = ((RNArray[selectedNode->getIndex()] / propArray[selectedNode->getIndex()]) + currentTime);
+    }
+
+    else
+        nt = inf;
     queue->update(selectedNode->getIndex(), nt);
     //uses the DG to update the time of the selected reaction on the priority Queue
     int *depArray = dg->getDependencies(selectedNode->getIndex());
@@ -91,18 +96,15 @@ void NextReactionMethod::reacExecution()
     {
         double propOld = propArray[depArray[i]];
         calcPropOne(depArray[i]);
-        HeapNode* actualNode = queue->getNode(depArray[i]);
-        if(propArray[depArray[i]] > 0 && propOld == 0)
+        if(propArray[depArray[i]] != 0.0)
         {
             nt = RNArray[depArray[i]]/propArray[depArray[i]] + currentTime;
+            //t[i] = -ln(r)/ak +
         }
         else
-        {
-            nt = ((propOld / propArray[depArray[i]]) * (actualNode->getTime() - currentTime) + currentTime);
-        }
+            nt = inf;
         queue->update(depArray[i], nt);
     }
-
 }
 void NextReactionMethod::perform(string filename, double simulTime, double beginTime)
 {
