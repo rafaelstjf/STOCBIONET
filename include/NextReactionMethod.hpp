@@ -24,8 +24,6 @@ protected:
   virtual void reacSelection();
   virtual void reacExecution();
   List* queue; //priority queue used to store the absolute time of each reaction
-  double* propArrayNonZero;
-  double* timePropZero;
   double* RNArray;
   HeapNode* selectedNode; //used to store the selected reaction index and time
 

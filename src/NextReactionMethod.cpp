@@ -85,7 +85,6 @@ void NextReactionMethod::reacExecution()
         RNArray[selectedNode->getIndex()] = (-1.00)*ut->ln(u);
         nt = ((RNArray[selectedNode->getIndex()] / propArray[selectedNode->getIndex()]) + currentTime);
     }
-
     else
         nt = inf;
     queue->update(selectedNode->getIndex(), nt);
@@ -146,9 +145,7 @@ NextReactionMethod::~NextReactionMethod()
     delete ut;
     delete[] specQuantity;
     delete[] propArray;
-    delete[] propArrayNonZero;
     delete[] RNArray;
-    delete[] timePropZero;
     delete queue;
     delete selectedNode;
 }
