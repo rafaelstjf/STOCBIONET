@@ -16,7 +16,7 @@ void NextReactionMethod::initialization(string filename, double simulTime)
         {
             specQuantity[i] = model->getInitialQuantity()[i];
         }
-        queue = new List(model->getReacNumber());
+        queue = new IndexedPrioQueue(model->getReacNumber());
         dg = new DependencyGraphNRM(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
         dg->printGraph();
     }
@@ -58,7 +58,7 @@ void NextReactionMethod::reacTimeGeneration()
             t1 = inf;
         queue->insertKey(i, t1);
     }
-    queue->sort();
+    //queue->sort();
 }
 void NextReactionMethod::reacSelection()
 {
