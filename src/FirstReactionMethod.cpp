@@ -6,7 +6,17 @@ void FirstReactionMethod::initialization(string filename, double simulTime)
     ut = new Utils();
     model->loadModel(filename);
     this->simulTime = simulTime;
-    methodOutName = "FRM_output";
+    for (int i = 0; i < filename.size(); i++)
+    {
+        if (filename[i] == '.')
+        {
+            methodOutName += "_FRM_output";
+            break;
+        }
+
+        else
+            methodOutName += filename[i];
+    }
     if (model->isModelLoaded())
     {
         specQuantity = new int[model->getSpecNumber()];

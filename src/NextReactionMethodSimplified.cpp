@@ -5,7 +5,17 @@ void NextReactionMethodSimplified::initialization(string filename, double simulT
     model = new Model();
     ut = new Utils();
     this->simulTime = simulTime;
-    methodOutName = "NRMSIMP_output";
+      for (int i = 0; i < filename.size(); i++)
+    {
+        if (filename[i] == '.')
+        {
+            methodOutName += "_NRMSIMP_output";
+            break;
+        }
+
+        else
+            methodOutName += filename[i];
+    }
     model->loadModel(filename);
     if (model->isModelLoaded())
     {

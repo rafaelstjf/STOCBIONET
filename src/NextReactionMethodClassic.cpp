@@ -5,7 +5,17 @@ void NextReactionMethodClassic::initialization(string filename, double simulTime
     model = new Model();
     ut = new Utils();
     this->simulTime = simulTime;
-    methodOutName = "NRMC_output";
+     for (int i = 0; i < filename.size(); i++)
+    {
+        if (filename[i] == '.')
+        {
+            methodOutName += "_NRMC_output";
+            break;
+        }
+
+        else
+            methodOutName += filename[i];
+    }
     model->loadModel(filename);
     if (model->isModelLoaded())
     {

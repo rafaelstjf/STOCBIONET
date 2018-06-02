@@ -2,10 +2,12 @@
 #define NEXTREACTIONMETHODCLASSIC_HPP
 
 #include <iostream>
+#include <climits>
 #include "../include/SSA.hpp"
 #include "../include/IndexedPrioQueue.hpp"
 #include "../include/HeapNode.hpp"
 #include "../include/DependencyGraphNRM.hpp"
+
 
 #define inf INT_MAX
 using namespace std;

@@ -4,7 +4,17 @@ void FirstReactionMethodDG::initialization(string filename, double simulTime)
     model = new Model();
     ut = new Utils();
     model->loadModel(filename);
-    methodOutName = "FRMDG_output";
+    for (int i = 0; i < filename.size(); i++)
+    {
+        if (filename[i] == '.')
+        {
+            methodOutName += "_FRMDG_output";
+            break;
+        }
+
+        else
+            methodOutName += filename[i];
+    }
     this->simulTime = simulTime;
     if (model->isModelLoaded())
     {
@@ -88,7 +98,7 @@ void FirstReactionMethodDG::reacTimeGeneration()
         {
             calcPropOne(depArray[i]);
             u = ut->getRandomNumber();
-            t[depArray[i]] = (-1.0) * log10(u) / propArray[depArray[i]];
+            t[depArray[i]] = (-1.0) * ut->ln(u) / propArray[depArray[i]];
         }
     }
 }

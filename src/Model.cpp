@@ -42,13 +42,15 @@ void Model::loadModel(string filename)
     {
         cout << "Reading the file..." << endl;
         text << inFile.rdbuf();
-        cout << "Load model in debug mode?(y or n)" << endl;
+        /*cout << "Load model in debug mode?(y or n)" << endl;
         cin >> debug;
         debug == 'n';
         if (debug == 'y' or debug == 'Y')
             tr = new TReact(true);
         else
             tr = new TReact(false);
+        */
+        tr = new TReact(false);
         vector<Reaction*> reactions = tr->getReactions(text.str(), specNameNumber, specQuantity, modelRepresentation);
         specNumber = specNameNumber.size();
         reacNumber = reactions.size();

@@ -5,7 +5,17 @@ void DirectMethod::initialization(string filename, double simultime)
     model = new Model(); //instantiate the model
     ut = new Utils();    //instantiate the utility class
     model->loadModel(filename);
-    methodOutName = "DM_output";
+    for (int i = 0; i < filename.size(); i++)
+    {
+        if (filename[i] == '.')
+        {
+            methodOutName += "_DM_output";
+            break;
+        }
+
+        else
+            methodOutName += filename[i];
+    }
     t = 0.0; //tal
     selectedReaction = 0;
     this->simulTime = simulTime;
@@ -123,7 +133,7 @@ void DirectMethod::calcPropOne(int index)
     //updates the propensity of the selected reaction
     double sum = 1;
     double propOld = propArray[index];
-    int* reactants = model->getReactants()[index];
+    int *reactants = model->getReactants()[index];
     for (int i = 0; i < model->getSpecNumber(); i++)
     {
         sum *= ut->binomialCoefficient(specQuantity[i], reactants[i]);
