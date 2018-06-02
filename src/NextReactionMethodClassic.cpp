@@ -168,7 +168,6 @@ void NextReactionMethodClassic::perform(string filename, double simulTime, doubl
     }
     double en = ut->getCurrentTime();
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
-    printResult();
     saveToFile();
 }
 NextReactionMethodClassic::~NextReactionMethodClassic()

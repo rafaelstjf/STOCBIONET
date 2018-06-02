@@ -57,7 +57,6 @@ void IndexedPrioQueue::insertKey(int index, double time)
 {
     if (heapsize == capacity)
         return;
-    cout << "Inserting: " << index << "; " << time << endl;
     heapsize++;
     int i = heapsize - 1;
     HeapNode* n =  new HeapNode(index, time);

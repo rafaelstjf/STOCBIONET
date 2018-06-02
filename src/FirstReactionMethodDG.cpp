@@ -59,7 +59,6 @@ void FirstReactionMethodDG::perform(string filename, double simulTime, double be
     }
     double en = ut->getCurrentTime(); //end
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
-    //printResult();
     saveToFile();
 }
 void FirstReactionMethodDG::reacSelection()

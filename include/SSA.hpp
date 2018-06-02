@@ -16,6 +16,7 @@ class SSA
 public:
     virtual void perform(string filename, double simulTime, double beginTime) = 0;
     virtual ~SSA();
+    virtual void printResult();
 protected:
     Utils* ut;
     DependencyGraph* dg;
@@ -35,7 +36,6 @@ protected:
     virtual void calcPropOne(int index) = 0;
     virtual void reacTimeGeneration() = 0;
     virtual void reacSelection() = 0;
-    virtual void printResult();
     virtual void saveToFile();
     virtual void reacExecution() = 0;
 

@@ -13,6 +13,7 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     int op = 1;
+    char printOp;
     string filename;
     double simulTime = 0.0, beginTime = 0.0;
     SSA* simulation;
@@ -50,6 +51,10 @@ int main(int argc, char *argv[])
         return -1;
     }
     simulation->perform(filename, simulTime, beginTime);
+    cout << "Do you want to print the results? (y-yes or n-no)" << endl;
+    cin >> printOp;
+    if(printOp == 'y')
+        simulation->printResult();
     delete simulation;
     return 0;
 }

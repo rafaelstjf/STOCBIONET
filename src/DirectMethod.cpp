@@ -37,7 +37,7 @@ void DirectMethod::reacTimeGeneration()
 {
     double u1;
     u1 = ut->getRandomNumber();
-    t = (1.0 / totalPropensity) * ut->ln(1.0 / u1); //next time increase
+    t = (-1.0* ut->ln(u1))/ totalPropensity;//next time increase
 }
 void DirectMethod::reacSelection()
 {
@@ -106,7 +106,6 @@ void DirectMethod::perform(string filename, double simulTime, double beginTime)
     }
     double en = ut->getCurrentTime(); //end
     saveToFile();
-    //printResult();
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
 }
 void DirectMethod::calcPropensity()

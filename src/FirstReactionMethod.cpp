@@ -59,7 +59,6 @@ void FirstReactionMethod::perform(string filename, double simulTime, double begi
     }
     double en = ut->getCurrentTime(); //end
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
-    printResult();
     saveToFile();
 }
 void FirstReactionMethod::reacExecution()
