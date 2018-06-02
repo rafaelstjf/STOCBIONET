@@ -24,7 +24,7 @@ void NextReactionMethodSimplified::initialization(string filename, double simulT
 }
 void NextReactionMethodSimplified::calcPropensity()
 {
-    int sum;
+    double sum;
     for (int i = 0; i < model->getReacNumber(); i++)
     {
         sum = 1;
@@ -37,7 +37,7 @@ void NextReactionMethodSimplified::calcPropensity()
 }
 void NextReactionMethodSimplified::calcPropOne(int index)
 {
-    int sum = 1;
+    double sum = 1;
     for (int j = 0; j < model->getSpecNumber(); j++)
     {
         sum *= ut->binomialCoefficient(specQuantity[j], model->getReactants()[index][j]);
@@ -57,7 +57,7 @@ void NextReactionMethodSimplified::reacTimeGeneration()
             t1 = (delta[i] / propArray[i]) + currentTime;
         else
             t1 = inf;
-        propNonZero[i] = propArray[i];
+        propNonZero[i] = propArray[i]; //if propArray[i] = propNonZero[i] = 0, that happens since the beginning of the simulation
         queue->insertKey(i, t1);
     }
     //queue->sort();
@@ -85,10 +85,10 @@ void NextReactionMethodSimplified::reacExecution()
     {
         u = ut->getRandomNumber();
         nt = (-1.0*ut->ln(u))/propArray[sIndex] + currentTime;
-        propNonZero[sIndex] = propArray[sIndex];
-        delta[sIndex] = propArray[sIndex]*nt;
+        propNonZero[sIndex] = propArray[sIndex]; //saves the last propensity different from 0
+        delta[sIndex] = propArray[sIndex]*nt; // saves -ln(u) to use when propArray[i] changes from 0
     }
-    else
+    else //propensity of the selected reaction becomes 0, invert the signal of the last delta
     {
         propNonZero[sIndex] = (-1.0*propNonZero[sIndex]);
         delta[sIndex] = (-1.0*delta[sIndex]);
@@ -102,6 +102,7 @@ void NextReactionMethodSimplified::reacExecution()
     {
         propOld = propArray[depArray[i]];
         calcPropOne(depArray[i]);
+        nt = inf;
         if(propArray[depArray[i]] > 0.0)
         {
             nt = (delta[depArray[i]] - (propNonZero[depArray[i]]*currentTime))/propArray[depArray[i]] + currentTime;
@@ -113,6 +114,7 @@ void NextReactionMethodSimplified::reacExecution()
             propNonZero[depArray[i]] = (-1.0*propOld);
             delta[depArray[i]] = propOld*currentTime;
         }
+        //if both propensities(last and current) are 0 so nt = inf
         queue->update(depArray[i], nt);
     }
 }

@@ -12,7 +12,8 @@ Avaiable methods:
  
 Methods in development:
  
- * Next reaction method (__80%__ )
+ * Next reaction method Classic (__95%__ )
+ * Next reaction method Simplified (__95%__ )
  * Modified next reaction method (__0%__ )
  * Rejection method (__0%__ )
  * Delayed modified next reaction method (__0%__ )
@@ -21,11 +22,6 @@ Requirements:
 
  * C++11
 
- Example of use:
-```c++
-SSA* s = new DirectMethod();
-s->peform(string filename, double simulationTime);
-```
 Example of input file:
 ```sh
 #reaction rate constants

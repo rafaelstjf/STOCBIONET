@@ -88,25 +88,29 @@ void FirstReactionMethod::reacSelection()
 }
 void FirstReactionMethod::calcPropensity()
 {
-    int sum = 1;
-    for (int i = 0; i < model->getReacNumber(); i++)
+   double sum;
+    int** reactants = model->getReactants();
+    double* rate = model->getReacRateArray();
+    for(int i = 0; i < model->getReacNumber(); i++)
     {
         sum = 1;
-        for (int j = 0; j < model->getSpecNumber(); j++)
+        for(int j = 0; j < model->getSpecNumber(); j++)
         {
-            sum *= ut->binomialCoefficient(specQuantity[j], model->getReactants()[i][j]);
+            sum*=ut->binomialCoefficient(specQuantity[j], reactants[i][j]);
+
         }
-        propArray[i] = model->getReacRateArray()[i] * sum;
+        propArray[i] = rate[i]*sum;
     }
 }
 void FirstReactionMethod::calcPropOne(int index)
 {
-    int sum = 1;
-    for (int j = 0; j < model->getSpecNumber(); j++)
+   int* reactants = model->getReactants()[index];
+    double sum=1;
+    for(int i = 0; i < model->getSpecNumber(); i++)
     {
-        sum *= ut->binomialCoefficient(specQuantity[j], model->getReactants()[index][j]);
+        sum*=ut->binomialCoefficient(specQuantity[i], reactants[i]);
     }
-    propArray[index] = model->getReacRateArray()[index] * sum;
+    propArray[index] = model->getReacRateArray()[index]* sum;
 }
 FirstReactionMethod::~FirstReactionMethod()
 {

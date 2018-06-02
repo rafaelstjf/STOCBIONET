@@ -7,7 +7,7 @@ void NextReactionMethodClassic::initialization(string filename, double simulTime
     this->simulTime = simulTime;
     methodOutName = "NRMC_output";
     model->loadModel(filename);
-    if(model->isModelLoaded())
+    if (model->isModelLoaded())
     {
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
@@ -15,7 +15,7 @@ void NextReactionMethodClassic::initialization(string filename, double simulTime
         propNonZero = new double[model->getReacNumber()];
         queue = new IndexedPrioQueue(model->getReacNumber());
         dg = new DependencyGraphNRM(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
-        for(int i = 0; i < model->getSpecNumber(); i++)
+        for (int i = 0; i < model->getSpecNumber(); i++)
         {
             specQuantity[i] = model->getInitialQuantity()[i];
         }
@@ -23,36 +23,35 @@ void NextReactionMethodClassic::initialization(string filename, double simulTime
 }
 void NextReactionMethodClassic::calcPropensity()
 {
-    int sum;
-    int** reactants = model->getReactants();
-    double* rate = model->getReacRateArray();
-    for(int i = 0; i < model->getReacNumber(); i++)
+    double sum;
+    int **reactants = model->getReactants();
+    double *rate = model->getReacRateArray();
+    for (int i = 0; i < model->getReacNumber(); i++)
     {
         sum = 1;
-        for(int j = 0; j < model->getSpecNumber(); j++)
+        for (int j = 0; j < model->getSpecNumber(); j++)
         {
-            sum*=ut->binomialCoefficient(specQuantity[j], reactants[i][j]);
-
+            sum *= ut->binomialCoefficient(specQuantity[j], reactants[i][j]);
         }
-        propArray[i] = rate[i]*sum;
+        propArray[i] = rate[i] * sum;
     }
 }
 void NextReactionMethodClassic::calcPropOne(int index)
 {
-    int* reactants = model->getReactants()[index];
-    int sum=1;
-    for(int i = 0; i < model->getSpecNumber(); i++)
+    int *reactants = model->getReactants()[index];
+    double sum = 1;
+    for (int i = 0; i < model->getSpecNumber(); i++)
     {
-        sum*=ut->binomialCoefficient(specQuantity[i], reactants[i]);
+        sum *= ut->binomialCoefficient(specQuantity[i], reactants[i]);
     }
-    propArray[index] = model->getReacRateArray()[index]* sum;
+    propArray[index] = model->getReacRateArray()[index] * sum;
 }
 void NextReactionMethodClassic::reacTimeGeneration()
 {
     double u, t1;
-    for(int i = 0; i < model->getReacNumber(); i++)
+    for (int i = 0; i < model->getReacNumber(); i++)
     {
-        if(propArray[i]==0.0)
+        if (propArray[i] == 0.0)
         {
             timePropZero[i] = currentTime;
             t1 = inf;
@@ -60,9 +59,9 @@ void NextReactionMethodClassic::reacTimeGeneration()
         else
         {
             u = ut->getRandomNumber();
-            t1 = ((-1*ut->ln(u))/propArray[i]) + currentTime;
+            t1 = ((-1 * ut->ln(u)) / propArray[i]) + currentTime;
         }
-        propNonZero[i] = propArray[i];
+        propNonZero[i] = propArray[i]; //if propNonZero[i] == 0 it happened since the beginning
         queue->insertKey(i, t1);
     }
 }
@@ -78,52 +77,50 @@ void NextReactionMethodClassic::reacExecution()
     double propOld;
     double delta;
     int sIndex = selectedNode->getIndex();
-    for(int i = 0; i < model->getSpecNumber(); i++)
+    for (int i = 0; i < model->getSpecNumber(); i++)
     {
         specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[sIndex][i];
     }
     calcPropOne(sIndex);
-    if(propArray[sIndex] == 0.0)
+    if (propArray[sIndex] == 0.0)
     {
-        timePropZero[sIndex] = currentTime;
+        timePropZero[sIndex] = currentTime; //saves the time that the propensity became 0
         nt = inf;
     }
     else
     {
         u = ut->getRandomNumber();
-        nt = ((-1*ut->ln(u))/propArray[sIndex]) + currentTime;
-        propNonZero[sIndex] = propArray[sIndex];
+        nt = ((-1 * ut->ln(u)) / propArray[sIndex]) + currentTime;
+        propNonZero[sIndex] = propArray[sIndex]; //saves the last propensity because a[m] =! 0
     }
     queue->update(sIndex, nt);
-    int* depArray = dg->getDependencies(sIndex);
+    int *depArray = dg->getDependencies(sIndex);
     int depSize = dg->getDependenciesSize(sIndex);
-    for(int i = 0; i < depSize; i++)
+    for (int i = 0; i < depSize; i++)
     {
         propOld = propArray[depArray[i]];
         calcPropOne(depArray[i]);
-        if(propArray[depArray[i]] > 0.0)
+        if (propArray[depArray[i]] > 0.0)
         {
-            if(propOld ==0.0)
+            if (propOld == 0.0) //propensity changed from 0
             {
-                if(propNonZero[depArray[i]] > 0.0)
-                    delta = propNonZero[depArray[i]]*(currentTime - timePropZero[depArray[i]]);
-                    //nt = (propNonZero[depArray[i]]/propArray[depArray[i]])*(currentTime-timePropZero[depArray[i]]) + currentTime;
-                else
+                if (propNonZero[depArray[i]] > 0.0) //the propensity was >0 at a moment t
+                    delta = propNonZero[depArray[i]] * (currentTime - timePropZero[depArray[i]]);
+                else //propensity was 0 from the beginning but now it's >0
                 {
                     u = ut->getRandomNumber();
-                    //nt = ((-1*ut->ln(u))/propArray[depArray[i]]) + currentTime;
-                    delta = (-1*ut->ln(u));
+                    delta = (-1 * ut->ln(u)); //propNonZero == 0
                 }
             }
-            else
-                //nt = (propNonZero[depArray[i]]/propArray[depArray[i]])*(currentTime-timePropZero[depArray[i]]) + currentTime;
-                delta = propNonZero[depArray[i]]*(selectedNode->getTime() - currentTime);
-            nt = delta/propArray[depArray[i]] + currentTime;
-            propNonZero[depArray[i]] = propArray[depArray[i]];
+            else //propOld > 0, so propNonZero > 0
+                delta = propNonZero[depArray[i]] * (selectedNode->getTime() - currentTime);
+            nt = delta / propArray[depArray[i]] + currentTime;
+            propNonZero[depArray[i]] = propArray[depArray[i]]; //saves the last propensity different than 0
         }
-        else if(propNonZero[depArray[i]] > 0.0)
+        else
         {
-            timePropZero[depArray[i]] = currentTime;
+            if (propNonZero[depArray[i]] > 0.0)
+                timePropZero[depArray[i]] = currentTime;
             nt = inf;
         }
         queue->update(depArray[i], nt);
@@ -133,7 +130,7 @@ void NextReactionMethodClassic::perform(string filename, double simulTime, doubl
 {
     cout << "NEXT REACTION METHOD CLASSIC" << endl;
     initialization(filename, simulTime);
-    if(!model->isModelLoaded())
+    if (!model->isModelLoaded())
     {
         cout << "Error! Invalid model." << endl;
         return;
@@ -146,13 +143,13 @@ void NextReactionMethodClassic::perform(string filename, double simulTime, doubl
     calcPropensity();
     reacTimeGeneration();
     reacSelection(); //just to check if the time = inf
-    if(currentTime != inf)
+    if (currentTime != inf)
     {
         currentTime = beginTime;
-        while(currentTime <=simulTime)
+        while (currentTime <= simulTime)
         {
             xArray = new int[model->getSpecNumber()];
-            for(int i = 0; i < model->getSpecNumber(); i++)
+            for (int i = 0; i < model->getSpecNumber(); i++)
                 xArray[i] = specQuantity[i];
             x.insert(make_pair(currentTime, xArray));
             reacSelection();
@@ -160,7 +157,7 @@ void NextReactionMethodClassic::perform(string filename, double simulTime, doubl
         }
     }
     double en = ut->getCurrentTime();
-    cout << "\nSimulation finished with " << en-beg << " seconds." << endl;
+    cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
     printResult();
     saveToFile();
 }

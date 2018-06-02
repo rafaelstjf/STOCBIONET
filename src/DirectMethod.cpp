@@ -6,7 +6,7 @@ void DirectMethod::initialization(string filename, double simultime)
     ut = new Utils();    //instantiate the utility class
     model->loadModel(filename);
     methodOutName = "DM_output";
-    t = 0.0;        //tal
+    t = 0.0; //tal
     selectedReaction = 0;
     this->simulTime = simulTime;
     totalPropensity = 0;
@@ -31,7 +31,7 @@ void DirectMethod::reacTimeGeneration()
 }
 void DirectMethod::reacSelection()
 {
-     double selector;
+    double selector;
     double u2;
     u2 = ut->getRandomNumber();
     selector = totalPropensity * u2;
@@ -103,27 +103,30 @@ void DirectMethod::calcPropensity()
 {
     //updates the entire array of propensities
     //propensity of a reaction i is: reaction rate * productory(n=0; n=numSpecies) of binomialcoefficient(SpecQuantity[n],reactants[i][n]
-    int sum = 1;
-    totalPropensity = 0;
+
+    double sum;
+    int **reactants = model->getReactants();
+    double *rate = model->getReacRateArray();
     for (int i = 0; i < model->getReacNumber(); i++)
     {
         sum = 1;
         for (int j = 0; j < model->getSpecNumber(); j++)
         {
-            sum *= ut->binomialCoefficient(specQuantity[j], model->getReactants()[i][j]);
+            sum *= ut->binomialCoefficient(specQuantity[j], reactants[i][j]);
         }
-        propArray[i] = model->getReacRateArray()[i] * sum;
+        propArray[i] = rate[i] * sum;
         totalPropensity += propArray[i];
     }
 }
 void DirectMethod::calcPropOne(int index)
 {
     //updates the propensity of the selected reaction
-    int sum = 1;
-    float propOld = propArray[index];
-    for (int j = 0; j < model->getSpecNumber(); j++)
+    double sum = 1;
+    double propOld = propArray[index];
+    int* reactants = model->getReactants()[index];
+    for (int i = 0; i < model->getSpecNumber(); i++)
     {
-        sum *= ut->binomialCoefficient(specQuantity[j], model->getReactants()[index][j]);
+        sum *= ut->binomialCoefficient(specQuantity[i], reactants[i]);
     }
     propArray[index] = model->getReacRateArray()[index] * sum;
     totalPropensity = totalPropensity - propOld + propArray[index];
