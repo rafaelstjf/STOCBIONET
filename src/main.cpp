@@ -4,7 +4,10 @@
 #include "../include/DirectMethod.hpp"
 #include "../include/FirstReactionMethod.hpp"
 #include "../include/FirstReactionMethodDG.hpp"
-#include "../include/NextReactionMethod.hpp"
+#include "../include/NextReactionMethodSimplified.hpp"
+#include "../include/NextReactionMethodClassic.hpp"
+
+
 using namespace std;
 
 int main(int argc, char *argv[])
@@ -17,9 +20,8 @@ int main(int argc, char *argv[])
     {
         filename = argv[1];
         op = atoi(argv[2]);
-        simulTime = atof(argv[3]);
-        beginTime = atof(argv[4]);
-
+        beginTime = atof(argv[3]);
+        simulTime = atof(argv[4]);
     }
     else
     {
@@ -27,7 +29,9 @@ int main(int argc, char *argv[])
         cin >> filename;
         cout << "Insert the simulation time:" << endl;
         cin >> simulTime;
-        cout << "Operations:\n 1 - Direct Method\n 2 - First Reaction Method\n 3 - First Reaction Method DG" << endl;
+        cout << "Insert the initial time:" << endl;
+        cin >> beginTime;
+        cout << "Operations:\n 1 - Direct Method\n 2 - First Reaction Method\n 3 - First Reaction Method DG\n4 - Next Reaction Method Classic\n5 - First Reaction Method Simplified" << endl;
         cin >> op;
     }
     if(op==1)
@@ -37,7 +41,9 @@ int main(int argc, char *argv[])
     else if(op==3)
         simulation = new FirstReactionMethodDG();
     else if(op==4)
-        simulation = new NextReactionMethod();
+        simulation = new NextReactionMethodClassic();
+    else if(op==5)
+        simulation = new NextReactionMethodSimplified();
     else
     {
         cout << "Error. Invalid operation!" << endl;
