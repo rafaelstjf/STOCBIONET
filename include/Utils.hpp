@@ -25,6 +25,7 @@ class Utils
   double getCurrentTime();
   double getMinDouble(double* array, int size);
   void saveToCSV(string buffer, string filename);
+  void saveToCSVNoOverwriting(string buffer, string filename);
   void saveToTXT(string buffer, string filename);
   ~Utils();
   private:

@@ -37,6 +37,7 @@ void FirstReactionMethodDG::perform(string filename, double simulTime, double be
         cout << "Error! Invalid model." << endl;
         return;
     }
+    this->beginTime = beginTime;
     double beg = ut->getCurrentTime();
     currentTime = beginTime;
     int *xArray;
@@ -78,7 +79,7 @@ void FirstReactionMethodDG::reacSelection()
 void FirstReactionMethodDG::reacTimeGeneration()
 {
     double u = 0.0;
-    if (currentTime == 0)
+    if (currentTime == beginTime)
     {
         //first execution
         for (int i = 0; i < model->getReacNumber(); i++)

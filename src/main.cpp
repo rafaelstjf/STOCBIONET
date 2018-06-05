@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
     cin >> printOp;
     if(printOp == 'y')
         simulation->printResult();
+
     delete simulation;
     return 0;
 }

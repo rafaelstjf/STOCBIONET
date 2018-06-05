@@ -127,6 +127,31 @@ void Utils::saveToCSV(string buffer, string filename)
     else
         cout << "Impossible to save file!" << endl;
 }
+void Utils::saveToCSVNoOverwriting(string buffer, string filename)
+{
+    fstream file;
+    fstream existFile;
+    int i = 0;
+    existFile.open(filename + ".csv", fstream::in);
+    while(existFile.good())
+    {
+        i++;
+        existFile.close();
+        existFile.open(filename + "_" + to_string(i) + ".csv", fstream::in);
+
+    }
+    if(i >0)
+        file.open(filename + "_" + to_string(i) +".csv", fstream::out);
+    else
+        file.open(filename + ".csv", fstream::out);
+    if (file.is_open())
+    {
+        file << buffer;
+        file.close();
+    }
+    else
+        cout << "Impossible to save file!" << endl;
+}
 void Utils::saveToTXT(string buffer, string filename)
 {
     fstream file;

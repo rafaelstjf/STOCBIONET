@@ -14,7 +14,7 @@ mRNA1=0;
 Protein1=0;
 mRNA2=0;
 Protein2=0;
-GENE2_IND = 1;
+GENE2_IND = 10;
 transcription,k1:GENE1-> GENE1 + mRNA1;
 transcription,k2:mRNA1-> mRNA1 + Protein1;
 transcription,k3:mRNA1-> ;

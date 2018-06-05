@@ -37,7 +37,7 @@ void SSA::saveToFile()
         buffer << '\n';
         itX++;
     }
-    ut->saveToCSV(buffer.str(), methodOutName);
+    ut->saveToCSVNoOverwriting(buffer.str(), methodOutName);
 }
 void SSA::printResult()
 {

@@ -23,6 +23,7 @@ protected:
     Model* model;
     double totalPropensity; //sum of all the propensities
     double currentTime;
+    double beginTime;
     int selectedReaction;
     string methodOutName;
     map<double, int*> x; //state dynamics
