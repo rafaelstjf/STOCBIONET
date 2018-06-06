@@ -75,6 +75,7 @@ void NextReactionMethodSimplified::reacTimeGeneration()
 void NextReactionMethodSimplified::reacSelection()
 {
     //selects the node with the minimal time and updates the time
+    queue->printQueue();
     selectedNode = queue->getMin();
     currentTime = selectedNode->getTime();
 
@@ -104,7 +105,7 @@ void NextReactionMethodSimplified::reacExecution()
         delta[sIndex] = (-1.0*delta[sIndex]);
         nt = inf;
     }
-    queue->update(selectedNode->getIndex(), nt);
+    queue->update(sIndex, nt);
     //uses the DG to update the time of the selected reaction on the priority Queue
     int *depArray = dg->getDependencies(selectedNode->getIndex());
     int depSize = dg->getDependenciesSize(selectedNode->getIndex());
@@ -127,6 +128,7 @@ void NextReactionMethodSimplified::reacExecution()
         //if both propensities(last and current) are 0 so nt = inf
         queue->update(depArray[i], nt);
     }
+
 }
 void NextReactionMethodSimplified::perform(string filename, double simulTime, double beginTime)
 {
@@ -145,20 +147,25 @@ void NextReactionMethodSimplified::perform(string filename, double simulTime, do
     //reacTimeGeneration comes before the while because you can calculate it only once and then
     //update inside the while
     reacTimeGeneration();
+    //saves the species quantities on beginTime
+    xArray = new int[model->getSpecNumber()];
+    for (int i = 0; i < model->getSpecNumber(); i++)
+        xArray[i] = specQuantity[i];
+    x.insert(make_pair(currentTime, xArray));
     reacSelection();
     if(currentTime != inf)
     {
-        currentTime = beginTime;
+        //currentTime = beginTime;
         while (currentTime <= simulTime)
         {
-            xArray = new int[model->getSpecNumber()];
+            reacExecution();
+              xArray = new int[model->getSpecNumber()];
             for (int i = 0; i < model->getSpecNumber(); i++)
             {
                 xArray[i] = specQuantity[i];
             }
             x.insert(make_pair(currentTime, xArray));
             reacSelection();
-            reacExecution();
         }
     }
     double en = ut->getCurrentTime(); //end

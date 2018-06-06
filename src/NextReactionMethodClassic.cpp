@@ -5,7 +5,7 @@ void NextReactionMethodClassic::initialization(string filename, double simulTime
     model = new Model();
     ut = new Utils();
     this->simulTime = simulTime;
-     for (int i = 0; i < filename.size(); i++)
+    for (int i = 0; i < filename.size(); i++)
     {
         if (filename[i] == '.')
         {
@@ -152,18 +152,23 @@ void NextReactionMethodClassic::perform(string filename, double simulTime, doubl
     x.clear();
     calcPropensity();
     reacTimeGeneration();
+    //saves the species quantities on beginTime
+    xArray = new int[model->getSpecNumber()];
+    for (int i = 0; i < model->getSpecNumber(); i++)
+        xArray[i] = specQuantity[i];
+    x.insert(make_pair(currentTime, xArray));
     reacSelection(); //just to check if the time = inf
     if (currentTime != inf)
     {
-        currentTime = beginTime;
+        //currentTime = beginTime;
         while (currentTime <= simulTime)
         {
+            reacExecution();
             xArray = new int[model->getSpecNumber()];
             for (int i = 0; i < model->getSpecNumber(); i++)
                 xArray[i] = specQuantity[i];
             x.insert(make_pair(currentTime, xArray));
             reacSelection();
-            reacExecution();
         }
     }
     double en = ut->getCurrentTime();

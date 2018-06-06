@@ -93,24 +93,25 @@ void IndexedPrioQueue::updateAux(int index)
         int l = left(index);
         int r = right(index);
         int smallest;
-        int flag = 0;
+        bool flag = false;
         if(l >= 0 && r >=0 && l < heapsize && r < heapsize)
         {
             smallest = l;
             if (heapArray[l]->getTime() > heapArray[r]->getTime())
                 smallest = r;
+            flag = true;
         }
         else if(l >=0 && l < heapsize)
         {
             smallest = l;
-            flag = 1;
+            flag = true;
         }
         else if(r >=0 && r < heapsize)
         {
             smallest = r;
-            flag = 2;
+            flag = true;
         }
-        if((flag==1 || flag == 2) &&(heapArray[index]->getTime() > heapArray[smallest]->getTime()))
+        if(flag &&(heapArray[index]->getTime() > heapArray[smallest]->getTime()))
         {
             swap(index, smallest);
             updateAux(smallest);
@@ -128,6 +129,7 @@ void IndexedPrioQueue::printQueue()
         */
         cout << "(" << heapArray[i]->getIndex() << " ; " << heapArray[i]->getTime() << ")";;
     }
+    cout << endl;
 }
 HeapNode* IndexedPrioQueue::getNode(int index)
 {
