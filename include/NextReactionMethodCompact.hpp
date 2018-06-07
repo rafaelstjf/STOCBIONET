@@ -1,5 +1,5 @@
-#ifndef NEXTREACTIONMETHOD_HPP
-#define NEXTREACTIONMETHOD_HPP
+#ifndef NEXTREACTIONMETHODCOMPACT_HPP
+#define NEXTREACTIONMETHODCOMPACT_HPP
 #include <iostream>
 #include <climits>
 #include "../include/SSA.hpp"
@@ -12,11 +12,11 @@
 
 using namespace std;
 
-class NextReactionMethodSimplified : public SSA
+class NextReactionMethodCompact : public SSA
 {
 public:
     virtual void perform(string filename, double simulTime, double beginTime);
-    virtual ~NextReactionMethodSimplified();
+    virtual ~NextReactionMethodCompact();
 
 protected:
     virtual void initialization(string filename, double simulTime);

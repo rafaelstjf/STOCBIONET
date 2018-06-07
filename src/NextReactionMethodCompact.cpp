@@ -1,6 +1,6 @@
-#include "../include/NextReactionMethodSimplified.hpp"
+#include "../include/NextReactionMethodCompact.hpp"
 
-void NextReactionMethodSimplified::initialization(string filename, double simulTime)
+void NextReactionMethodCompact::initialization(string filename, double simulTime)
 {
     model = new Model();
     ut = new Utils();
@@ -9,7 +9,7 @@ void NextReactionMethodSimplified::initialization(string filename, double simulT
     {
         if (filename[i] == '.')
         {
-            methodOutName += "_NRMSIMP_output";
+            methodOutName += "_NRMCOMPACT_output";
             break;
         }
 
@@ -25,14 +25,14 @@ void NextReactionMethodSimplified::initialization(string filename, double simulT
         propNonZero = new double[model->getReacNumber()];
         delta = new double[model->getReacNumber()];
         queue = new IndexedPrioQueue(model->getReacNumber());
-        dg = new DependencyGraphNRM(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
+        dg = new DependencyGraph->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
         for (int i = 0; i < model->getSpecNumber(); i++)
         {
             specQuantity[i] = model->getInitialQuantity()[i];
         }
     }
 }
-void NextReactionMethodSimplified::calcPropensity()
+void NextReactionMethodCompact::calcPropensity()
 {
     double sum;
     for (int i = 0; i < model->getReacNumber(); i++)
@@ -45,7 +45,7 @@ void NextReactionMethodSimplified::calcPropensity()
         propArray[i] = model->getReacRateArray()[i] * sum;
     }
 }
-void NextReactionMethodSimplified::calcPropOne(int index)
+void NextReactionMethodCompact::calcPropOne(int index)
 {
     double sum = 1;
     for (int j = 0; j < model->getSpecNumber(); j++)
@@ -54,7 +54,7 @@ void NextReactionMethodSimplified::calcPropOne(int index)
     }
     propArray[index] = model->getReacRateArray()[index] * sum;
 }
-void NextReactionMethodSimplified::reacTimeGeneration()
+void NextReactionMethodCompact::reacTimeGeneration()
 {
     //generates the absolute time for each reaction and saves it in the priority queue
     double u, t1;
@@ -72,7 +72,7 @@ void NextReactionMethodSimplified::reacTimeGeneration()
     }
     //queue->sort();
 }
-void NextReactionMethodSimplified::reacSelection()
+void NextReactionMethodCompact::reacSelection()
 {
     //selects the node with the minimal time and updates the time
     queue->printQueue();
@@ -80,7 +80,7 @@ void NextReactionMethodSimplified::reacSelection()
     currentTime = selectedNode->getTime();
 
 }
-void NextReactionMethodSimplified::reacExecution()
+void NextReactionMethodCompact::reacExecution()
 {
     double u; //random number
     double nt; //new time
@@ -91,21 +91,10 @@ void NextReactionMethodSimplified::reacExecution()
         specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[sIndex][i];
     }
     calcPropOne(sIndex);
-    //calculate the next time of the selected reacion
-    if(propArray[sIndex] > 0.0)
-    {
-        u = ut->getRandomNumber();
-        nt = (-1.0*ut->ln(u))/propArray[sIndex] + currentTime;
-        propNonZero[sIndex] = propArray[sIndex]; //saves the last propensity different from 0
-        delta[sIndex] = propArray[sIndex]*nt; // saves -ln(u) to use when propArray[i] changes from 0
-    }
-    else //propensity of the selected reaction becomes 0, invert the signal of the last delta
-    {
-        propNonZero[sIndex] = (-1.0*propNonZero[sIndex]);
-        delta[sIndex] = (-1.0*delta[sIndex]);
-        nt = inf;
-    }
-    queue->update(sIndex, nt);
+    u = ut->getRandomNumber();
+    delta[sIndex] = (-1.0*ut->ln(u));
+    propNonZero[sIndex] = 0;
+    
     //uses the DG to update the time of the selected reaction on the priority Queue
     int *depArray = dg->getDependencies(selectedNode->getIndex());
     int depSize = dg->getDependenciesSize(selectedNode->getIndex());
@@ -130,7 +119,7 @@ void NextReactionMethodSimplified::reacExecution()
     }
 
 }
-void NextReactionMethodSimplified::perform(string filename, double simulTime, double beginTime)
+void NextReactionMethodCompact::perform(string filename, double simulTime, double beginTime)
 {
     cout << "NEXT REACTION METHOD SIMPLIFIED" << endl;
     initialization(filename, simulTime);
@@ -172,7 +161,7 @@ void NextReactionMethodSimplified::perform(string filename, double simulTime, do
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
     saveToFile();
 }
-NextReactionMethodSimplified::~NextReactionMethodSimplified()
+NextReactionMethodCompact::~NextReactionMethodCompact()
 {
     delete dg;
     delete model;

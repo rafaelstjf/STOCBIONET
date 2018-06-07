@@ -119,10 +119,6 @@ void Model::loadModel(string filename)
             initialQuantity[itQ->second] = specQuantity.find(itQ->first)->second; //search the specie with the same name and set the quantity
             itQ++;
         }
-
-
-
-
         for(i = 0; i < specNumber; i++)
         {
             itQ = specNameNumber.begin();
