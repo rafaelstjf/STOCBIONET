@@ -63,7 +63,6 @@ void NextReactionMethodClassic::reacTimeGeneration()
     {
         if (propArray[i] == 0.0)
         {
-            timePropZero[i] = currentTime;
             t1 = inf;
         }
         else
@@ -94,15 +93,14 @@ void NextReactionMethodClassic::reacExecution()
     calcPropOne(sIndex);
     if (propArray[sIndex] == 0.0)
     {
-        timePropZero[sIndex] = currentTime; //saves the time that the propensity became 0
         nt = inf;
     }
     else
     {
         u = ut->getRandomNumber();
         nt = ((-1 * ut->ln(u)) / propArray[sIndex]) + currentTime;
-        propNonZero[sIndex] = propArray[sIndex]; //saves the last propensity because a[m] =! 0
     }
+    propNonZero[sIndex] = propArray[sIndex];
     queue->update(sIndex, nt);
     int *depArray = dg->getDependencies(sIndex);
     int depSize = dg->getDependenciesSize(sIndex);

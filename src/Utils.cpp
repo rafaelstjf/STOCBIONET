@@ -46,8 +46,8 @@ Utils::Utils()
     fat[8] = 40320;
     fat[9] = 362880;
     fat[10] = 3628800;
-    unsigned long seed = mix(clock(), time(NULL), getpid());
-    //unsigned long seed = 1940740546;
+    //unsigned long seed = mix(clock(), time(NULL), getpid());
+    unsigned long seed = 1940740546;
     stringstream s;
     s << seed;
     saveToTXT(s.str(), "last_seed");

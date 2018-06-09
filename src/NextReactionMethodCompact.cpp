@@ -25,7 +25,7 @@ void NextReactionMethodCompact::initialization(string filename, double simulTime
         propNonZero = new double[model->getReacNumber()];
         delta = new double[model->getReacNumber()];
         queue = new IndexedPrioQueue(model->getReacNumber());
-        dg = new DependencyGraph->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
+        dg = new DependencyGraph(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
         for (int i = 0; i < model->getSpecNumber(); i++)
         {
             specQuantity[i] = model->getInitialQuantity()[i];
@@ -63,7 +63,7 @@ void NextReactionMethodCompact::reacTimeGeneration()
 
         u = ut->getRandomNumber();
         delta[i] = (-1.00)*ut->ln(u);
-        if(propArray[i] != 0.0)
+        if(propArray[i] > 0.0)
             t1 = (delta[i] / propArray[i]) + currentTime;
         else
             t1 = inf;
@@ -75,7 +75,6 @@ void NextReactionMethodCompact::reacTimeGeneration()
 void NextReactionMethodCompact::reacSelection()
 {
     //selects the node with the minimal time and updates the time
-    queue->printQueue();
     selectedNode = queue->getMin();
     currentTime = selectedNode->getTime();
 
@@ -94,10 +93,9 @@ void NextReactionMethodCompact::reacExecution()
     u = ut->getRandomNumber();
     delta[sIndex] = (-1.0*ut->ln(u));
     propNonZero[sIndex] = 0;
-    
     //uses the DG to update the time of the selected reaction on the priority Queue
-    int *depArray = dg->getDependencies(selectedNode->getIndex());
-    int depSize = dg->getDependenciesSize(selectedNode->getIndex());
+    int *depArray = dg->getDependencies(sIndex);
+    int depSize = dg->getDependenciesSize(sIndex);
     for (int i = 0; i < depSize; i++)
     {
         propOld = propArray[depArray[i]];
