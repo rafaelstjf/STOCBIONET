@@ -1,6 +1,6 @@
-#include "../include/NextReactionMethodCompact.hpp"
+#include "../include/NextReactionMethodCamillo.hpp"
 
-void NextReactionMethodCompact::initialization(string filename, double simulTime)
+void NextReactionMethodCamillo::initialization(string filename, double simulTime)
 {
     model = new Model();
     ut = new Utils();
@@ -9,10 +9,9 @@ void NextReactionMethodCompact::initialization(string filename, double simulTime
     {
         if (filename[i] == '.')
         {
-            methodOutName += "_NRMCOMPACT_output";
+            methodOutName += "_NRMCAMILLO_output";
             break;
         }
-
         else
             methodOutName += filename[i];
     }
@@ -21,18 +20,19 @@ void NextReactionMethodCompact::initialization(string filename, double simulTime
     {
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
-        timePropZero = new double[model->getReacNumber()];
-        propNonZero = new double[model->getReacNumber()];
-        delta = new double[model->getReacNumber()];
         queue = new IndexedPrioQueue(model->getReacNumber());
-        dg = new DependencyGraphNRM(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
+        dg = new DependencyGraph(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
+        //
+        P = new double[model->getReacNumber()];
+        U = new double[model->getReacNumber()];
+        T = new double[model->getReacNumber()];
         for (int i = 0; i < model->getSpecNumber(); i++)
         {
             specQuantity[i] = model->getInitialQuantity()[i];
         }
     }
 }
-void NextReactionMethodCompact::calcPropensity()
+void NextReactionMethodCamillo::calcPropensity()
 {
     double sum;
     for (int i = 0; i < model->getReacNumber(); i++)
@@ -45,7 +45,7 @@ void NextReactionMethodCompact::calcPropensity()
         propArray[i] = model->getReacRateArray()[i] * sum;
     }
 }
-void NextReactionMethodCompact::calcPropOne(int index)
+void NextReactionMethodCamillo::calcPropOne(int index)
 {
     double sum = 1;
     for (int j = 0; j < model->getSpecNumber(); j++)
@@ -54,36 +54,32 @@ void NextReactionMethodCompact::calcPropOne(int index)
     }
     propArray[index] = model->getReacRateArray()[index] * sum;
 }
-void NextReactionMethodCompact::reacTimeGeneration()
+void NextReactionMethodCamillo::reacTimeGeneration()
 {
-    //generates the absolute time for each reaction and saves it in the priority queue
-    double u, t1;
+    double u, t1, nt;
     for (int i = 0; i < model->getReacNumber(); i++)
     {
 
         u = ut->getRandomNumber();
-        delta[i] = (-1.00)*ut->ln(u);
-        if(propArray[i] > 0.0)
-            t1 = (delta[i] / propArray[i]) + currentTime;
-        else
-            t1 = inf;
-        propNonZero[i] = propArray[i]; //if propArray[i] = propNonZero[i] = 0, that happens since the beginning of the simulation
+        P[i] = (-1.0*ut->ln(u));
+        U[i] = currentTime;
+        T[i] = 0.0;
+        nt = (P[i] - T[i])/propArray[i] + currentTime;
         queue->insertKey(i, t1);
     }
     //queue->sort();
 }
-void NextReactionMethodCompact::reacSelection()
+void NextReactionMethodCamillo::reacSelection()
 {
     //selects the node with the minimal time and updates the time
     selectedNode = queue->getMin();
     currentTime = selectedNode->getTime();
 
 }
-void NextReactionMethodCompact::reacExecution()
+void NextReactionMethodCamillo::reacExecution()
 {
     double u; //random number
     double nt; //new time
-    double propOld;
     int index;
     int sIndex = selectedNode->getIndex();
     for(int i = 0; i < model->getSpecNumber(); i++)
@@ -91,45 +87,21 @@ void NextReactionMethodCompact::reacExecution()
         specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[sIndex][i];
     }
     calcPropOne(sIndex);
-    u = ut->getRandomNumber();
-    delta[sIndex] = -1*ut->ln(u);
-    propNonZero[sIndex] = propArray[sIndex];
-
-    if(propArray[sIndex] > 0)
-    {
-        nt = (delta[sIndex]/propArray[sIndex]) + currentTime;
-    }
-    else
-    {
-        nt = inf;
-    }
-    queue->update(sIndex, nt);
-    //uses the DG to update the time of the selected reaction on the priority Queue
+    P[sIndex] = P[sIndex] + (-1.0*ut->ln(u));
     int *depArray = dg->getDependencies(sIndex);
     int depSize = dg->getDependenciesSize(sIndex);
     for (int i = 0; i < depSize; i++)
     {
         index = depArray[i];
-        propOld = propArray[index];
-        calcPropOne(index);
-        nt = inf;
-        if(propArray[index] > 0.0)
-        {
-            nt = (delta[index] - (propNonZero[index]*currentTime))/propArray[index] + currentTime;
-            propNonZero[index] = propArray[index];
-            delta[index] = propArray[index]*nt;
-        }
-        else if(propOld > 0.0)
-        {
-            propNonZero[index] = (-1.0*propOld);
-            delta[index] = propOld*currentTime;
-        }
-        //if both propensities(last and current) are 0 so nt = inf
+        T[index] = T[index] + propArray[index]*(currentTime - U[depArray[i]]);
+        U[index] = currentTime;
+        calcPropOne(depArray[i]);
+        nt = (P[index] - T[index])/propArray[index] + currentTime;
         queue->update(index, nt);
     }
 
 }
-void NextReactionMethodCompact::perform(string filename, double simulTime, double beginTime)
+void NextReactionMethodCamillo::perform(string filename, double simulTime, double beginTime)
 {
     cout << "NEXT REACTION METHOD COMPACT" << endl;
     initialization(filename, simulTime);
@@ -147,17 +119,13 @@ void NextReactionMethodCompact::perform(string filename, double simulTime, doubl
     //update inside the while
     reacTimeGeneration();
     //saves the species quantities on beginTime
-    xArray = new int[model->getSpecNumber()];
-    for (int i = 0; i < model->getSpecNumber(); i++)
-        xArray[i] = specQuantity[i];
-    x.insert(make_pair(currentTime, xArray));
     reacSelection();
     if(currentTime != inf)
     {
+        currentTime = beginTime;
         //currentTime = beginTime;
         while (currentTime <= simulTime)
         {
-            reacExecution();
             xArray = new int[model->getSpecNumber()];
             for (int i = 0; i < model->getSpecNumber(); i++)
             {
@@ -165,20 +133,23 @@ void NextReactionMethodCompact::perform(string filename, double simulTime, doubl
             }
             x.insert(make_pair(currentTime, xArray));
             reacSelection();
+            reacExecution();
         }
     }
     double en = ut->getCurrentTime(); //end
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
     saveToFile();
 }
-NextReactionMethodCompact::~NextReactionMethodCompact()
+NextReactionMethodCamillo::~NextReactionMethodCamillo()
 {
     delete dg;
     delete model;
     delete ut;
     delete[] specQuantity;
     delete[] propArray;
-    delete[] delta;
+    delete[] T;
+    delete[] U;
+    delete[] P;
     delete queue;
     delete selectedNode;
 }

@@ -12,7 +12,6 @@ void NextReactionMethodClassic::initialization(string filename, double simulTime
             methodOutName += "_NRMC_output";
             break;
         }
-
         else
             methodOutName += filename[i];
     }
@@ -85,6 +84,7 @@ void NextReactionMethodClassic::reacExecution()
     double nt;
     double propOld;
     double delta;
+    int index;
     int sIndex = selectedNode->getIndex();
     for (int i = 0; i < model->getSpecNumber(); i++)
     {
@@ -106,14 +106,15 @@ void NextReactionMethodClassic::reacExecution()
     int depSize = dg->getDependenciesSize(sIndex);
     for (int i = 0; i < depSize; i++)
     {
-        propOld = propArray[depArray[i]];
-        calcPropOne(depArray[i]);
-        if (propArray[depArray[i]] > 0.0)
+        index = depArray[i];
+        propOld = propArray[index];
+        calcPropOne(index);
+        if (propArray[index] > 0.0)
         {
             if (propOld == 0.0) //propensity changed from 0
             {
-                if (propNonZero[depArray[i]] > 0.0) //the propensity was >0 at a moment t
-                    delta = propNonZero[depArray[i]] * (currentTime - timePropZero[depArray[i]]);
+                if (propNonZero[index] > 0.0) //the propensity was >0 at a moment t
+                    delta = propNonZero[index] * (currentTime - timePropZero[index]);
                 else //propensity was 0 from the beginning but now it's >0
                 {
                     u = ut->getRandomNumber();
@@ -121,17 +122,17 @@ void NextReactionMethodClassic::reacExecution()
                 }
             }
             else //propOld > 0, so propNonZero > 0
-                delta = propNonZero[depArray[i]] * (selectedNode->getTime() - currentTime);
-            nt = delta / propArray[depArray[i]] + currentTime;
-            propNonZero[depArray[i]] = propArray[depArray[i]]; //saves the last propensity different than 0
+                delta = propNonZero[index] * (selectedNode->getTime() - currentTime);
+            nt = delta / propArray[index] + currentTime;
+            propNonZero[index] = propArray[index]; //saves the last propensity different than 0
         }
         else
         {
-            if (propNonZero[depArray[i]] > 0.0)
-                timePropZero[depArray[i]] = currentTime;
+            if (propNonZero[index] > 0.0)
+                timePropZero[index] = currentTime;
             nt = inf;
         }
-        queue->update(depArray[i], nt);
+        queue->update(index, nt);
     }
 }
 void NextReactionMethodClassic::perform(string filename, double simulTime, double beginTime)

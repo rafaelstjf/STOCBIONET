@@ -5,7 +5,7 @@
 #include "../include/FirstReactionMethod.hpp"
 #include "../include/NextReactionMethodClassic.hpp"
 #include "../include/NextReactionMethodCompact.hpp"
-
+#include "../include/NextReactionMethodCamillo.hpp"
 
 using namespace std;
 
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
         cin >> simulTime;
         cout << "Insert the initial time:" << endl;
         cin >> beginTime;
-        cout << "Operations:\n 1 - Direct Method\n 2 - First Reaction Method\n 3 - Next Reaction Method Classic\n 4 - First Reaction Method Simplified" << endl;
+        cout << "Operations:\n 1 - Direct Method\n 2 - First Reaction Method\n 3 - Next Reaction Method Classic\n 4 - First Reaction Method Compact" << endl;
         cin >> op;
     }
     if(op==1)
@@ -42,6 +42,8 @@ int main(int argc, char *argv[])
         simulation = new NextReactionMethodClassic();
     else if(op==4)
         simulation = new NextReactionMethodCompact();
+    else if(op==5)
+        simulation = new NextReactionMethodCamillo();
     else
     {
         cout << "Error. Invalid operation!" << endl;
