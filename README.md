@@ -8,11 +8,10 @@ Avaiable methods:
 
  * Direct method
  * First reaction method
- * First reaction method using dependency graph (inefficient but used for test purposes)
+ * Next reaction method Classic
  
 Methods in development:
  
- * Next reaction method Classic (__99%__ )
  * Next reaction method Compact (__99%__ )
  * Modified next reaction method (__0%__ )
  * Rejection method (__0%__ )
