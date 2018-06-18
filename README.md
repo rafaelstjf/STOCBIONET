@@ -8,12 +8,13 @@ Avaiable methods:
 
  * Direct method
  * First reaction method
- * Next reaction method Classic
+ * Next reaction method [Gibson](https://pubs.acs.org/doi/abs/10.1021/jp993732q)
+ * Next reaction method compact
+ * Modified next reaction method [Anderson](https://aip.scitation.org/doi/abs/10.1063/1.2799998)
+ * Simplified next reaction method [Camillo](http://repositorio.ufjf.br:8080/jspui/bitstream/ufjf/4828/1/camillodelellisfalcaodasilva.pdf)
  
 Methods in development:
  
- * Next reaction method Compact (__99%__ )
- * Modified next reaction method (__0%__ )
  * Rejection method (__0%__ )
  * Delayed modified next reaction method (__0%__ )
 

@@ -1,5 +1,5 @@
-#ifndef NEXTREACTIONMETHODCLASSIC_HPP
-#define NEXTREACTIONMETHODCLASSIC_HPP
+#ifndef NEXTREACTIONMETHOD_HPP
+#define NEXTREACTIONMETHOD_HPP
 
 #include <iostream>
 #include <climits>
@@ -12,10 +12,10 @@
 #define inf INT_MAX
 using namespace std;
 
-class NextReactionMethodClassic : public SSA{
+class NextReactionMethod : public SSA{
     public:
     virtual void perform(string filename, double simulTime, double beginTime);
-    virtual ~NextReactionMethodClassic();
+    virtual ~NextReactionMethod();
 
     protected:
     virtual void initialization(string filename, double simulTime);

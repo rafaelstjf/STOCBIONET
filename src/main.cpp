@@ -6,6 +6,7 @@
 #include "../include/NextReactionMethodClassic.hpp"
 #include "../include/NextReactionMethodCompact.hpp"
 #include "../include/NextReactionMethodCamillo.hpp"
+#include "../include/ModifiedNextReactionMethod.hpp"
 
 using namespace std;
 
@@ -43,6 +44,8 @@ int main(int argc, char *argv[])
     else if(op==4)
         simulation = new NextReactionMethodCompact();
     else if(op==5)
+        simulation = new ModifiedNextReactionMethod();
+     else if(op==6)
         simulation = new NextReactionMethodCamillo();
     else
     {

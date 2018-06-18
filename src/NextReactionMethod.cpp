@@ -1,6 +1,6 @@
-#include "../include/NextReactionMethodClassic.hpp"
+#include "../include/NextReactionMethod.hpp"
 
-void NextReactionMethodClassic::initialization(string filename, double simulTime)
+void NextReactionMethod::initialization(string filename, double simulTime)
 {
     model = new Model();
     ut = new Utils();
@@ -30,7 +30,7 @@ void NextReactionMethodClassic::initialization(string filename, double simulTime
         }
     }
 }
-void NextReactionMethodClassic::calcPropensity()
+void NextReactionMethod::calcPropensity()
 {
     double sum;
     int **reactants = model->getReactants();
@@ -45,7 +45,7 @@ void NextReactionMethodClassic::calcPropensity()
         propArray[i] = rate[i] * sum;
     }
 }
-void NextReactionMethodClassic::calcPropOne(int index)
+void NextReactionMethod::calcPropOne(int index)
 {
     int *reactants = model->getReactants()[index];
     double sum = 1;
@@ -55,7 +55,7 @@ void NextReactionMethodClassic::calcPropOne(int index)
     }
     propArray[index] = model->getReacRateArray()[index] * sum;
 }
-void NextReactionMethodClassic::reacTimeGeneration()
+void NextReactionMethod::reacTimeGeneration()
 {
     double u, t1;
     for (int i = 0; i < model->getReacNumber(); i++)
@@ -73,12 +73,12 @@ void NextReactionMethodClassic::reacTimeGeneration()
         queue->insertKey(i, t1);
     }
 }
-void NextReactionMethodClassic::reacSelection()
+void NextReactionMethod::reacSelection()
 {
     selectedNode = queue->getMin();
     currentTime = selectedNode->getTime();
 }
-void NextReactionMethodClassic::reacExecution()
+void NextReactionMethod::reacExecution()
 {
     double u;
     double nt;
@@ -135,7 +135,7 @@ void NextReactionMethodClassic::reacExecution()
         queue->update(index, nt);
     }
 }
-void NextReactionMethodClassic::perform(string filename, double simulTime, double beginTime)
+void NextReactionMethod::perform(string filename, double simulTime, double beginTime)
 {
     cout << "NEXT REACTION METHOD CLASSIC" << endl;
     initialization(filename, simulTime);
@@ -174,7 +174,7 @@ void NextReactionMethodClassic::perform(string filename, double simulTime, doubl
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
     saveToFile();
 }
-NextReactionMethodClassic::~NextReactionMethodClassic()
+NextReactionMethod::~NextReactionMethod()
 {
     delete dg;
     delete model;

@@ -20,8 +20,6 @@ public:
 
 protected:
     virtual void initialization(string filename, double simulTime);
-    virtual void calcPropensity();
-    virtual void calcPropOne(int index);
     virtual void reacTimeGeneration();
     virtual void reacSelection();
     virtual void reacExecution();

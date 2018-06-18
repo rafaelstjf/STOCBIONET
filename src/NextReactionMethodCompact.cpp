@@ -32,28 +32,7 @@ void NextReactionMethodCompact::initialization(string filename, double simulTime
         }
     }
 }
-void NextReactionMethodCompact::calcPropensity()
-{
-    double sum;
-    for (int i = 0; i < model->getReacNumber(); i++)
-    {
-        sum = 1;
-        for (int j = 0; j < model->getSpecNumber(); j++)
-        {
-            sum *= ut->binomialCoefficient(specQuantity[j], model->getReactants()[i][j]);
-        }
-        propArray[i] = model->getReacRateArray()[i] * sum;
-    }
-}
-void NextReactionMethodCompact::calcPropOne(int index)
-{
-    double sum = 1;
-    for (int j = 0; j < model->getSpecNumber(); j++)
-    {
-        sum *= ut->binomialCoefficient(specQuantity[j], model->getReactants()[index][j]);
-    }
-    propArray[index] = model->getReacRateArray()[index] * sum;
-}
+
 void NextReactionMethodCompact::reacTimeGeneration()
 {
     //generates the absolute time for each reaction and saves it in the priority queue

@@ -56,3 +56,25 @@ void SSA::printResult()
         it++;
     }
 }
+void SSA::calcPropensity()
+{
+    double sum;
+    for (int i = 0; i < model->getReacNumber(); i++)
+    {
+        sum = 1;
+        for (int j = 0; j < model->getSpecNumber(); j++)
+        {
+            sum *= ut->binomialCoefficient(specQuantity[j], model->getReactants()[i][j]);
+        }
+        propArray[i] = model->getReacRateArray()[i] * sum;
+    }
+}
+void SSA::calcPropOne(int index)
+{
+    double sum = 1;
+    for (int j = 0; j < model->getSpecNumber(); j++)
+    {
+        sum *= ut->binomialCoefficient(specQuantity[j], model->getReactants()[index][j]);
+    }
+    propArray[index] = model->getReacRateArray()[index] * sum;
+}

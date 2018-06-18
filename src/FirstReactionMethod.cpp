@@ -95,32 +95,6 @@ void FirstReactionMethod::reacSelection()
     }
     currentTime = currentTime + minT;
 }
-void FirstReactionMethod::calcPropensity()
-{
-   double sum;
-    int** reactants = model->getReactants();
-    double* rate = model->getReacRateArray();
-    for(int i = 0; i < model->getReacNumber(); i++)
-    {
-        sum = 1;
-        for(int j = 0; j < model->getSpecNumber(); j++)
-        {
-            sum*=ut->binomialCoefficient(specQuantity[j], reactants[i][j]);
-
-        }
-        propArray[i] = rate[i]*sum;
-    }
-}
-void FirstReactionMethod::calcPropOne(int index)
-{
-   int* reactants = model->getReactants()[index];
-    double sum=1;
-    for(int i = 0; i < model->getSpecNumber(); i++)
-    {
-        sum*=ut->binomialCoefficient(specQuantity[i], reactants[i]);
-    }
-    propArray[index] = model->getReacRateArray()[index]* sum;
-}
 FirstReactionMethod::~FirstReactionMethod()
 {
     //dtor
