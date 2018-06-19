@@ -150,7 +150,7 @@ void NextReactionMethod::perform(string filename, double simulTime, double begin
     }
     double en = ut->getCurrentTime();
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
-    sucess = true
+    sucess = true;
     saveToFile();
 }
 NextReactionMethod::~NextReactionMethod()

@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     if (argc == 5)
     {
         filename = argv[1];
-        op = atoi(argv[2]);
+        op = argv[2];
         beginTime = atof(argv[3]);
         simulTime = atof(argv[4]);
     }
@@ -32,16 +32,10 @@ int main(int argc, char *argv[])
         cin >> simulTime;
         cout << "Insert the initial time:" << endl;
         cin >> beginTime;
-        cout << "Operations:\n
-         DM - Direct Method\n
-         FRM - First Reaction Method\n
-         NRM - Next Reaction Method\n
-         NRMC - Next Reaction Method Compact\n
-         MNRM - Modified Next Reaction Method\n
-         SNRM - Simplified Next Reaction Method\n" << endl;
+        cout << "Operations:\nDM - Direct Method\nFRM - First Reaction Method\nNRM - Next Reaction Method\nNRMC - Next Reaction Method Compact\nMNRM - Modified Next Reaction Method\nSNRM - Simplified Next Reaction Method\n" << endl;
         cin >> op;
     }
-    if (op == 1"DM")
+    if (op == "DM")
         simulation = new DirectMethod();
     else if (op == "FRM")
         simulation = new FirstReactionMethod();

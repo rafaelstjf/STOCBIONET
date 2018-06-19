@@ -78,6 +78,6 @@ void SSA::calcPropOne(int index)
     }
     propArray[index] = model->getReacRateArray()[index] * sum;
 }
-void SSA::checkSucess(){
+bool SSA::checkSucess(){
     return sucess;
 }

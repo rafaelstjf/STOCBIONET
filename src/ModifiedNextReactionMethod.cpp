@@ -34,10 +34,9 @@ void ModifiedNextReactionMethod::initialization(string filename, double simulTim
 void ModifiedNextReactionMethod::reacTimeGeneration()
 {
     double u, t1;
-    calcPropOne(i);
     for (int i = 0; i < model->getReacNumber(); i++)
     {
-
+        calcPropOne(i);
         u = ut->getRandomNumber();
         P[i] = (-1.0 * ut->ln(u));
         T[i] = 0.0;

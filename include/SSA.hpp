@@ -15,6 +15,7 @@ class SSA
 {
 public:
     virtual void perform(string filename, double simulTime, double beginTime) = 0;
+    virtual bool checkSucess();
     virtual ~SSA();
     virtual void printResult();
 protected:
@@ -41,7 +42,6 @@ protected:
     virtual void reacSelection() = 0;
     virtual void saveToFile();
     virtual void reacExecution() = 0;
-    virtual bool checkSucess();
 
 };
 
