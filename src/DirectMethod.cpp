@@ -32,6 +32,7 @@ void DirectMethod::initialization(string filename, double simultime)
             specQuantity[i] = model->getInitialQuantity()[i];
         }
     }
+    sucess = false;
 }
 void DirectMethod::reacTimeGeneration()
 {
@@ -107,6 +108,7 @@ void DirectMethod::perform(string filename, double simulTime, double beginTime)
     double en = ut->getCurrentTime(); //end
     saveToFile();
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
+    sucess = true;
 }
 void DirectMethod::calcPropensity()
 {

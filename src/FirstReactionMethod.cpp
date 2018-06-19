@@ -2,6 +2,7 @@
 
 void FirstReactionMethod::initialization(string filename, double simulTime)
 {
+    sucess = false;
     model = new Model();
     ut = new Utils();
     model->loadModel(filename);
@@ -59,6 +60,7 @@ void FirstReactionMethod::perform(string filename, double simulTime, double begi
     }
     double en = ut->getCurrentTime(); //end
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
+    sucess = true;
     saveToFile();
 }
 void FirstReactionMethod::reacExecution()

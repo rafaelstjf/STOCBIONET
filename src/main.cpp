@@ -3,21 +3,21 @@
 //#include "SSA.h"
 #include "../include/DirectMethod.hpp"
 #include "../include/FirstReactionMethod.hpp"
-#include "../include/NextReactionMethodClassic.hpp"
+#include "../include/NextReactionMethod.hpp"
 #include "../include/NextReactionMethodCompact.hpp"
-#include "../include/NextReactionMethodCamillo.hpp"
+#include "../include/SimplifiedNextReactionMethod.hpp"
 #include "../include/ModifiedNextReactionMethod.hpp"
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
-    int op = 1;
     char printOp;
     string filename;
+    string op;
     double simulTime = 0.0, beginTime = 0.0;
-    SSA* simulation;
-    if(argc == 5)
+    SSA *simulation;
+    if (argc == 5)
     {
         filename = argv[1];
         op = atoi(argv[2]);
@@ -26,38 +26,46 @@ int main(int argc, char *argv[])
     }
     else
     {
-        cout <<"Insert the filename (with the extension):" << endl;
+        cout << "Insert the filename (with the extension):" << endl;
         cin >> filename;
         cout << "Insert the simulation time:" << endl;
         cin >> simulTime;
         cout << "Insert the initial time:" << endl;
         cin >> beginTime;
-        cout << "Operations:\n 1 - Direct Method\n 2 - First Reaction Method\n 3 - Next Reaction Method Classic\n 4 - First Reaction Method Compact" << endl;
+        cout << "Operations:\n
+         DM - Direct Method\n
+         FRM - First Reaction Method\n
+         NRM - Next Reaction Method\n
+         NRMC - Next Reaction Method Compact\n
+         MNRM - Modified Next Reaction Method\n
+         SNRM - Simplified Next Reaction Method\n" << endl;
         cin >> op;
     }
-    if(op==1)
+    if (op == 1"DM")
         simulation = new DirectMethod();
-    else if(op==2)
+    else if (op == "FRM")
         simulation = new FirstReactionMethod();
-    else if(op==3)
-        simulation = new NextReactionMethodClassic();
-    else if(op==4)
+    else if (op == "NRM")
+        simulation = new NextReactionMethod();
+    else if (op == "NRMC")
         simulation = new NextReactionMethodCompact();
-    else if(op==5)
+    else if (op == "MNRM")
         simulation = new ModifiedNextReactionMethod();
-     else if(op==6)
-        simulation = new NextReactionMethodCamillo();
+    else if (op == "SNRM")
+        simulation = new SimplifiedNextReactionMethod();
     else
     {
         cout << "Error. Invalid operation!" << endl;
         return -1;
     }
     simulation->perform(filename, simulTime, beginTime);
-    cout << "Do you want to print the results? (y-yes or n-no)" << endl;
-    cin >> printOp;
-    if(printOp == 'y')
-        simulation->printResult();
-
+    if (simulation->checkSucess())
+    {
+        cout << "Do you want to print the results? (y-yes or n-no)" << endl;
+        cin >> printOp;
+        if (printOp == 'y')
+            simulation->printResult();
+    }
     delete simulation;
     return 0;
 }

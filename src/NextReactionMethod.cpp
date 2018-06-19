@@ -2,6 +2,7 @@
 
 void NextReactionMethod::initialization(string filename, double simulTime)
 {
+    sucess = false;
     model = new Model();
     ut = new Utils();
     this->simulTime = simulTime;
@@ -9,7 +10,7 @@ void NextReactionMethod::initialization(string filename, double simulTime)
     {
         if (filename[i] == '.')
         {
-            methodOutName += "_NRMC_output";
+            methodOutName += "_NRM_output";
             break;
         }
         else
@@ -30,36 +31,12 @@ void NextReactionMethod::initialization(string filename, double simulTime)
         }
     }
 }
-void NextReactionMethod::calcPropensity()
-{
-    double sum;
-    int **reactants = model->getReactants();
-    double *rate = model->getReacRateArray();
-    for (int i = 0; i < model->getReacNumber(); i++)
-    {
-        sum = 1;
-        for (int j = 0; j < model->getSpecNumber(); j++)
-        {
-            sum *= ut->binomialCoefficient(specQuantity[j], reactants[i][j]);
-        }
-        propArray[i] = rate[i] * sum;
-    }
-}
-void NextReactionMethod::calcPropOne(int index)
-{
-    int *reactants = model->getReactants()[index];
-    double sum = 1;
-    for (int i = 0; i < model->getSpecNumber(); i++)
-    {
-        sum *= ut->binomialCoefficient(specQuantity[i], reactants[i]);
-    }
-    propArray[index] = model->getReacRateArray()[index] * sum;
-}
 void NextReactionMethod::reacTimeGeneration()
 {
     double u, t1;
     for (int i = 0; i < model->getReacNumber(); i++)
     {
+        calcPropOne(i); //uses calcPropOne(i) to saves one O(n)
         if (propArray[i] == 0.0)
         {
             t1 = inf;
@@ -137,7 +114,7 @@ void NextReactionMethod::reacExecution()
 }
 void NextReactionMethod::perform(string filename, double simulTime, double beginTime)
 {
-    cout << "NEXT REACTION METHOD CLASSIC" << endl;
+    cout << "NEXT REACTION METHOD" << endl;
     initialization(filename, simulTime);
     if (!model->isModelLoaded())
     {
@@ -147,9 +124,8 @@ void NextReactionMethod::perform(string filename, double simulTime, double begin
     double beg = ut->getCurrentTime();
     currentTime = beginTime;
     int *xArray;
-    int oldCtime;
     x.clear();
-    calcPropensity();
+    //calculates the propensity of all the reactions and generates the simulation time
     reacTimeGeneration();
     //saves the species quantities on beginTime
     xArray = new int[model->getSpecNumber()];
@@ -162,16 +138,19 @@ void NextReactionMethod::perform(string filename, double simulTime, double begin
         //currentTime = beginTime;
         while (currentTime <= simulTime)
         {
-            reacExecution();
+            reacExecution(); //executes the reaction
+            //saves the species quantities
             xArray = new int[model->getSpecNumber()];
             for (int i = 0; i < model->getSpecNumber(); i++)
                 xArray[i] = specQuantity[i];
             x.insert(make_pair(currentTime, xArray));
+            //selects a new reaction
             reacSelection();
         }
     }
     double en = ut->getCurrentTime();
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
+    sucess = true
     saveToFile();
 }
 NextReactionMethod::~NextReactionMethod()

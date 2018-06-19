@@ -4,25 +4,40 @@
 
 Stochastic simulation algorithms for Gene Regulatory Networks for delayed and non-delayed reactions.
 
-Avaiable methods:
+## Avaiable methods:
 
  * Direct method
  * First reaction method
- * Next reaction method [Gibson](https://pubs.acs.org/doi/abs/10.1021/jp993732q)
+ * [Next reaction method](https://pubs.acs.org/doi/abs/10.1021/jp993732q)
+ * [Modified next reaction method](https://aip.scitation.org/doi/abs/10.1063/1.2799998)
+ * [Simplified next reaction method](http://repositorio.ufjf.br:8080/jspui/bitstream/ufjf/4828/1/camillodelellisfalcaodasilva.pdf)
  * Next reaction method compact
- * Modified next reaction method [Anderson](https://aip.scitation.org/doi/abs/10.1063/1.2799998)
- * Simplified next reaction method [Camillo](http://repositorio.ufjf.br:8080/jspui/bitstream/ufjf/4828/1/camillodelellisfalcaodasilva.pdf)
  
-Methods in development:
+## Methods in development:
  
  * Rejection method (__0%__ )
  * Delayed modified next reaction method (__0%__ )
 
-Requirements:
+## Requirements:
 
  * C++11
 
-Example of input file:
+## Example of use:
+
+If you are using it in the terminal you can run it without arguments or with the following arguments: Input-file Operation-code Initial-time Maximum-time
+
+The current operations codes are:
+```
+DM - Direct Method
+FRM - First Reaction Method
+NRM - Next Reaction Method
+NRMC - Next Reaction Method Compact
+MNRM - Modified Next Reaction Method
+SNRM - Simplified Next Reaction Method
+```
+
+## Example of input file:
+
 ```sh
 #reaction rate constants
 k1=1;

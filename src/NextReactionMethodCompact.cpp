@@ -2,6 +2,7 @@
 
 void NextReactionMethodCompact::initialization(string filename, double simulTime)
 {
+    sucess = false;
     model = new Model();
     ut = new Utils();
     this->simulTime = simulTime;
@@ -9,7 +10,7 @@ void NextReactionMethodCompact::initialization(string filename, double simulTime
     {
         if (filename[i] == '.')
         {
-            methodOutName += "_NRMCOMPACT_output";
+            methodOutName += "_NRMC_output";
             break;
         }
 
@@ -39,7 +40,7 @@ void NextReactionMethodCompact::reacTimeGeneration()
     double u, t1;
     for (int i = 0; i < model->getReacNumber(); i++)
     {
-
+        calcPropOne(i);
         u = ut->getRandomNumber();
         delta[i] = (-1.00)*ut->ln(u);
         if(propArray[i] > 0.0)
@@ -121,9 +122,7 @@ void NextReactionMethodCompact::perform(string filename, double simulTime, doubl
     currentTime = beginTime;
     int *xArray;
     x.clear();
-    calcPropensity();
-    //reacTimeGeneration comes before the while because you can calculate it only once and then
-    //update inside the while
+     //calculates the propensity of all the reactions and generates the simulation time
     reacTimeGeneration();
     //saves the species quantities on beginTime
     xArray = new int[model->getSpecNumber()];
@@ -148,6 +147,7 @@ void NextReactionMethodCompact::perform(string filename, double simulTime, doubl
     }
     double en = ut->getCurrentTime(); //end
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
+    sucess = true;
     saveToFile();
 }
 NextReactionMethodCompact::~NextReactionMethodCompact()

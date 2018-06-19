@@ -2,6 +2,7 @@
 
 void SimplifiedNextReactionMethod::initialization(string filename, double simulTime)
 {
+    sucess = false;
     model = new Model();
     ut = new Utils();
     this->simulTime = simulTime;
@@ -9,7 +10,7 @@ void SimplifiedNextReactionMethod::initialization(string filename, double simulT
     {
         if (filename[i] == '.')
         {
-            methodOutName += "_NRMCAMILLO_output";
+            methodOutName += "_SNRM_output";
             break;
         }
         else
@@ -37,7 +38,7 @@ void SimplifiedNextReactionMethod::reacTimeGeneration()
     double u, t1;
     for (int i = 0; i < model->getReacNumber(); i++)
     {
-
+        calcPropOne(i);
         u = ut->getRandomNumber();
         P[i] = (-1.0*ut->ln(u));
         U[i] = currentTime;
@@ -45,7 +46,6 @@ void SimplifiedNextReactionMethod::reacTimeGeneration()
         t1 = (P[i] - T[i])/propArray[i] + currentTime;
         queue->insertKey(i, t1);
     }
-    //queue->sort();
 }
 void SimplifiedNextReactionMethod::reacSelection()
 {
@@ -82,7 +82,7 @@ void SimplifiedNextReactionMethod::reacExecution()
 }
 void SimplifiedNextReactionMethod::perform(string filename, double simulTime, double beginTime)
 {
-    cout << "NEXT REACTION METHOD CAMILLO" << endl;
+    cout << "SIMPLIFIED NEXT REACTION METHOD" << endl;
     initialization(filename, simulTime);
     if (!model->isModelLoaded())
     {
@@ -93,9 +93,7 @@ void SimplifiedNextReactionMethod::perform(string filename, double simulTime, do
     currentTime = beginTime;
     int *xArray;
     x.clear();
-    calcPropensity();
-    //reacTimeGeneration comes before the while because you can calculate it only once and then
-    //update inside the while
+    //calculates the propensity of all the reactions and generates the simulation time
     reacTimeGeneration();
     //saves the species quantities on beginTime
     reacSelection();
@@ -111,12 +109,13 @@ void SimplifiedNextReactionMethod::perform(string filename, double simulTime, do
                 xArray[i] = specQuantity[i];
             }
             x.insert(make_pair(currentTime, xArray));
-            reacSelection();
-            reacExecution();
+            reacSelection(); //selects a reaction 
+            reacExecution();//executes the selected reaction
         }
     }
     double en = ut->getCurrentTime(); //end
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
+    sucess = true;
     saveToFile();
 }
 SimplifiedNextReactionMethod::~SimplifiedNextReactionMethod()

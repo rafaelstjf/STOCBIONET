@@ -22,14 +22,16 @@ protected:
     DependencyGraph* dg;
     Model* model;
     double totalPropensity; //sum of all the propensities
-    double currentTime;
-    double beginTime;
+    double currentTime; //current time of the simulation
+    double beginTime; //time that the simulation begins
     int selectedReaction;
     string methodOutName;
     map<double, int*> x; //state dynamics
     double* propArray; //propensity array
     double simulTime; //simulation time
     int* specQuantity; //species quantity
+    double reacPerSecond; //number of reactions executed per second
+    bool sucess; //boolean variable used to check if the simulation was performed
 
     //functions
     virtual void initialization(string filename,  double simultime) = 0; //read the model and initialization data structures
@@ -39,6 +41,7 @@ protected:
     virtual void reacSelection() = 0;
     virtual void saveToFile();
     virtual void reacExecution() = 0;
+    virtual bool checkSucess();
 
 };
 

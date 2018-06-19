@@ -19,15 +19,13 @@ class NextReactionMethod : public SSA{
 
     protected:
     virtual void initialization(string filename, double simulTime);
-    virtual void calcPropensity();
-    virtual void calcPropOne(int index);
     virtual void reacTimeGeneration();
     virtual void reacSelection();
     virtual void reacExecution();
     IndexedPrioQueue* queue;
     HeapNode* selectedNode;
-    double* timePropZero;
-    double* propNonZero;
+    double* timePropZero; //time when ak becomes 0
+    double* propNonZero;//last propensity != 0
 
 };
 
