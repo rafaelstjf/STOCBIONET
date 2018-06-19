@@ -1,19 +1,21 @@
 #include "../include/DependencyGraph.hpp"
-DependencyGraph::DependencyGraph(){
+DependencyGraph::DependencyGraph()
+{
 }
 DependencyGraph::DependencyGraph(int numReactions, int **reactants, int **products, int numSpecies)
 {
     createGraph(numReactions,reactants,products,numSpecies);
 }
-void DependencyGraph::createGraph(int numReactions, int **reactants, int **products, int numSpecies){
- int **affects; //set of substances that change quantity when the reaction i is executed
+void DependencyGraph::createGraph(int numReactions, int **reactants, int **products, int numSpecies)
+{
+    int **affects; //set of substances that change quantity when the reaction i is executed
     //graph struct
     this->numReactions = numReactions;
     this->numSpecies = numSpecies;
     vertex = new DGVertex *[numReactions];
     for (int i = 0; i < numReactions; i++)
     {
-        vertex[i] = new DGVertex;
+        vertex[i] = new DGVertex();
         vertex[i]->setId(i);
         vertex[i]->setN(numReactions);
     }
@@ -37,12 +39,19 @@ void DependencyGraph::createGraph(int numReactions, int **reactants, int **produ
                 if (inter[k] >= 1)
                     count++;
             }
-
-            if (count > 0)
+            delete[] inter;
+            if (count > 0){
                 insertDependency(i, j);
+            }
+
             //j depends on i
         }
-    }}
+    }
+    for(int i = 0; i < numReactions; i++){
+        delete[] affects[i];
+    }
+    delete[] affects;
+}
 void DependencyGraph::insertDependency(int id, int val)
 {
 
@@ -103,7 +112,8 @@ int *DependencyGraph::intersectionSet(int *a, int *b)
     }
     return in;
 }
-DependencyGraph::~DependencyGraph(){
+DependencyGraph::~DependencyGraph()
+{
     for(int i = 0; i < numReactions; i++){
         delete vertex[i];
     }

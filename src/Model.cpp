@@ -92,24 +92,29 @@ void Model::loadModel(string filename)
                     delaysValue[i][sQ2[j]->getSpecie()->getNumber()] = sQ2[j]->getDelay()->getVariation();
             }
         }
+        cout << "Reaction rate" << endl;
         reacRate = new double[reacNumber];
         for(i = 0; i < reacNumber; i++)
         {
             reacRate[i] = reactions[i]->getRate();
+            cout << "Reaction[" << i << "]: " << reacRate[i] << " ";
         }
         cout << "Reactants" << endl;
         for(i = 0; i < reacNumber; i++)
         {
+            /*
             for(j = 0; j < specNumber; j++)
                 cout << reactants[i][j] << " ";
             cout << endl;
+            */
         }
         cout << "Products" << endl;
         for(i = 0; i < reacNumber; i++)
         {
-            for(j = 0; j < specNumber; j++)
+            /*for(j = 0; j < specNumber; j++)
                 cout << products[i][j] << " ";
             cout << endl;
+            */
         }
         cout << "Species quantities" << endl;
         initialQuantity = new int[specNumber];
@@ -130,19 +135,17 @@ void Model::loadModel(string filename)
             }
             cout << itQ->first << " [" << initialQuantity[i] << "]" << endl;
         }
-        /* print model representation
+        //print model representation
         for(i = 0; i< modelRepresentation.size(); i++){
             cout << modelRepresentation[i] << endl;
         }
-        */
-        cout << endl;
         buildStoichiometryMatrix();
         cout << "Stoichiometry matrix" << endl;
         for(i = 0; i < reacNumber; i++)
         {
-            for(j = 0; j < specNumber; j++)
+            /*for(j = 0; j < specNumber; j++)
                 cout << stoiMatrix[i][j] <<" ";
-            cout << endl;
+            cout << endl;*/
         }
         cout << "Model loaded" << endl;
         modelLoaded = true;
