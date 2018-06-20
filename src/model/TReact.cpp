@@ -22,7 +22,9 @@ TReact::TReact(bool debug)
 }
 TReact::~TReact()
 {
+    constants.erase(constants.begin(), constants.end());
     constants.clear();
+    speciesNumber.erase(speciesNumber.begin(), speciesNumber.end());
     speciesNumber.clear();
     delete sm;
 }
@@ -141,7 +143,9 @@ vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long 
         }
     }
     cout << "Reactions sucessfuly imported" << endl;
+    lines.clear();
     return ret;
+
 }
 void TReact::getLines(vector<string>& newLines, string lineOrig)
 {

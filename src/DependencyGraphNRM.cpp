@@ -37,7 +37,7 @@ void DependencyGraphNRM::createGraph(int numReactions, int **reactants, int **pr
                 if (inter[k] >= 1)
                     count++;
             }
-
+            delete[] inter;
             if (count > 0)
             {
                 if (i != j) //doesn't insert the self dependency
@@ -46,4 +46,8 @@ void DependencyGraphNRM::createGraph(int numReactions, int **reactants, int **pr
             //j depends on i
         }
     }
+     for(int i = 0; i < numReactions; i++){
+        delete[] affects[i];
+    }
+    delete[] affects;
 }

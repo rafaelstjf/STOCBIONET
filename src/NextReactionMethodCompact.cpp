@@ -126,22 +126,24 @@ void NextReactionMethodCompact::perform(string filename, double simulTime, doubl
     reacTimeGeneration();
     //saves the species quantities on beginTime
     xArray = new int[model->getSpecNumber()];
-    for (int i = 0; i < model->getSpecNumber(); i++)
+    /*for (int i = 0; i < model->getSpecNumber(); i++)
         xArray[i] = specQuantity[i];
-    x.insert(make_pair(currentTime, xArray));
+    x.insert(make_pair(currentTime, xArray));*/
     reacSelection();
     if(currentTime != inf)
     {
         //currentTime = beginTime;
         while (currentTime <= simulTime)
         {
+            cout << currentTime << endl;
             reacExecution();
-            xArray = new int[model->getSpecNumber()];
+            /*xArray = new int[model->getSpecNumber()];
             for (int i = 0; i < model->getSpecNumber(); i++)
             {
                 xArray[i] = specQuantity[i];
             }
             x.insert(make_pair(currentTime, xArray));
+            */
             reacSelection();
         }
     }

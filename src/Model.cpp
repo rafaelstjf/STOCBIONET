@@ -6,6 +6,7 @@ Model::Model()
     products = NULL;
     delaysValue = NULL;
     delaysVariation = NULL;
+    stoiMatrix = NULL;
     specNumber = 0;
     reacNumber = 0;
     specNameNumber.clear();
@@ -19,11 +20,13 @@ Model::~Model()
         delete[] products[i];
         delete[] delaysValue[i];
         delete[] delaysVariation[i];
+        delete[] stoiMatrix[i];
     }
     delete[] reactants;
     delete[] products;
     delete[] delaysValue;
     delete[] delaysVariation;
+    delete[] stoiMatrix;
 }
 void Model::loadModel(string filename)
 {
@@ -52,6 +55,8 @@ void Model::loadModel(string filename)
         */
         tr = new TReact(false);
         vector<Reaction*> reactions = tr->getReactions(text.str(), specNameNumber, specQuantity, modelRepresentation);
+        text.clear();
+        //delete tr;
         specNumber = specNameNumber.size();
         reacNumber = reactions.size();
         //Lines = reactions. Columns = species.
@@ -59,6 +64,7 @@ void Model::loadModel(string filename)
         products = new int *[reacNumber];
         delaysValue = new double *[reacNumber];
         delaysVariation = new double *[reacNumber];
+        reacRate = new double[reacNumber];
         for (i = 0; i < reacNumber; i++)
         {
             reactants[i] = new int[specNumber];
@@ -66,6 +72,7 @@ void Model::loadModel(string filename)
             delaysValue[i] = new double[specNumber];
             delaysVariation[i] = new double[specNumber];
         }
+        //clears all the matrices
         for (i = 0; i < reacNumber; i++)
         {
             for (j = 0; j < specNumber; j++)
@@ -92,31 +99,35 @@ void Model::loadModel(string filename)
                     delaysValue[i][sQ2[j]->getSpecie()->getNumber()] = sQ2[j]->getDelay()->getVariation();
             }
         }
-        cout << "Reaction rate" << endl;
-        reacRate = new double[reacNumber];
+        cout << " * Reactants loaded" << endl;
+        cout << " * Products loaded" << endl;
         for(i = 0; i < reacNumber; i++)
         {
             reacRate[i] = reactions[i]->getRate();
-            cout << "Reaction[" << i << "]: " << reacRate[i] << " ";
+            delete reactions[i];
+            //cout << "Reaction[" << i << "]: " << reacRate[i] << " ";
         }
+        cout << " * Reaction rate constants loaded" << endl;
+
+         /*
         cout << "Reactants" << endl;
         for(i = 0; i < reacNumber; i++)
         {
-            /*
+
             for(j = 0; j < specNumber; j++)
                 cout << reactants[i][j] << " ";
             cout << endl;
-            */
+
         }
         cout << "Products" << endl;
         for(i = 0; i < reacNumber; i++)
         {
-            /*for(j = 0; j < specNumber; j++)
+            for(j = 0; j < specNumber; j++)
                 cout << products[i][j] << " ";
             cout << endl;
-            */
+
         }
-        cout << "Species quantities" << endl;
+        */
         initialQuantity = new int[specNumber];
         map<string, long int>::iterator itQ = specNameNumber.begin();
         while(itQ != specNameNumber.end())
@@ -133,22 +144,28 @@ void Model::loadModel(string filename)
                     break;
                 itQ++;
             }
-            cout << itQ->first << " [" << initialQuantity[i] << "]" << endl;
+            //cout << itQ->first << " [" << initialQuantity[i] << "]" << endl;
         }
+        cout << " * Species quantities loaded" << endl;
         //print model representation
+        /*
         for(i = 0; i< modelRepresentation.size(); i++){
             cout << modelRepresentation[i] << endl;
-        }
+        }*/
+
         buildStoichiometryMatrix();
-        cout << "Stoichiometry matrix" << endl;
+        cout << " * Stoichiometry matrix loaded" << endl;
+        /*
         for(i = 0; i < reacNumber; i++)
         {
-            /*for(j = 0; j < specNumber; j++)
+            for(j = 0; j < specNumber; j++)
                 cout << stoiMatrix[i][j] <<" ";
-            cout << endl;*/
+            cout << endl;
         }
+        */
         cout << "Model loaded" << endl;
         modelLoaded = true;
+        specQuantity.clear();
         reactions.clear();
     }
     else

@@ -8,6 +8,12 @@ Reaction::Reaction(){
     products.clear();
 }
 Reaction::~Reaction(){
+  /* for(int i = 0; i < reactants.size(); i++){
+        delete reactants[i];
+        delete products[i];
+    }*/
+reactants.clear();
+products.clear();
 
 }
 string Reaction::getName(){

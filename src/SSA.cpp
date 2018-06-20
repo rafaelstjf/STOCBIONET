@@ -37,6 +37,8 @@ void SSA::saveToFile()
         buffer << '\n';
         itX++;
     }
+    buffer.clear();
+    speciesNameNumber.clear();
     ut->saveToCSVNoOverwriting(buffer.str(), methodOutName);
 }
 void SSA::printResult()
