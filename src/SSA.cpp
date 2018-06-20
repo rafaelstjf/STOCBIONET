@@ -80,6 +80,14 @@ void SSA::calcPropOne(int index)
     }
     propArray[index] = model->getReacRateArray()[index] * sum;
 }
-bool SSA::checkSucess(){
+void SSA::updateSpeciesQuantities(int index)
+{
+    for (int i = 0; i < model->getSpecNumber(); i++)
+    {
+        specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[index][i];
+    }
+}
+bool SSA::checkSucess()
+{
     return sucess;
 }

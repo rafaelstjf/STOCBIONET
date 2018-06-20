@@ -80,7 +80,7 @@ vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long 
                 if (line.find('>') != string::npos) //contains reaction
                 {
                     react = getTranslatedReaction(line);
-                    if(react != NULL)
+                    if(react != nullptr)
                     {
                         ret.push_back(react);
                     }
@@ -143,7 +143,7 @@ vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long 
         }
     }
     cout << "Reactions sucessfuly imported" << endl;
-    lines.clear();
+    constants.clear();
     return ret;
 
 }

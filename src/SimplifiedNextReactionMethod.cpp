@@ -61,10 +61,7 @@ void SimplifiedNextReactionMethod::reacExecution()
     int index;
     int sIndex = selectedNode->getIndex();
     //updates the species quantities
-    for(int i = 0; i < model->getSpecNumber(); i++)
-    {
-        specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[sIndex][i];
-    }
+    updateSpeciesQuantities(sIndex);
     u = ut->getRandomNumber();
     P[sIndex] = P[sIndex] + (-1.0*ut->ln(u));
     int *depArray = dg->getDependencies(sIndex);
@@ -109,7 +106,7 @@ void SimplifiedNextReactionMethod::perform(string filename, double simulTime, do
                 xArray[i] = specQuantity[i];
             }
             x.insert(make_pair(currentTime, xArray));
-            reacSelection(); //selects a reaction 
+            reacSelection(); //selects a reaction
             reacExecution();//executes the selected reaction
         }
     }

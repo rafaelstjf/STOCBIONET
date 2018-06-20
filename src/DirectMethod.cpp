@@ -58,10 +58,7 @@ void DirectMethod::reacSelection()
 }
 void DirectMethod::reacExecution()
 {
-    for (int i = 0; i < model->getSpecNumber(); i++)
-    {
-        specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[selectedReaction][i];
-    }
+    updateSpeciesQuantities(selectedReaction);
     //check the dependencies of the selected reaction and update the propensity array
     int *deparray = dg->getDependencies(selectedReaction);
     int depSize = dg->getDependenciesSize(selectedReaction);

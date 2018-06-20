@@ -42,6 +42,7 @@ protected:
     virtual void reacSelection() = 0;
     virtual void saveToFile();
     virtual void reacExecution() = 0;
+    virtual void updateSpeciesQuantities(int index);
 
 };
 

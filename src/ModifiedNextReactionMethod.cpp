@@ -56,11 +56,7 @@ void ModifiedNextReactionMethod::reacExecution()
     int index;
     int sIndex = selectedNode->getIndex();
     //updates the species quantities
-    for (int i = 0; i < model->getSpecNumber(); i++)
-    {
-        specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[sIndex][i];
-    }
-
+    updateSpeciesQuantities(sIndex);
     for (int i = 0; i < model->getReacNumber(); i++)
     {
         T[i] = T[i] + propArray[i] * selectedNode->getTime();
@@ -70,9 +66,7 @@ void ModifiedNextReactionMethod::reacExecution()
     for (int i = 0; i < model->getReacNumber(); i++)
     {
         calcPropOne(i);
-        cout << P[i] << " : " << T[i] << " : " << propArray[i] << endl;
         nt = (P[i] - T[i]) / propArray[i];
-        cout << i << ": " << nt << endl;
         queue->update(i, nt);
     }
 }

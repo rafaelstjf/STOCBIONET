@@ -63,10 +63,7 @@ void NextReactionMethod::reacExecution()
     double delta;
     int index;
     int sIndex = selectedNode->getIndex();
-    for (int i = 0; i < model->getSpecNumber(); i++)
-    {
-        specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[sIndex][i];
-    }
+    updateSpeciesQuantities(sIndex);
     calcPropOne(sIndex);
     if (propArray[sIndex] == 0.0)
     {

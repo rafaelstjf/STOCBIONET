@@ -66,10 +66,8 @@ void FirstReactionMethod::perform(string filename, double simulTime, double begi
 void FirstReactionMethod::reacExecution()
 {
     //updates the species quantities of the selected reaction
-    for (int i = 0; i < model->getSpecNumber(); i++)
-    {
-        specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[selectedReaction][i];
-    }
+        updateSpeciesQuantities(selectedReaction);
+
 }
 void FirstReactionMethod::reacTimeGeneration()
 {

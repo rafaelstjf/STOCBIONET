@@ -66,10 +66,7 @@ void NextReactionMethodCompact::reacExecution()
     double propOld;
     int index;
     int sIndex = selectedNode->getIndex();
-    for(int i = 0; i < model->getSpecNumber(); i++)
-    {
-        specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[sIndex][i];
-    }
+    updateSpeciesQuantities(sIndex);
     calcPropOne(sIndex);
     u = ut->getRandomNumber();
     delta[sIndex] = -1*ut->ln(u);

@@ -4,6 +4,10 @@ Reaction::Reaction(){
     name = '\0';
     textRepresentation = '\0';
     rate  = 0.0;
+    for(int i = 0; i < reactants.size(); i++){
+        delete reactants[i];
+        delete products[i];
+    }
     reactants.clear();
     products.clear();
 }
