@@ -90,3 +90,19 @@ stringstream Log::exportToStringStream()
     }
     return buffer;
 }
+void Log::setNumberReacExecuted(int reacCount)
+{
+    this->reacCount = reacCount;
+}
+int Log::getNumberReacExecuted()
+{
+    return reacCount;
+}
+void Log::setReacPerSecond(double reacPerSecond)
+{
+    this->reacPerSecond = reacPerSecond;
+}
+double Log::getReacPerSecond()
+{
+    return reacPerSecond;
+}

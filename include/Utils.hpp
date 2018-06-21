@@ -9,6 +9,9 @@
 #include <sstream>
 #include <fstream>
 #include <unistd.h>
+#include <stdio.h>
+#include <time.h>
+#include <string>
 #define E 2.71828182845904523536
 using namespace std;
 
@@ -27,6 +30,7 @@ class Utils
   void saveToCSV(string buffer, string filename);
   void saveToCSVNoOverwriting(string buffer, string filename);
   void saveToTXT(string buffer, string filename);
+  string getCurrentDateTime();
   ~Utils();
   private:
   int calcFactorial(int n);

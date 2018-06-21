@@ -101,6 +101,11 @@ void DirectMethod::perform(string filename, double simulTime, double beginTime)
     saveToFile();
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
     sucess = true;
+    reacPerSecond = (double)reacCount/(en-beg);
+    cout << "Reactions per second: " << reacPerSecond << endl;
+    log->setReacPerSecond(reacPerSecond);
+    log->setNumberReacExecuted(reacCount);
+    saveToFile();
 }
 void DirectMethod::calcPropensity()
 {

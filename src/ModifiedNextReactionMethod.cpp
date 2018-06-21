@@ -104,6 +104,8 @@ void ModifiedNextReactionMethod::perform(string filename, double simulTime, doub
     sucess = true;
     reacPerSecond = (double)reacCount/(en-beg);
     cout << "Reactions per second: " << reacPerSecond << endl;
+    log->setReacPerSecond(reacPerSecond);
+    log->setNumberReacExecuted(reacCount);
     saveToFile();
 }
 ModifiedNextReactionMethod::~ModifiedNextReactionMethod()
