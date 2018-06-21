@@ -19,6 +19,7 @@ void ModifiedNextReactionMethod::initialization(string filename, double simulTim
     model->loadModel(filename);
     if (model->isModelLoaded())
     {
+        log = new Log(model->getSpecNumber());
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
         queue = new IndexedPrioQueue(model->getReacNumber());
@@ -30,6 +31,8 @@ void ModifiedNextReactionMethod::initialization(string filename, double simulTim
             specQuantity[i] = model->getInitialQuantity()[i];
         }
     }
+    reacCount = 0;
+    reacPerSecond = 0.0;
 }
 void ModifiedNextReactionMethod::reacTimeGeneration()
 {
@@ -81,8 +84,6 @@ void ModifiedNextReactionMethod::perform(string filename, double simulTime, doub
     }
     double beg = ut->getCurrentTime();
     currentTime = beginTime;
-    int *xArray;
-    x.clear();
     //calculates the propensity of all the reactions and generates the simulation time
     reacTimeGeneration();
     //saves the species quantities on beginTime
@@ -93,12 +94,7 @@ void ModifiedNextReactionMethod::perform(string filename, double simulTime, doub
         //currentTime = beginTime;
         while (currentTime <= simulTime)
         {
-            xArray = new int[model->getSpecNumber()];
-            for (int i = 0; i < model->getSpecNumber(); i++)
-            {
-                xArray[i] = specQuantity[i];
-            }
-            x.insert(make_pair(currentTime, xArray));
+            log->insertNode(currentTime, specQuantity);
             reacSelection();
             reacExecution();
         }
@@ -106,6 +102,8 @@ void ModifiedNextReactionMethod::perform(string filename, double simulTime, doub
     double en = ut->getCurrentTime(); //end
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
     sucess = true;
+    reacPerSecond = (double)reacCount/(en-beg);
+    cout << "Reactions per second: " << reacPerSecond << endl;
     saveToFile();
 }
 ModifiedNextReactionMethod::~ModifiedNextReactionMethod()
@@ -119,4 +117,5 @@ ModifiedNextReactionMethod::~ModifiedNextReactionMethod()
     delete[] P;
     delete queue;
     delete selectedNode;
+    delete log;
 }

@@ -19,6 +19,7 @@ void NextReactionMethod::initialization(string filename, double simulTime)
     model->loadModel(filename);
     if (model->isModelLoaded())
     {
+        log = new Log(model->getSpecNumber());
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
         timePropZero = new double[model->getReacNumber()];
@@ -30,6 +31,8 @@ void NextReactionMethod::initialization(string filename, double simulTime)
             specQuantity[i] = model->getInitialQuantity()[i];
         }
     }
+    reacCount = 0;
+    reacPerSecond = 0.0;
 }
 void NextReactionMethod::reacTimeGeneration()
 {
@@ -120,15 +123,10 @@ void NextReactionMethod::perform(string filename, double simulTime, double begin
     }
     double beg = ut->getCurrentTime();
     currentTime = beginTime;
-    int *xArray;
-    x.clear();
     //calculates the propensity of all the reactions and generates the simulation time
     reacTimeGeneration();
     //saves the species quantities on beginTime
-    xArray = new int[model->getSpecNumber()];
-    for (int i = 0; i < model->getSpecNumber(); i++)
-        xArray[i] = specQuantity[i];
-    x.insert(make_pair(currentTime, xArray));
+    log->insertNode(currentTime, specQuantity);
     reacSelection(); //just to check if the time = inf
     if (currentTime != inf)
     {
@@ -137,10 +135,7 @@ void NextReactionMethod::perform(string filename, double simulTime, double begin
         {
             reacExecution(); //executes the reaction
             //saves the species quantities
-            xArray = new int[model->getSpecNumber()];
-            for (int i = 0; i < model->getSpecNumber(); i++)
-                xArray[i] = specQuantity[i];
-            x.insert(make_pair(currentTime, xArray));
+            log->insertNode(currentTime, specQuantity);
             //selects a new reaction
             reacSelection();
         }
@@ -160,4 +155,5 @@ NextReactionMethod::~NextReactionMethod()
     delete[] timePropZero;
     delete queue;
     delete selectedNode;
+    delete log;
 }

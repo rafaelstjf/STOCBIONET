@@ -20,6 +20,7 @@ void NextReactionMethodCompact::initialization(string filename, double simulTime
     model->loadModel(filename);
     if (model->isModelLoaded())
     {
+        log = new Log(model->getSpecNumber());
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
         timePropZero = new double[model->getReacNumber()];
@@ -32,6 +33,8 @@ void NextReactionMethodCompact::initialization(string filename, double simulTime
             specQuantity[i] = model->getInitialQuantity()[i];
         }
     }
+    reacCount = 0;
+    reacPerSecond = 0.0;
 }
 
 void NextReactionMethodCompact::reacTimeGeneration()
@@ -55,9 +58,9 @@ void NextReactionMethodCompact::reacTimeGeneration()
 void NextReactionMethodCompact::reacSelection()
 {
     //selects the node with the minimal time and updates the time
+    double cOld = currentTime;
     selectedNode = queue->getMin();
     currentTime = selectedNode->getTime();
-
 }
 void NextReactionMethodCompact::reacExecution()
 {
@@ -117,30 +120,17 @@ void NextReactionMethodCompact::perform(string filename, double simulTime, doubl
     }
     double beg = ut->getCurrentTime();
     currentTime = beginTime;
-    int *xArray;
-    x.clear();
      //calculates the propensity of all the reactions and generates the simulation time
     reacTimeGeneration();
     //saves the species quantities on beginTime
-    xArray = new int[model->getSpecNumber()];
-    /*for (int i = 0; i < model->getSpecNumber(); i++)
-        xArray[i] = specQuantity[i];
-    x.insert(make_pair(currentTime, xArray));*/
     reacSelection();
     if(currentTime != inf)
     {
         //currentTime = beginTime;
         while (currentTime <= simulTime)
         {
-            cout << currentTime << endl;
             reacExecution();
-            /*xArray = new int[model->getSpecNumber()];
-            for (int i = 0; i < model->getSpecNumber(); i++)
-            {
-                xArray[i] = specQuantity[i];
-            }
-            x.insert(make_pair(currentTime, xArray));
-            */
+            log->insertNode(currentTime, specQuantity);
             reacSelection();
         }
     }
@@ -159,4 +149,5 @@ NextReactionMethodCompact::~NextReactionMethodCompact()
     delete[] delta;
     delete queue;
     delete selectedNode;
+    delete log;
 }

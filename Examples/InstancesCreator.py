@@ -32,7 +32,7 @@ def tightlyCoupled2():
     n = int(input("Type the number of reactions\n"))
     m = int(input("Type the M value\n"))
     g = int(input("Type the g value\n"))
-    text_file = open("tightlyCoupled-2-" + str(n) + ".txt", "w")
+    text_file = open("tightlyCoupled-2-" + str(n) +"-"+ str(g) + ".txt", "w")
     text_file.write("k1=1;\n")
     for i in range(1,n+1):
         text_file.write("S{}".format(i) + "=40;\n")

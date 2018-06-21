@@ -19,6 +19,7 @@ void SimplifiedNextReactionMethod::initialization(string filename, double simulT
     model->loadModel(filename);
     if (model->isModelLoaded())
     {
+        log = new Log(model->getSpecNumber());
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
         queue = new IndexedPrioQueue(model->getReacNumber());
@@ -32,6 +33,8 @@ void SimplifiedNextReactionMethod::initialization(string filename, double simulT
             specQuantity[i] = model->getInitialQuantity()[i];
         }
     }
+    reacCount = 0;
+    reacPerSecond = 0.0;
 }
 void SimplifiedNextReactionMethod::reacTimeGeneration()
 {
@@ -88,8 +91,6 @@ void SimplifiedNextReactionMethod::perform(string filename, double simulTime, do
     }
     double beg = ut->getCurrentTime();
     currentTime = beginTime;
-    int *xArray;
-    x.clear();
     //calculates the propensity of all the reactions and generates the simulation time
     reacTimeGeneration();
     //saves the species quantities on beginTime
@@ -100,12 +101,7 @@ void SimplifiedNextReactionMethod::perform(string filename, double simulTime, do
         //currentTime = beginTime;
         while (currentTime <= simulTime)
         {
-            xArray = new int[model->getSpecNumber()];
-            for (int i = 0; i < model->getSpecNumber(); i++)
-            {
-                xArray[i] = specQuantity[i];
-            }
-            x.insert(make_pair(currentTime, xArray));
+            log->insertNode(currentTime, specQuantity);
             reacSelection(); //selects a reaction
             reacExecution();//executes the selected reaction
         }
@@ -127,4 +123,5 @@ SimplifiedNextReactionMethod::~SimplifiedNextReactionMethod()
     delete[] P;
     delete queue;
     delete selectedNode;
+    delete log;
 }

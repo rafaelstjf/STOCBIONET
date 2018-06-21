@@ -4,9 +4,9 @@ SSA::~SSA()
 }
 void SSA::saveToFile()
 {
+    cout << "SAVING SIMULATION LOG IN A FILE" << endl;
     stringstream buffer;
     map<string, long int> speciesNameNumber = model->getSpecNameNumber();
-    map<double, int *>::iterator itX = x.begin();
     map<string, long int>::iterator itSpecies = speciesNameNumber.begin();
     //get the name of the species
     string names[speciesNameNumber.size()];
@@ -24,39 +24,14 @@ void SSA::saveToFile()
             buffer << "; ";
     }
     buffer << '\n';
-    while (itX != x.end())
-    {
-        int *a = itX->second;
-        buffer << itX->first << "; ";
-        for (int i = 0; i < model->getSpecNumber(); i++)
-        {
-            buffer << a[i];
-            if (i < model->getSpecNumber() - 1)
-                buffer << "; ";
-        }
-        buffer << '\n';
-        itX++;
-    }
-    buffer.clear();
+    buffer << log->exportToStringStream().str();
     speciesNameNumber.clear();
     ut->saveToCSVNoOverwriting(buffer.str(), methodOutName);
+    buffer.clear();
 }
 void SSA::printResult()
 {
-    map<double, int *>::iterator it = x.begin();
-    while (it != x.end())
-    {
-        int *a = it->second;
-        cout << "Time: " << it->first << endl;
-        for (int i = 0; i < model->getSpecNumber(); i++)
-        {
-            cout << a[i];
-            if (i < model->getSpecNumber() - 1)
-                cout << ": ";
-        }
-        cout << endl;
-        it++;
-    }
+        log->printLog();
 }
 void SSA::calcPropensity()
 {
@@ -82,6 +57,7 @@ void SSA::calcPropOne(int index)
 }
 void SSA::updateSpeciesQuantities(int index)
 {
+    reacCount++;
     for (int i = 0; i < model->getSpecNumber(); i++)
     {
         specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[index][i];

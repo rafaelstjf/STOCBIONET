@@ -20,6 +20,7 @@ void FirstReactionMethod::initialization(string filename, double simulTime)
     }
     if (model->isModelLoaded())
     {
+        log = new Log(model->getSpecNumber());
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
         for (int i = 0; i < model->getSpecNumber(); i++)
@@ -28,6 +29,8 @@ void FirstReactionMethod::initialization(string filename, double simulTime)
         }
         t = new double[model->getReacNumber()];
     }
+    reacCount = 0;
+    reacPerSecond = 0.0;
 }
 void FirstReactionMethod::perform(string filename, double simulTime, double beginTime)
 {
@@ -40,17 +43,10 @@ void FirstReactionMethod::perform(string filename, double simulTime, double begi
     }
     double beg = ut->getCurrentTime();
     currentTime = beginTime;
-    int *xArray;
-    x.clear();
     calcPropensity();
     while (currentTime <= simulTime)
     {
-        xArray = new int[model->getSpecNumber()];
-        for (int i = 0; i < model->getSpecNumber(); i++)
-        {
-            xArray[i] = specQuantity[i];
-        }
-        x.insert(make_pair(currentTime, xArray));
+       log->insertNode(currentTime, specQuantity);
         //generate simulation time
         reacTimeGeneration();
         //reaction selection
@@ -104,4 +100,5 @@ FirstReactionMethod::~FirstReactionMethod()
     delete[] specQuantity;
     delete[] propArray;
     delete[] t;
+    delete log;
 }

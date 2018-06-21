@@ -23,6 +23,7 @@ void DirectMethod::initialization(string filename, double simultime)
     //load both model and its depedency graph
     if (model->isModelLoaded())
     {
+        log = new Log(model->getSpecNumber());
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
         dg = new DependencyGraph(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
@@ -33,6 +34,8 @@ void DirectMethod::initialization(string filename, double simultime)
         }
     }
     sucess = false;
+    reacCount = 0;
+    reacPerSecond = 0.0;
 }
 void DirectMethod::reacTimeGeneration()
 {
@@ -80,20 +83,12 @@ void DirectMethod::perform(string filename, double simulTime, double beginTime)
     //peform the simulation
     currentTime = beginTime;
     t = 0.0;
-    int *xArray;
-    x.clear();
     //calculate the reactions propensity
     calcPropensity();
     while (currentTime <= simulTime)
     {
         //save the current species quantities on the map
-        xArray = new int[model->getSpecNumber()];
-        for (int i = 0; i < model->getSpecNumber(); i++)
-        {
-            // xArray[i] = 0;
-            xArray[i] = specQuantity[i];
-        }
-        x.insert(make_pair(currentTime, xArray));
+       log->insertNode(currentTime, specQuantity);
         //generate simulation time
         reacTimeGeneration();
         //reaction selection
@@ -146,4 +141,5 @@ DirectMethod::~DirectMethod()
     delete ut;
     delete[] specQuantity;
     delete[] propArray;
+    delete log;
 }

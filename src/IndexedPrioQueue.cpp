@@ -10,6 +10,9 @@ IndexedPrioQueue::IndexedPrioQueue(int capacity)
 }
 IndexedPrioQueue::~IndexedPrioQueue()
 {
+    for(int i = 0; i < capacity; i++){
+        delete heapArray[i];
+    }
     delete[] heapArray;
     delete[] indexArray;
 }
