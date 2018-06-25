@@ -24,7 +24,6 @@ void SimplifiedNextReactionMethod::initialization(string filename, double simulT
         propArray = new double[model->getReacNumber()];
         queue = new IndexedPrioQueue(model->getReacNumber());
         dg = new DependencyGraph(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
-        //
         P = new double[model->getReacNumber()];
         U = new double[model->getReacNumber()];
         T = new double[model->getReacNumber()];
@@ -75,9 +74,10 @@ void SimplifiedNextReactionMethod::reacExecution()
         T[index] = T[index] + propArray[index]*(currentTime - U[index]);
         U[index] = currentTime;
         calcPropOne(index);
-        nt = (P[index] - T[index])/propArray[index] + currentTime;
+        nt = ((P[index] - T[index])/propArray[index]) + currentTime;
         queue->update(index, nt);
     }
+    delete[] depArray;
 
 }
 void SimplifiedNextReactionMethod::perform(string filename, double simulTime, double beginTime)

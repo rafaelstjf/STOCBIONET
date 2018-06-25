@@ -1,2 +1,0 @@
-Number of reactions executed: 3
-Reactions per second: inf

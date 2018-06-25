@@ -1,4 +1,4 @@
-#include "../include/log/Node.hpp"
+#include "../../include/log/Node.hpp"
 
 Node::Node()
 {

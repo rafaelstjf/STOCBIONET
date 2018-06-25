@@ -46,17 +46,17 @@ Utils::Utils()
     fat[8] = 40320;
     fat[9] = 362880;
     fat[10] = 3628800;
-    unsigned long seed = mix(clock(), time(NULL), getpid());
+    seed = mix(clock(), time(NULL), getpid());
     //unsigned long seed = 1940740546;
-    stringstream s;
-    s << seed;
-    saveToTXT(s.str(), "last_seed");
     srand(seed);
 }
 Utils::~Utils()
 {
 }
-
+unsigned long int Utils::getSeed()
+{
+    return seed;
+}
 double Utils::getRandomNumber()
 {
     double i = 0.0;
@@ -64,7 +64,8 @@ double Utils::getRandomNumber()
         i = rand() / (float)(RAND_MAX);
     return i;
 }
-string Utils::getCurrentDateTime() {
+string Utils::getCurrentDateTime()
+{
     time_t     now = time(0);
     struct tm  tstruct;
     char       buf[80];

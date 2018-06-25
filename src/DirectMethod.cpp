@@ -1,10 +1,18 @@
 #include "../include/DirectMethod.hpp"
 void DirectMethod::initialization(string filename, double simultime)
 {
-    //instantiate the variables
-    model = new Model(); //instantiate the model
-    ut = new Utils();    //instantiate the utility class
+    //instantiates the variables
+    model = new Model(); //instantiates the model
+    ut = new Utils();    //instantiates the utility class
     model->loadModel(filename);
+    t = 0.0; //tal
+    selectedReaction = 0;
+    this->simulTime = simulTime;
+    totalPropensity = 0;
+    sucess = false;
+    reacCount = 0;
+    reacPerSecond = 0.0;
+    //creates the output file's name
     for (int i = 0; i < filename.size(); i++)
     {
         if (filename[i] == '.')
@@ -16,32 +24,24 @@ void DirectMethod::initialization(string filename, double simultime)
         else
             methodOutName += filename[i];
     }
-    t = 0.0; //tal
-    selectedReaction = 0;
-    this->simulTime = simulTime;
-    totalPropensity = 0;
-    //load both model and its depedency graph
+    //loads both log and the depedency graph
     if (model->isModelLoaded())
     {
         log = new Log(model->getSpecNumber());
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
         dg = new DependencyGraph(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
-        //dg->printGraph();
         for (int i = 0; i < model->getSpecNumber(); i++)
         {
             specQuantity[i] = model->getInitialQuantity()[i];
         }
     }
-    sucess = false;
-    reacCount = 0;
-    reacPerSecond = 0.0;
 }
 void DirectMethod::reacTimeGeneration()
 {
     double u1;
     u1 = ut->getRandomNumber();
-    t = (-1.0* ut->ln(u1))/ totalPropensity;//next time increase
+    t = (-1.0* ut->ln(u1))/ totalPropensity;//next time increases
 }
 void DirectMethod::reacSelection()
 {
@@ -63,45 +63,45 @@ void DirectMethod::reacExecution()
 {
     updateSpeciesQuantities(selectedReaction);
     //check the dependencies of the selected reaction and update the propensity array
-    int *deparray = dg->getDependencies(selectedReaction);
+    int *depArray = dg->getDependencies(selectedReaction);
     int depSize = dg->getDependenciesSize(selectedReaction);
     for (int i = 0; i < depSize; i++)
     {
-        calcPropOne(deparray[i]);
+        calcPropOne(depArray[i]);
     }
+    delete [] depArray;
+    currentTime = currentTime + t;
 }
 void DirectMethod::perform(string filename, double simulTime, double beginTime)
 {
     cout << "DIRECT METHOD" << endl;
-    initialization(filename, simulTime); //instantiate the variables
+    initialization(filename, simulTime); //instantiates the variables
+    //checks if the model is loaded
     if (!model->isModelLoaded())
     {
         cout << "Error! Invalid model." << endl;
         return;
     }
-    double beg = ut->getCurrentTime(); //begin
-    //peform the simulation
+    double beg = ut->getCurrentTime(); //beginning of the simulation
     currentTime = beginTime;
     t = 0.0;
-    //calculate the reactions propensity
-    calcPropensity();
+    //peforms the simulation
+    calcPropensity();    //calculate the reactions propensity
     while (currentTime <= simulTime)
     {
-        //save the current species quantities on the map
+        //saves the current species quantities on the log 
        log->insertNode(currentTime, specQuantity);
-        //generate simulation time
+        //generates simulation time
         reacTimeGeneration();
-        //reaction selection
+        //reaction's selection
         reacSelection();
-        //reaction execution
+        //reaction's execution
         reacExecution();
-        currentTime = currentTime + t;
     }
-    double en = ut->getCurrentTime(); //end
-    saveToFile();
-    cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
+    double en = ut->getCurrentTime(); //ending of the simulation
     sucess = true;
     reacPerSecond = (double)reacCount/(en-beg);
+    cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
     cout << "Reactions per second: " << reacPerSecond << endl;
     log->setReacPerSecond(reacPerSecond);
     log->setNumberReacExecuted(reacCount);

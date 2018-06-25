@@ -2,10 +2,15 @@
 
 void NextReactionMethod::initialization(string filename, double simulTime)
 {
+    //instantiates the variables
     sucess = false;
     model = new Model();
     ut = new Utils();
     this->simulTime = simulTime;
+    model->loadModel(filename);
+    reacCount = 0;
+    reacPerSecond = 0.0;
+    //creates the output file's name
     for (int i = 0; i < filename.size(); i++)
     {
         if (filename[i] == '.')
@@ -16,7 +21,7 @@ void NextReactionMethod::initialization(string filename, double simulTime)
         else
             methodOutName += filename[i];
     }
-    model->loadModel(filename);
+    //loads both log and the depedency graph
     if (model->isModelLoaded())
     {
         log = new Log(model->getSpecNumber());
@@ -31,8 +36,6 @@ void NextReactionMethod::initialization(string filename, double simulTime)
             specQuantity[i] = model->getInitialQuantity()[i];
         }
     }
-    reacCount = 0;
-    reacPerSecond = 0.0;
 }
 void NextReactionMethod::reacTimeGeneration()
 {
@@ -111,17 +114,19 @@ void NextReactionMethod::reacExecution()
         }
         queue->update(index, nt);
     }
+    delete [] depArray;
 }
 void NextReactionMethod::perform(string filename, double simulTime, double beginTime)
 {
     cout << "NEXT REACTION METHOD" << endl;
-    initialization(filename, simulTime);
+    initialization(filename, simulTime);//instantiates the variables
+    //checks if the model is loaded
     if (!model->isModelLoaded())
     {
         cout << "Error! Invalid model." << endl;
         return;
     }
-    double beg = ut->getCurrentTime();
+    double beg = ut->getCurrentTime();//beginning of the simulation
     currentTime = beginTime;
     //calculates the propensity of all the reactions and generates the simulation time
     reacTimeGeneration();
@@ -130,7 +135,6 @@ void NextReactionMethod::perform(string filename, double simulTime, double begin
     reacSelection(); //just to check if the time = inf
     if (currentTime != inf)
     {
-        //currentTime = beginTime;
         while (currentTime <= simulTime)
         {
             reacExecution(); //executes the reaction
@@ -140,10 +144,10 @@ void NextReactionMethod::perform(string filename, double simulTime, double begin
             reacSelection();
         }
     }
-    double en = ut->getCurrentTime();
-    cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
+    double en = ut->getCurrentTime(); //ending of the simulation
     sucess = true;
     reacPerSecond = (double)reacCount/(en-beg);
+    cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
     cout << "Reactions per second: " << reacPerSecond << endl;
     log->setReacPerSecond(reacPerSecond);
     log->setNumberReacExecuted(reacCount);

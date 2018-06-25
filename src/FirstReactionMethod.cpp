@@ -2,11 +2,15 @@
 
 void FirstReactionMethod::initialization(string filename, double simulTime)
 {
-    sucess = false;
+    //instantiates the variables
     model = new Model();
     ut = new Utils();
     model->loadModel(filename);
+    sucess = false;
     this->simulTime = simulTime;
+    reacCount = 0;
+    reacPerSecond = 0.0;
+    //creates the output file's name
     for (int i = 0; i < filename.size(); i++)
     {
         if (filename[i] == '.')
@@ -14,50 +18,51 @@ void FirstReactionMethod::initialization(string filename, double simulTime)
             methodOutName += "_FRM_output";
             break;
         }
-
         else
             methodOutName += filename[i];
     }
+    //loads both log, the depedency graph and the tal array
     if (model->isModelLoaded())
     {
         log = new Log(model->getSpecNumber());
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
+        t = new double[model->getReacNumber()];
         for (int i = 0; i < model->getSpecNumber(); i++)
         {
             specQuantity[i] = model->getInitialQuantity()[i];
         }
-        t = new double[model->getReacNumber()];
     }
-    reacCount = 0;
-    reacPerSecond = 0.0;
 }
 void FirstReactionMethod::perform(string filename, double simulTime, double beginTime)
 {
-    cout << "FIRST REACTION METHOD" << endl;
-    initialization(filename, simulTime);
+    cout << "FIRST REACTION METHOD" << endl; 
+    initialization(filename, simulTime);//instantiates the variables
+    //checks if the model is loaded
     if (!model->isModelLoaded())
     {
         cout << "Error! Invalid model." << endl;
         return;
     }
-    double beg = ut->getCurrentTime();
+    double beg = ut->getCurrentTime(); //beginning of the simulation
     currentTime = beginTime;
+    //performs the simulation
     calcPropensity();
     while (currentTime <= simulTime)
     {
+        //saves the current species quantities on the log 
        log->insertNode(currentTime, specQuantity);
-        //generate simulation time
+        //generates simulation time
         reacTimeGeneration();
-        //reaction selection
+        //reaction's selection
         reacSelection();
-        //reaction execution
+        //reaction's execution
         reacExecution();
     }
-    double en = ut->getCurrentTime(); //end
-    cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
+    double en = ut->getCurrentTime(); //ending of the simulation
     sucess = true;
     reacPerSecond = (double)reacCount/(en-beg);
+    cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
     cout << "Reactions per second: " << reacPerSecond << endl;
     log->setReacPerSecond(reacPerSecond);
     log->setNumberReacExecuted(reacCount);

@@ -12,7 +12,6 @@ conversor
 # Algorithm generated files #
 #############################
 *.csv
-last_seed.txt
 # OS generated files #
 ######################
 .DS_Store
@@ -23,6 +22,7 @@ last_seed.txt
 .Trashes
 ehthumbs.db
 Thumbs.db
+logs/*.txt
 # specific to CodeBlocks IDE #
 ##############################
 *.cbp
