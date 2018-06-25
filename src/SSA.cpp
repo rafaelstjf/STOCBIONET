@@ -1,6 +1,12 @@
 #include "../include/SSA.hpp"
 SSA::~SSA()
 {
+    delete dg;
+    delete model;
+    delete ut;
+    delete log;
+    delete[] specQuantity;
+    delete[] propArray;
 }
 void SSA::saveToFile()
 {
@@ -31,12 +37,12 @@ void SSA::saveToFile()
     buffer2 << "Number of reactions executed: " << log->getNumberReacExecuted() << '\n';
     buffer2 << "Reactions per second: " << log->getReacPerSecond() << '\n';
     buffer2 << "Seed: " << ut->getSeed() << '\n';
-    cout <<("logs/" + ut->getCurrentDateTime()) << endl;
+    cout << ("logs/" + ut->getCurrentDateTime()) << endl;
     ut->saveToTXT(buffer2.str(), ("logs/" + ut->getCurrentDateTime()));
 }
 void SSA::printResult()
 {
-        log->printLog();
+    log->printLog();
 }
 void SSA::calcPropensity()
 {

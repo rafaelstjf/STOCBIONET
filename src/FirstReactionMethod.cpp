@@ -103,11 +103,5 @@ void FirstReactionMethod::reacSelection()
 FirstReactionMethod::~FirstReactionMethod()
 {
     //dtor
-    delete dg;
-    delete model;
-    delete ut;
-    delete[] specQuantity;
-    delete[] propArray;
     delete[] t;
-    delete log;
 }

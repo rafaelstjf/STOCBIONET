@@ -117,15 +117,9 @@ void SimplifiedNextReactionMethod::perform(string filename, double simulTime, do
 }
 SimplifiedNextReactionMethod::~SimplifiedNextReactionMethod()
 {
-    delete dg;
-    delete model;
-    delete ut;
-    delete[] specQuantity;
-    delete[] propArray;
     delete[] T;
     delete[] U;
     delete[] P;
     delete queue;
     delete selectedNode;
-    delete log;
 }

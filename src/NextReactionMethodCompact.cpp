@@ -148,13 +148,7 @@ void NextReactionMethodCompact::perform(string filename, double simulTime, doubl
 }
 NextReactionMethodCompact::~NextReactionMethodCompact()
 {
-    delete dg;
-    delete model;
-    delete ut;
-    delete[] specQuantity;
-    delete[] propArray;
     delete[] delta;
     delete queue;
     delete selectedNode;
-    delete log;
 }

@@ -155,13 +155,8 @@ void NextReactionMethod::perform(string filename, double simulTime, double begin
 }
 NextReactionMethod::~NextReactionMethod()
 {
-    delete dg;
-    delete model;
-    delete ut;
     delete[] propNonZero;
-    delete[] propArray;
     delete[] timePropZero;
     delete queue;
     delete selectedNode;
-    delete log;
 }

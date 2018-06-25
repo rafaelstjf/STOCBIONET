@@ -78,14 +78,14 @@ void ModifiedNextReactionMethod::reacExecution()
 void ModifiedNextReactionMethod::perform(string filename, double simulTime, double beginTime)
 {
     cout << "MODIFIED NEXT REACTION METHOD" << endl;
-    initialization(filename, simulTime);//instantiates the variables
+    initialization(filename, simulTime); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
     {
         cout << "Error! Invalid model." << endl;
         return;
     }
-    double beg = ut->getCurrentTime();//beginning of the simulation
+    double beg = ut->getCurrentTime(); //beginning of the simulation
     //performs the simulation
     currentTime = beginTime;
     //calculates the propensity of all the reactions and generates the simulation time
@@ -103,7 +103,7 @@ void ModifiedNextReactionMethod::perform(string filename, double simulTime, doub
     }
     double en = ut->getCurrentTime(); //ending of the simulation
     sucess = true;
-    reacPerSecond = (double)reacCount/(en-beg);
+    reacPerSecond = (double)reacCount / (en - beg);
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
     cout << "Reactions per second: " << reacPerSecond << endl;
     log->setReacPerSecond(reacPerSecond);
@@ -112,14 +112,8 @@ void ModifiedNextReactionMethod::perform(string filename, double simulTime, doub
 }
 ModifiedNextReactionMethod::~ModifiedNextReactionMethod()
 {
-    delete dg;
-    delete model;
-    delete ut;
-    delete[] specQuantity;
-    delete[] propArray;
     delete[] T;
     delete[] P;
     delete queue;
     delete selectedNode;
-    delete log;
 }

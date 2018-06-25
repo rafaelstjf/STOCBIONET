@@ -141,10 +141,5 @@ void DirectMethod::calcPropOne(int index)
 }
 DirectMethod::~DirectMethod()
 {
-    delete dg;
-    delete model;
-    delete ut;
-    delete[] specQuantity;
-    delete[] propArray;
-    delete log;
+    
 }
