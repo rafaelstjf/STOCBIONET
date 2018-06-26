@@ -1,6 +1,7 @@
 # Stochastic simulation algorithms
 
-[![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
+[![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/) [![GPL Licence](https://badges.frapsoft.com/os/gpl/gpl.svg?v=103)](https://opensource.org/licenses/GPL-3.0/)
+
 
 Stochastic simulation algorithms for Gene Regulatory Networks for delayed and non-delayed reactions.
 
@@ -8,13 +9,14 @@ Stochastic simulation algorithms for Gene Regulatory Networks for delayed and no
 
  * Direct method
  * First reaction method
- * [Next reaction method](https://pubs.acs.org/doi/abs/10.1021/jp993732q)
- * [Modified next reaction method](https://aip.scitation.org/doi/abs/10.1063/1.2799998)
- * [Simplified next reaction method](http://repositorio.ufjf.br:8080/jspui/bitstream/ufjf/4828/1/camillodelellisfalcaodasilva.pdf)
- * Next reaction method compact
+
  
 ## Methods in development:
  
+ * [Next reaction method](https://pubs.acs.org/doi/abs/10.1021/jp993732q) (__99.9%__)
+ * [Modified next reaction method](https://aip.scitation.org/doi/abs/10.1063/1.2799998) (__99.9%__)
+ * [Simplified next reaction method](http://repositorio.ufjf.br:8080/jspui/bitstream/ufjf/4828/1/camillodelellisfalcaodasilva.pdf) (__99.9%__)
+ * Next reaction method compact (__99.9%__)
  * Rejection method (__0%__ )
  * Delayed modified next reaction method (__0%__ )
 
@@ -26,7 +28,7 @@ Stochastic simulation algorithms for Gene Regulatory Networks for delayed and no
 
 If you are using it in the terminal you can run it without arguments or with the following arguments: Input-file Operation-code Initial-time Maximum-time
 
-The current operations codes are:
+The current operation's codes are:
 ```
 DM - Direct Method
 FRM - First Reaction Method

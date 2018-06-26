@@ -6,7 +6,6 @@
 *.exe
 *.o
 *.so
-makefile
 main
 conversor
 # Algorithm generated files #

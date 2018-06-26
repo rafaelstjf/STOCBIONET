@@ -9,6 +9,7 @@ class DependencyGraphNRM : public DependencyGraph
 {
 public:
     DependencyGraphNRM(int numReactions, int** reactants, int** products, int numSpecies);
+    virtual ~DependencyGraphNRM();
     virtual void createGraph(int numReactions, int **reactants, int **products, int numSpecies);
 protected:
 
