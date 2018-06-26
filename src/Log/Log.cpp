@@ -1,4 +1,4 @@
-#include "../../include/log/Log.hpp"
+#include "../../include/Log/Log.hpp"
 
 Log::Log(int size)
 {
