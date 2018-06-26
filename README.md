@@ -1,6 +1,7 @@
 # Stochastic simulation algorithms
 
-[![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/) [![GPL Licence](https://badges.frapsoft.com/os/gpl/gpl.svg?v=103)](https://opensource.org/licenses/GPL-3.0/)
+[![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/) [![GPL Licence](https://badges.frapsoft.com/os/gpl/gpl.svg?v=103)](https://opensource.org/licenses/GPL-3.0/) [![Build Status](https://semaphoreci.com/api/v1/rafaelstjf/stochastic-simulation-algorithms/branches/master/shields_badge.svg)](https://semaphoreci.com/rafaelstjf/stochastic-simulation-algorithms)
+
 
 
 Stochastic simulation algorithms for Gene Regulatory Networks for delayed and non-delayed reactions.
