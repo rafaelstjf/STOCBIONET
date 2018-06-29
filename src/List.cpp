@@ -46,16 +46,18 @@ void List::swap(int i, int j)
 }
 void List::sort()
 {
-    int i, j, minIndex;
-    for(i = 0; i < inUse-1; i++)
+    int i, j;
+    HeapNode* chosed;
+    for(i = 1; i < inUse; i++)
     {
-        minIndex = i;
-        for(j = i+1; j < inUse; j++)
+        chosed = arr[i];
+        j = i - 1;
+        while((j>=0) && (arr[j]>chosed))
         {
-            if(arr[j]->getTime() < arr[minIndex]->getTime())
-                minIndex = j;
+            arr[j+1] = arr[j];
+            j--;
         }
-        swap(minIndex, i);
+        arr[j+1] = chosed;
     }
 }
 void List::print()

@@ -77,7 +77,7 @@ void ModifiedNextReactionMethod::reacExecution()
 }
 void ModifiedNextReactionMethod::perform(string filename, double simulTime, double beginTime)
 {
-    cout << "MODIFIED NEXT REACTION METHOD" << endl;
+    cout << "-----------MODIFIED NEXT REACTION METHOD-----------" << endl;
     initialization(filename, simulTime); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
@@ -108,7 +108,6 @@ void ModifiedNextReactionMethod::perform(string filename, double simulTime, doub
     cout << "Reactions per second: " << reacPerSecond << endl;
     log->setReacPerSecond(reacPerSecond);
     log->setNumberReacExecuted(reacCount);
-    saveToFile();
 }
 ModifiedNextReactionMethod::~ModifiedNextReactionMethod()
 {

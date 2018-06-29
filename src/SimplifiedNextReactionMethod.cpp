@@ -82,7 +82,7 @@ void SimplifiedNextReactionMethod::reacExecution()
 }
 void SimplifiedNextReactionMethod::perform(string filename, double simulTime, double beginTime)
 {
-    cout << "SIMPLIFIED NEXT REACTION METHOD" << endl;
+    cout << "-----------SIMPLIFIED NEXT REACTION METHOD-----------" << endl;
     initialization(filename, simulTime);
     if (!model->isModelLoaded())
     {
@@ -113,7 +113,6 @@ void SimplifiedNextReactionMethod::perform(string filename, double simulTime, do
     cout << "Reactions per second: " << reacPerSecond << endl;
     log->setReacPerSecond(reacPerSecond);
     log->setNumberReacExecuted(reacCount);
-    saveToFile();
 }
 SimplifiedNextReactionMethod::~SimplifiedNextReactionMethod()
 {

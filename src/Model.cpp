@@ -43,7 +43,7 @@ void Model::loadModel(string filename)
     inFile.open(filename, fstream::in);
     if (inFile.is_open())
     {
-        cout << "Importing reactions..." << endl;
+        //cout << "Importing reactions..." << endl;
         text << inFile.rdbuf();
         tr = new TReact(false);
         vector<Reaction*> reactions = tr->getReactions(text.str(), specNameNumber, specQuantity, modelRepresentation);
@@ -82,6 +82,7 @@ void Model::loadModel(string filename)
                 delaysVariation[i][j] = 0.0;
             }
         }
+        cout << " * Reactants and products... ";
         for (i = 0; i < reactions.size(); i++)
         {
             Reaction *r = reactions[i];
@@ -100,13 +101,14 @@ void Model::loadModel(string filename)
         }
         sQ.clear();
         sQ2.clear();
-        cout << " * Reactants loaded" << endl;
-        cout << " * Products loaded" << endl;
+        cout << "loaded" << endl;
+        cout << " * Reaction rate constants ... ";
         for(i = 0; i < reacNumber; i++)
         {
             reacRate[i] = reactions[i]->getRate();
         }
-        cout << " * Reaction rate constants loaded" << endl;
+        cout << "loaded" << endl;
+        cout << " * Species quantities... ";
         initialQuantity = new int[specNumber];
         map<string, long int>::iterator itQ = specNameNumber.begin();
         while(itQ != specNameNumber.end())
@@ -114,19 +116,10 @@ void Model::loadModel(string filename)
             initialQuantity[itQ->second] = specQuantity.find(itQ->first)->second; //search the specie with the same name and set the quantity
             itQ++;
         }
-        for(i = 0; i < specNumber; i++)
-        {
-            itQ = specNameNumber.begin();
-            while(itQ != specNameNumber.end())
-            {
-                if(itQ->second == i)
-                    break;
-                itQ++;
-            }
-        }
-        cout << " * Species quantities loaded" << endl;
+        cout << "loaded" << endl;
+        cout << " * Stoichiometry matrix... ";
         buildStoichiometryMatrix();
-        cout << " * Stoichiometry matrix loaded" << endl;
+        cout << "loaded" << endl;
         cout << "Model loaded" << endl;
         modelLoaded = true;
         specQuantity.clear();

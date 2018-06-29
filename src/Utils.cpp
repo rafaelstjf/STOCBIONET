@@ -60,7 +60,7 @@ unsigned long int Utils::getSeed()
 double Utils::getRandomNumber()
 {
     double i = 0.0;
-    while (i == 0.0)
+    while (i <= EP || i >= 1 - EP)
         i = rand() / (float)(RAND_MAX);
     return i;
 }

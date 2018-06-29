@@ -52,7 +52,7 @@ void DirectMethod::reacSelection()
     for (int i = 0; i < model->getReacNumber(); i++)
     {
         selector = selector - propArray[i];
-        if (selector <= 0.0)
+        if (selector <= EP)
         {
             selectedReaction = i;
             break;
@@ -74,7 +74,7 @@ void DirectMethod::reacExecution()
 }
 void DirectMethod::perform(string filename, double simulTime, double beginTime)
 {
-    cout << "DIRECT METHOD" << endl;
+    cout << "-----------DIRECT METHOD-----------" << endl;
     initialization(filename, simulTime); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
@@ -89,7 +89,7 @@ void DirectMethod::perform(string filename, double simulTime, double beginTime)
     calcPropensity();    //calculate the reactions propensity
     while (currentTime <= simulTime)
     {
-        //saves the current species quantities on the log 
+        //saves the current species quantities on the log
        log->insertNode(currentTime, specQuantity);
         //generates simulation time
         reacTimeGeneration();
@@ -105,7 +105,6 @@ void DirectMethod::perform(string filename, double simulTime, double beginTime)
     cout << "Reactions per second: " << reacPerSecond << endl;
     log->setReacPerSecond(reacPerSecond);
     log->setNumberReacExecuted(reacCount);
-    saveToFile();
 }
 void DirectMethod::calcPropensity()
 {
@@ -141,5 +140,5 @@ void DirectMethod::calcPropOne(int index)
 }
 DirectMethod::~DirectMethod()
 {
-    
+
 }

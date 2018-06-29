@@ -2,14 +2,14 @@
 #define NEXTREACTIONMETHOD_HPP
 
 #include <iostream>
-#include <climits>
+#include <iomanip>
 #include "../include/SSA.hpp"
 #include "../include/IndexedPrioQueue.hpp"
 #include "../include/HeapNode.hpp"
 #include "../include/DependencyGraphNRM.hpp"
+#include "../include/List.hpp"
 
 
-#define inf INT_MAX
 using namespace std;
 
 class NextReactionMethod : public SSA{
@@ -22,6 +22,7 @@ class NextReactionMethod : public SSA{
     virtual void reacTimeGeneration();
     virtual void reacSelection();
     virtual void reacExecution();
+    double c;
     IndexedPrioQueue* queue;
     HeapNode* selectedNode;
     double* timePropZero; //time when ak becomes 0

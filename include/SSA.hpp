@@ -4,12 +4,16 @@
 #include<string>
 #include <iostream>
 #include <stdlib.h>
+#include <climits>
+#include <map>
 #include "../include/Model.hpp"
 #include "../include/DependencyGraph.hpp"
 #include "../include/Utils.hpp"
 #include "../include/Log/Log.hpp"
 
-#include <map>
+
+#define INF INT_MAX
+#define EP 1.0E-5
 using namespace std;
 
 class SSA
@@ -19,6 +23,7 @@ public:
     virtual bool checkSucess();
     virtual ~SSA();
     virtual void printResult();
+    virtual void saveToFile();
 protected:
     Utils* ut;
     Log* log;
@@ -43,7 +48,6 @@ protected:
     virtual void calcPropOne(int index);
     virtual void reacTimeGeneration() = 0;
     virtual void reacSelection() = 0;
-    virtual void saveToFile();
     virtual void reacExecution() = 0;
     virtual void updateSpeciesQuantities(int index);
 

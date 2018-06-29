@@ -48,7 +48,7 @@ void NextReactionMethodCompact::reacTimeGeneration()
         calcPropOne(i);
         u = ut->getRandomNumber();
         delta[i] = (-1.00)*ut->ln(u);
-        if(propArray[i] > 0.0)
+        if(propArray[i] > EP)
             t1 = (delta[i] / propArray[i]) + currentTime;
         else
             t1 = inf;
@@ -73,10 +73,9 @@ void NextReactionMethodCompact::reacExecution()
     int sIndex = selectedNode->getIndex();
     updateSpeciesQuantities(sIndex);
     calcPropOne(sIndex);
+    propNonZero[sIndex] = propArray[sIndex];
     u = ut->getRandomNumber();
     delta[sIndex] = -1*ut->ln(u);
-    propNonZero[sIndex] = propArray[sIndex];
-
     if(propArray[sIndex] > 0)
     {
         nt = (delta[sIndex]/propArray[sIndex]) + currentTime;
@@ -84,6 +83,7 @@ void NextReactionMethodCompact::reacExecution()
     else
     {
         nt = inf;
+
     }
     queue->update(sIndex, nt);
     //uses the DG to update the time of the selected reaction on the priority Queue
@@ -95,13 +95,13 @@ void NextReactionMethodCompact::reacExecution()
         propOld = propArray[index];
         calcPropOne(index);
         nt = inf;
-        if(propArray[index] > 0.0)
+        if(propArray[index] > EP)
         {
             nt = (delta[index] - (propNonZero[index]*currentTime))/propArray[index] + currentTime;
             propNonZero[index] = propArray[index];
             delta[index] = propArray[index]*nt;
         }
-        else if(propOld > 0.0)
+        else if(propOld > EP)
         {
             propNonZero[index] = (-1.0*propOld);
             delta[index] = propOld*currentTime;
@@ -114,7 +114,7 @@ void NextReactionMethodCompact::reacExecution()
 }
 void NextReactionMethodCompact::perform(string filename, double simulTime, double beginTime)
 {
-    cout << "NEXT REACTION METHOD COMPACT" << endl;
+    cout << "-----------NEXT REACTION METHOD COMPACT-----------" << endl;
     initialization(filename, simulTime);//instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
@@ -124,7 +124,7 @@ void NextReactionMethodCompact::perform(string filename, double simulTime, doubl
     }
     double beg = ut->getCurrentTime();//beginning of the simulation
     currentTime = beginTime;
-     //calculates the propensity of all the reactions and generates the simulation time
+    //calculates the propensity of all the reactions and generates the simulation time
     reacTimeGeneration();
     log->insertNode(currentTime, specQuantity);//saves the species quantities on beginTime
     reacSelection();
@@ -144,7 +144,6 @@ void NextReactionMethodCompact::perform(string filename, double simulTime, doubl
     cout << "Reactions per second: " << reacPerSecond << endl;
     log->setReacPerSecond(reacPerSecond);
     log->setNumberReacExecuted(reacCount);
-    saveToFile();
 }
 NextReactionMethodCompact::~NextReactionMethodCompact()
 {

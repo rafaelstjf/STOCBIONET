@@ -59,6 +59,10 @@ int main(int argc, char *argv[])
         cin >> printOp;
         if (printOp == 'y')
             simulation->printResult();
+        cout << "Do you want to save the results in a file? (y-yes or n-no)" << endl;
+        cin >> printOp;
+        if (printOp == 'y')
+            simulation->saveToFile();
     }
     delete simulation;
     return 0;

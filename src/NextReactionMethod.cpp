@@ -43,9 +43,10 @@ void NextReactionMethod::reacTimeGeneration()
     for (int i = 0; i < model->getReacNumber(); i++)
     {
         calcPropOne(i); //uses calcPropOne(i) to saves one O(n)
-        if (propArray[i] == 0.0)
+        if (propArray[i] <= EP)
         {
-            t1 = inf;
+            t1 = INF;
+            timePropZero[i] = currentTime;
         }
         else
         {
@@ -58,8 +59,11 @@ void NextReactionMethod::reacTimeGeneration()
 }
 void NextReactionMethod::reacSelection()
 {
+    c = currentTime;
     selectedNode = queue->getMin();
     currentTime = selectedNode->getTime();
+    if(c > currentTime)
+        cout << "Wrong" << endl;
 }
 void NextReactionMethod::reacExecution()
 {
@@ -71,9 +75,10 @@ void NextReactionMethod::reacExecution()
     int sIndex = selectedNode->getIndex();
     updateSpeciesQuantities(sIndex);
     calcPropOne(sIndex);
-    if (propArray[sIndex] == 0.0)
+    if (propArray[sIndex] <= EP)
     {
-        nt = inf;
+        nt = INF;
+        timePropZero[sIndex] = currentTime;
     }
     else
     {
@@ -89,11 +94,11 @@ void NextReactionMethod::reacExecution()
         index = depArray[i];
         propOld = propArray[index];
         calcPropOne(index);
-        if (propArray[index] > 0.0)
+        if (propArray[index] > EP)
         {
-            if (propOld == 0.0) //propensity changed from 0
+            if (propOld <= EP) //propensity changed from 0
             {
-                if (propNonZero[index] > 0.0) //the propensity was >0 at a moment t
+                if (propNonZero[index] > EP) //the propensity was >0 at a moment t
                     delta = propNonZero[index] * (currentTime - timePropZero[index]);
                 else //propensity was 0 from the beginning but now it's >0
                 {
@@ -108,32 +113,33 @@ void NextReactionMethod::reacExecution()
         }
         else
         {
-            if (propNonZero[index] > 0.0)
+            if (propNonZero[index] > EP)
                 timePropZero[index] = currentTime;
-            nt = inf;
+            nt = INF;
         }
         queue->update(index, nt);
     }
-    delete [] depArray;
+    delete[] depArray;
 }
 void NextReactionMethod::perform(string filename, double simulTime, double beginTime)
 {
-    cout << "NEXT REACTION METHOD" << endl;
-    initialization(filename, simulTime);//instantiates the variables
+    cout << "-----------NEXT REACTION METHOD-----------" << endl;
+    initialization(filename, simulTime); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
     {
         cout << "Error! Invalid model." << endl;
         return;
     }
-    double beg = ut->getCurrentTime();//beginning of the simulation
+    double beg = ut->getCurrentTime(); //beginning of the simulation
     currentTime = beginTime;
     //calculates the propensity of all the reactions and generates the simulation time
     reacTimeGeneration();
     //saves the species quantities on beginTime
     log->insertNode(currentTime, specQuantity);
     reacSelection(); //just to check if the time = inf
-    if (currentTime != inf)
+
+    if (currentTime != INF)
     {
         while (currentTime <= simulTime)
         {
@@ -146,12 +152,11 @@ void NextReactionMethod::perform(string filename, double simulTime, double begin
     }
     double en = ut->getCurrentTime(); //ending of the simulation
     sucess = true;
-    reacPerSecond = (double)reacCount/(en-beg);
+    reacPerSecond = (double)reacCount / (en - beg);
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
     cout << "Reactions per second: " << reacPerSecond << endl;
     log->setReacPerSecond(reacPerSecond);
     log->setNumberReacExecuted(reacCount);
-    saveToFile();
 }
 NextReactionMethod::~NextReactionMethod()
 {

@@ -36,7 +36,7 @@ void FirstReactionMethod::initialization(string filename, double simulTime)
 }
 void FirstReactionMethod::perform(string filename, double simulTime, double beginTime)
 {
-    cout << "FIRST REACTION METHOD" << endl; 
+    cout << "-----------FIRST REACTION METHOD-----------" << endl;
     initialization(filename, simulTime);//instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
@@ -50,7 +50,7 @@ void FirstReactionMethod::perform(string filename, double simulTime, double begi
     calcPropensity();
     while (currentTime <= simulTime)
     {
-        //saves the current species quantities on the log 
+        //saves the current species quantities on the log
        log->insertNode(currentTime, specQuantity);
         //generates simulation time
         reacTimeGeneration();
@@ -66,7 +66,6 @@ void FirstReactionMethod::perform(string filename, double simulTime, double begi
     cout << "Reactions per second: " << reacPerSecond << endl;
     log->setReacPerSecond(reacPerSecond);
     log->setNumberReacExecuted(reacCount);
-    saveToFile();
 }
 void FirstReactionMethod::reacExecution()
 {
