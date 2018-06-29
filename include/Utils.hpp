@@ -36,8 +36,8 @@ class Utils
 
   ~Utils();
   private:
-  int calcFactorial(int n);
-  int fat[11];
+  long int calcFactorial(int n);
+  long int fat[11];
   unsigned long seed;
 };
 #endif

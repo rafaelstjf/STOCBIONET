@@ -78,20 +78,8 @@ void Node::insertSpecie(int index, int value, int* array)
     {
         if(array[index] != value)
         {
-            while (it != nullptr && !it->checkExists(index))
-            {
-                it = it->getPrevious();
-            }
-            if (it != nullptr)
-            {
-                //found index on a previous node
-                if (it->getValIndex(index) != value)
-                {
-                    dict.insert(pair<int, int>(index, value));
-                    array[index] = value;
-                }
-
-            }
+            dict.insert(pair<int, int>(index, value));
+            array[index] = value;
         }
 
     }

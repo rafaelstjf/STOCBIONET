@@ -79,21 +79,26 @@ string Utils::getCurrentDateTime()
 
 double Utils::binomialCoefficient(int k, int n)
 {
+    //k = quantity
+    //n = reactants
     // k!/n!*(k-n)!
-    int fatn = 1, fatk = 1;
+    long int fatn = 1, fatk = 1;
     if (n > k || (k == 0 && n != 0))
         return 0;
+    if(n==0)
+        return 1;
     if (n > 10)
         fatn = calcFactorial(n);
     else
         fatn = fat[n];
-    for (int i = k; i < k - n; i--)
+    for (int i = k; i >= k - (n-1); i--)
     {
+        if(k>0)
         fatk *= i;
     }
     return (double)(fatk / fatn);
 }
-int Utils::calcFactorial(int n)
+long int Utils::calcFactorial(int n)
 {
     if (n == 0)
         return 1;

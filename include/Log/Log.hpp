@@ -18,7 +18,7 @@ class Log{
     public:
     Log(int size);
     ~Log();
-    void insertNode(double time, int array[]);
+    void insertNode(double time, int* array);
     void printLog();
     stringstream exportToStringStream();
     void setReacPerSecond(double reacPerSecond);

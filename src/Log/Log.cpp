@@ -20,7 +20,7 @@ Log::~Log()
     delete it;
     delete aux;
 }
-void Log::insertNode(double time, int array[])
+void Log::insertNode(double time, int* array)
 {
     Node* n = new Node();
     n->setTime(time);
