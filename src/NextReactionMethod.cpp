@@ -29,7 +29,7 @@ void NextReactionMethod::initialization(string filename, double simulTime)
         propArray = new double[model->getReacNumber()];
         timePropZero = new double[model->getReacNumber()];
         propNonZero = new double[model->getReacNumber()];
-        queue = new IndexedPrioQueue(model->getReacNumber());
+        queue = new List(model->getReacNumber());
         dg = new DependencyGraphNRM(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
         for (int i = 0; i < model->getSpecNumber(); i++)
         {
@@ -47,13 +47,14 @@ void NextReactionMethod::reacTimeGeneration()
         {
             t1 = INF;
             timePropZero[i] = currentTime;
+            propNonZero[i] = EP;
         }
         else
         {
+            propNonZero[i] = propArray[i]; //if propNonZero[i] == 0 it happened since the beginning
             u = ut->getRandomNumber();
             t1 = ((-1 * ut->ln(u)) / propArray[i]) + currentTime;
         }
-        propNonZero[i] = propArray[i]; //if propNonZero[i] == 0 it happened since the beginning
         queue->insertKey(i, t1);
     }
 }
@@ -62,8 +63,6 @@ void NextReactionMethod::reacSelection()
     c = currentTime;
     selectedNode = queue->getMin();
     currentTime = selectedNode->getTime();
-    if(c > currentTime)
-        cout << "Wrong" << endl;
 }
 void NextReactionMethod::reacExecution()
 {
@@ -138,7 +137,6 @@ void NextReactionMethod::perform(string filename, double simulTime, double begin
     //saves the species quantities on beginTime
     log->insertNode(currentTime, specQuantity);
     reacSelection(); //just to check if the time = inf
-
     if (currentTime != INF)
     {
         while (currentTime <= simulTime)
@@ -149,6 +147,7 @@ void NextReactionMethod::perform(string filename, double simulTime, double begin
             //selects a new reaction
             reacSelection();
         }
+        log->insertNode(currentTime, specQuantity);
     }
     double en = ut->getCurrentTime(); //ending of the simulation
     sucess = true;

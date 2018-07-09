@@ -14,11 +14,10 @@ class IndexedPrioQueue
     HeapNode* getMin();
     void insertKey(int index, double time);
     HeapNode* getNode(int index);
-    void printQueue();
+    void print();
 
   private:
     void swap(int ix, int iy);
-    void minHeapify(int i);
     void updateAux(int aux);
     int left(int i);
     int right(int i);

@@ -91,12 +91,15 @@ double Utils::binomialCoefficient(int k, int n)
         fatn = calcFactorial(n);
     else
         fatn = fat[n];
+    //(k*(k-1)*...*(k-n)!)/(n!*(k-n)!)
+    //k*(k-1)*...*(k-n-1)/n!
     for (int i = k; i >= k - (n-1); i--)
     {
         if(k>0)
         fatk *= i;
     }
-    return (double)(fatk / fatn);
+    double result = (1.0*fatk)/fatn;
+    return result;
 }
 long int Utils::calcFactorial(int n)
 {

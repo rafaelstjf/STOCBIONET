@@ -42,20 +42,6 @@ void IndexedPrioQueue::swap(int ix, int iy)
     heapArray[iy]->setIndex(index);
     heapArray[iy]->setTime(time);
 }
-void IndexedPrioQueue::minHeapify(int i)
-{
-    int l = left(i);
-    int r = right(i);
-    int smallest = i;
-    if (l < heapsize && heapArray[l]->getTime() < heapArray[i]->getTime())
-        smallest = l;
-    if (r < heapsize && heapArray[r]->getTime() < heapArray[smallest]->getTime())
-        if (smallest != i)
-        {
-            swap(i, smallest);
-            minHeapify(smallest);
-        }
-}
 void IndexedPrioQueue::insertKey(int index, double time)
 {
     if (heapsize == capacity)
@@ -121,15 +107,10 @@ void IndexedPrioQueue::updateAux(int index)
         }
     }
 }
-void IndexedPrioQueue::printQueue()
+void IndexedPrioQueue::print()
 {
     for(int i = 0; i < heapsize; i++)
     {
-        /*cout << "Current node: " << heapArray[i]->getIndex() << " | " << heapArray[i]->getTime() <<endl;
-        if(i>=1)cout << "Parent: " << heapArray[parent(i)]->getIndex() << " | " << heapArray[parent(i)]->getTime() <<endl;
-        if(left(i) >= 0 && left(i) < heapsize)cout << "Left child: " << heapArray[left(i)]->getIndex() << " | " << heapArray[left(i)]->getTime() <<endl;
-        if(right(i) >= 0 && right(i) < heapsize)cout << "Right child: " << heapArray[right(i)]->getIndex() << " | " << heapArray[right(i)]->getTime() <<endl;
-        */
         cout << "(" << heapArray[i]->getIndex() << " ; " << heapArray[i]->getTime() << ")";;
     }
     cout << endl;
