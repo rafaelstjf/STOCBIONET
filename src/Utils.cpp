@@ -48,7 +48,6 @@ Utils::Utils()
     fat[10] = 3628800;
     seed = mix(clock(), time(NULL), getpid());
     //unsigned long seed = 1940740546;
-    srand(seed);
 }
 Utils::~Utils()
 {
@@ -59,16 +58,19 @@ unsigned long int Utils::getSeed()
 }
 double Utils::getRandomNumber()
 {
+    //using static to save the same object
     double i = 0.0;
+    static mt19937 generator(seed);
+    static uniform_real_distribution<double> dist(0.0, 1.0);
     while (i <= EP || i >= 1 - EP)
-        i = rand() / (float)(RAND_MAX);
+        i = dist(generator);
     return i;
 }
 string Utils::getCurrentDateTime()
 {
-    time_t     now = time(0);
-    struct tm  tstruct;
-    char       buf[80];
+    time_t now = time(0);
+    struct tm tstruct;
+    char buf[80];
     tstruct = *localtime(&now);
     // Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
     // for more information about date/time format
@@ -85,7 +87,7 @@ double Utils::binomialCoefficient(int k, int n)
     long int fatn = 1, fatk = 1;
     if (n > k || (k == 0 && n != 0))
         return 0;
-    if(n==0)
+    if (n == 0)
         return 1;
     if (n > 10)
         fatn = calcFactorial(n);
@@ -93,12 +95,12 @@ double Utils::binomialCoefficient(int k, int n)
         fatn = fat[n];
     //(k*(k-1)*...*(k-n)!)/(n!*(k-n)!)
     //k*(k-1)*...*(k-n-1)/n!
-    for (int i = k; i >= k - (n-1); i--)
+    for (int i = k; i >= k - (n - 1); i--)
     {
-        if(k>0)
-        fatk *= i;
+        if (k > 0)
+            fatk *= i;
     }
-    double result = (1.0*fatk)/fatn;
+    double result = (1.0 * fatk) / fatn;
     return result;
 }
 long int Utils::calcFactorial(int n)
@@ -154,15 +156,14 @@ void Utils::saveToCSVNoOverwriting(string buffer, string filename)
     fstream existFile;
     int i = 0;
     existFile.open(filename + ".csv", fstream::in);
-    while(existFile.good())
+    while (existFile.good())
     {
         i++;
         existFile.close();
         existFile.open(filename + "_" + to_string(i) + ".csv", fstream::in);
-
     }
-    if(i >0)
-        file.open(filename + "_" + to_string(i) +".csv", fstream::out);
+    if (i > 0)
+        file.open(filename + "_" + to_string(i) + ".csv", fstream::out);
     else
         file.open(filename + ".csv", fstream::out);
     if (file.is_open())

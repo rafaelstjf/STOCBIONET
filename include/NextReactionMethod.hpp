@@ -23,9 +23,7 @@ class NextReactionMethod : public SSA{
     virtual void reacSelection();
     virtual void reacExecution();
     double c;
-    double* testU;
-    double* testProp;
-    List* queue;
+    IndexedPrioQueue* queue;
     HeapNode* selectedNode;
     double* timePropZero; //time when ak becomes 0
     double* propNonZero;//last propensity != 0

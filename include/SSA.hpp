@@ -12,7 +12,7 @@
 #include "../include/Log/Log.hpp"
 
 
-#define INF INT_MAX
+#define INF 1.0E9
 #define EP 1.0E-5
 using namespace std;
 

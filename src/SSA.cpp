@@ -33,13 +33,14 @@ void SSA::saveToFile()
     buffer << log->exportToStringStream().str();
     speciesNameNumber.clear();
     ut->saveToCSVNoOverwriting(buffer.str(), methodOutName);
-    buffer.clear();
     stringstream buffer2;
     buffer2 << "Number of reactions executed: " << log->getNumberReacExecuted() << '\n';
     buffer2 << "Reactions per second: " << log->getReacPerSecond() << '\n';
     buffer2 << "Seed: " << ut->getSeed() << '\n';
     cout << ("logs/" + ut->getCurrentDateTime()) << endl;
     ut->saveToTXT(buffer2.str(), ("logs/" + ut->getCurrentDateTime()));
+    buffer.clear();
+    buffer2.clear();
 }
 void SSA::printResult()
 {
