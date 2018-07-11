@@ -51,7 +51,7 @@ void NextReactionMethodCompact::reacTimeGeneration()
         if(propArray[i] > EP)
             t1 = (delta[i] / propArray[i]) + currentTime;
         else
-            t1 = inf;
+            t1 = INF;
         propNonZero[i] = propArray[i]; //if propArray[i] = propNonZero[i] = 0, that happens since the beginning of the simulation
         queue->insertKey(i, t1);
     }
@@ -60,9 +60,11 @@ void NextReactionMethodCompact::reacTimeGeneration()
 void NextReactionMethodCompact::reacSelection()
 {
     //selects the node with the minimal time and updates the time
-    double cOld = currentTime;
+    cOld = currentTime;
     selectedNode = queue->getMin();
     currentTime = selectedNode->getTime();
+    if(cOld >= currentTime)
+        cout << "WRONG-> " << cOld << " " << currentTime << endl;
 }
 void NextReactionMethodCompact::reacExecution()
 {
@@ -82,7 +84,7 @@ void NextReactionMethodCompact::reacExecution()
     }
     else
     {
-        nt = inf;
+        nt = INF;
 
     }
     queue->update(sIndex, nt);
@@ -94,7 +96,7 @@ void NextReactionMethodCompact::reacExecution()
         index = depArray[i];
         propOld = propArray[index];
         calcPropOne(index);
-        nt = inf;
+        nt = INF;
         if(propArray[index] > EP)
         {
             nt = (delta[index] - (propNonZero[index]*currentTime))/propArray[index] + currentTime;
@@ -106,7 +108,7 @@ void NextReactionMethodCompact::reacExecution()
             propNonZero[index] = (-1.0*propOld);
             delta[index] = propOld*currentTime;
         }
-        //if both propensities(last and current) are 0 so nt = inf
+        //if both propensities(last and current) are 0 so nt = INF
         queue->update(index, nt);
     }
     delete[] depArray;
@@ -128,7 +130,7 @@ void NextReactionMethodCompact::perform(string filename, double simulTime, doubl
     reacTimeGeneration();
     log->insertNode(currentTime, specQuantity);//saves the species quantities on beginTime
     reacSelection();
-    if(currentTime != inf)
+    if(currentTime != INF)
     {
         while (currentTime <= simulTime)
         {
@@ -137,6 +139,7 @@ void NextReactionMethodCompact::perform(string filename, double simulTime, doubl
             reacSelection();
         }
     }
+    cout << cOld << endl;
     double en = ut->getCurrentTime();//ending of the simulation
     sucess = true;
     reacPerSecond = (double)reacCount/(en-beg);

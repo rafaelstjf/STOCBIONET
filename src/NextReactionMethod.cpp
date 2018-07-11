@@ -29,7 +29,7 @@ void NextReactionMethod::initialization(string filename, double simulTime)
         propArray = new double[model->getReacNumber()];
         timePropZero = new double[model->getReacNumber()];
         propNonZero = new double[model->getReacNumber()];
-        queue = new List(model->getReacNumber());
+        queue = new IndexedPrioQueue(model->getReacNumber());
         dg = new DependencyGraphNRM(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
         for (int i = 0; i < model->getSpecNumber(); i++)
         {
@@ -39,23 +39,21 @@ void NextReactionMethod::initialization(string filename, double simulTime)
 }
 void NextReactionMethod::reacTimeGeneration()
 {
-    double u, t1;
+    double u, nt;
     for (int i = 0; i < model->getReacNumber(); i++)
     {
         calcPropOne(i); //uses calcPropOne(i) to saves one O(n)
         if (propArray[i] <= EP)
         {
-            t1 = INF;
-            timePropZero[i] = currentTime;
-            propNonZero[i] = EP;
+            nt = INF;
         }
         else
         {
-            propNonZero[i] = propArray[i]; //if propNonZero[i] == 0 it happened since the beginning
             u = ut->getRandomNumber();
-            t1 = ((-1 * ut->ln(u)) / propArray[i]) + currentTime;
+            nt = ((-1 * ut->ln(u)) / propArray[i]) + currentTime;
         }
-        queue->insertKey(i, t1);
+        propNonZero[i] = propArray[i]; //if propNonZero[i] == 0 it happened since the beginning
+        queue->insertKey(i, nt);
     }
 }
 void NextReactionMethod::reacSelection()
@@ -63,6 +61,8 @@ void NextReactionMethod::reacSelection()
     c = currentTime;
     selectedNode = queue->getMin();
     currentTime = selectedNode->getTime();
+    if (c >= currentTime)
+        cout << "Wrong" << endl;
 }
 void NextReactionMethod::reacExecution()
 {
@@ -77,7 +77,6 @@ void NextReactionMethod::reacExecution()
     if (propArray[sIndex] <= EP)
     {
         nt = INF;
-        timePropZero[sIndex] = currentTime;
     }
     else
     {
@@ -106,7 +105,7 @@ void NextReactionMethod::reacExecution()
                 }
             }
             else //propOld > 0, so propNonZero > 0
-                delta = propNonZero[index] * (selectedNode->getTime() - currentTime);
+                delta = propNonZero[index] * (queue->getNode(index)->getTime() - currentTime);
             nt = delta / propArray[index] + currentTime;
             propNonZero[index] = propArray[index]; //saves the last propensity different than 0
         }
@@ -149,6 +148,7 @@ void NextReactionMethod::perform(string filename, double simulTime, double begin
         }
         log->insertNode(currentTime, specQuantity);
     }
+    cout << c << endl;
     double en = ut->getCurrentTime(); //ending of the simulation
     sucess = true;
     reacPerSecond = (double)reacCount / (en - beg);

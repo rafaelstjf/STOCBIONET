@@ -8,8 +8,6 @@
 #include "../include/List.hpp"
 #include "../include/DependencyGraphNRM.hpp"
 
-#define inf INT_MAX
-
 using namespace std;
 
 class NextReactionMethodCompact : public SSA
@@ -27,6 +25,7 @@ protected:
     double* timePropZero;
     double* propNonZero;
     double* delta;
+    double cOld;
     HeapNode* selectedNode; //used to store the selected reaction index and time
 
 };
