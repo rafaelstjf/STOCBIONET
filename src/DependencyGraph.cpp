@@ -40,7 +40,7 @@ void DependencyGraph::createGraph(int numReactions, int **reactants, int **produ
                     count++;
             }
             delete[] inter;
-            if (count > 0){
+            if (count > 0 || i==j){ //i==j always insert a self-edge
                 insertDependency(i, j);
             }
 

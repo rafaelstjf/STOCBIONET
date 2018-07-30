@@ -3,15 +3,16 @@
 Log::Log(int size)
 {
     first = nullptr;
+    numNodes = 0;
     last = nullptr;
     this->size = size;
     currentArray = new int[size];
 }
 Log::~Log()
 {
-    Node* it = first;
-    Node* aux = nullptr;
-    while(it!=nullptr)
+    Node *it = first;
+    Node *aux = nullptr;
+    while (it != nullptr)
     {
         aux = it->getNext();
         delete it;
@@ -20,18 +21,19 @@ Log::~Log()
     delete it;
     delete aux;
 }
-void Log::insertNode(double time, int* array)
+void Log::insertNode(double time, int *array)
 {
-    Node* n = new Node();
+    numNodes++;
+    Node *n = new Node();
     n->setTime(time);
-    if(first == nullptr)
+    if (first == nullptr)
         first = n;
     else
         last->setNext(n);
     n->setPrevious(last);
     n->setNext(nullptr);
     last = n;
-    for(int i = 0; i < size; i++)
+    for (int i = 0; i < size; i++)
     {
         n->insertSpecie(i, array[i], currentArray);
     }
@@ -39,13 +41,13 @@ void Log::insertNode(double time, int* array)
 void Log::printLog()
 {
     int val;
-    Node* it = first;
-    while(it!=nullptr)
+    Node *it = first;
+    while (it != nullptr)
     {
         cout << "time: " << it->getTime() << endl;
-        for(int i = 0; i < size; i++)
+        for (int i = 0; i < size; i++)
         {
-            if(it->checkExists(i))
+            if (it->checkExists(i))
             {
                 val = it->getValIndex(i);
                 cout << val;
@@ -55,8 +57,8 @@ void Log::printLog()
             {
                 cout << currentArray[i];
             }
-            if(i < size-1)
-                cout<< ": ";
+            if (i < size - 1)
+                cout << ": ";
         }
         cout << endl;
         it = it->getNext();
@@ -64,29 +66,76 @@ void Log::printLog()
 }
 stringstream Log::exportToStringStream()
 {
+    //exports the log into a string, if the number of nodes is bigger than the maximum, the algorithm
+    //will jump some nodes
     stringstream buffer;
     int val;
-    Node* it = first;
-    while(it!=nullptr)
+    Node *it = first;
+    if (numNodes >= 5000)
     {
-        buffer << it->getTime() << "; ";
-        for(int i = 0; i < size; i++)
+        int jump = ceil((double)numNodes / 5000);
+        int j = jump;
+        while (it != nullptr)
         {
-            if(it->checkExists(i))
+            if (j == jump)
             {
-                val = it->getValIndex(i);
-                buffer << val;
-                currentArray[i] = val;
+                buffer << it->getTime() << "; ";
+                for (int i = 0; i < size; i++)
+                {
+                    if (it->checkExists(i))
+                    {
+                        val = it->getValIndex(i);
+                        buffer << val;
+                        currentArray[i] = val;
+                    }
+                    else
+                    {
+                        buffer << currentArray[i];
+                    }
+                    if (i < size - 1)
+                        buffer << "; ";
+                }
+                buffer << '\n';
+                j = 1;
             }
             else
             {
-                buffer << currentArray[i];
+                for (int i = 0; i < size; i++)
+                {
+                    if (it->checkExists(i))
+                    {
+                        val = it->getValIndex(i);
+                        currentArray[i] = val;
+                    }
+                }
+                j++;
             }
-            if(i < size-1)
-                buffer<< "; ";
+            it = it->getNext();
         }
-        buffer << '\n';
-        it = it->getNext();
+    }
+    else
+    {
+        while (it != nullptr)
+        {
+            buffer << it->getTime() << "; ";
+            for (int i = 0; i < size; i++)
+            {
+                if (it->checkExists(i))
+                {
+                    val = it->getValIndex(i);
+                    buffer << val;
+                    currentArray[i] = val;
+                }
+                else
+                {
+                    buffer << currentArray[i];
+                }
+                if (i < size - 1)
+                    buffer << "; ";
+            }
+            buffer << '\n';
+            it = it->getNext();
+        }
     }
     return buffer;
 }

@@ -5,6 +5,7 @@
 #include "Node.hpp"
 #include <iostream>
 #include <climits>
+#include <math.h>
 using namespace std;
 class Log{
 
@@ -12,6 +13,7 @@ class Log{
     Node* first;
     Node* last;
     int size;
+    unsigned int numNodes;
     double reacPerSecond;
     int reacCount;
     int* currentArray;

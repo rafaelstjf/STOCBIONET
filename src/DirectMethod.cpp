@@ -1,9 +1,12 @@
 #include "../include/DirectMethod.hpp"
-void DirectMethod::initialization(string filename, double simultime)
+void DirectMethod::initialization(string filename, double simultime, long int seed)
 {
     //instantiates the variables
     model = new Model(); //instantiates the model
-    ut = new Utils();    //instantiates the utility class
+    if (seed >= 0)
+        ut = new Utils(seed); //instantiates the utility class
+    else
+        ut = new Utils(); //instantiates the utility class
     model->loadModel(filename);
     t = 0.0; //tal
     selectedReaction = 0;
@@ -41,7 +44,7 @@ void DirectMethod::reacTimeGeneration()
 {
     double u1;
     u1 = ut->getRandomNumber();
-    t = (-1.0* ut->ln(u1))/ totalPropensity;//next time increases
+    t = (-1.0 * ut->ln(u1)) / totalPropensity; //next time increases
 }
 void DirectMethod::reacSelection()
 {
@@ -69,13 +72,13 @@ void DirectMethod::reacExecution()
     {
         calcPropOne(depArray[i]);
     }
-    delete [] depArray;
+    delete[] depArray;
     currentTime = currentTime + t;
 }
-void DirectMethod::perform(string filename, double simulTime, double beginTime)
+void DirectMethod::perform(string filename, double simulTime, double beginTime, long int seed)
 {
     cout << "-----------DIRECT METHOD-----------" << endl;
-    initialization(filename, simulTime); //instantiates the variables
+    initialization(filename, simulTime, seed); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
     {
@@ -86,11 +89,11 @@ void DirectMethod::perform(string filename, double simulTime, double beginTime)
     currentTime = beginTime;
     t = 0.0;
     //peforms the simulation
-    calcPropensity();    //calculate the reactions propensity
+    calcPropensity(); //calculate the reactions propensity
     while (currentTime <= simulTime)
     {
         //saves the current species quantities on the log
-       log->insertNode(currentTime, specQuantity);
+        log->insertNode(currentTime, specQuantity);
         //generates simulation time
         reacTimeGeneration();
         //reaction's selection
@@ -100,7 +103,7 @@ void DirectMethod::perform(string filename, double simulTime, double beginTime)
     }
     double en = ut->getCurrentTime(); //ending of the simulation
     sucess = true;
-    reacPerSecond = (double)reacCount/(en-beg);
+    reacPerSecond = (double)reacCount / (en - beg);
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
     cout << "Reactions per second: " << reacPerSecond << endl;
     log->setReacPerSecond(reacPerSecond);
@@ -140,5 +143,4 @@ void DirectMethod::calcPropOne(int index)
 }
 DirectMethod::~DirectMethod()
 {
-
 }

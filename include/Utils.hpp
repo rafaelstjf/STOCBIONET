@@ -23,6 +23,7 @@ class Utils
 {
   public:
   Utils();
+  Utils(unsigned long int seed);
   double getRandomNumber();
   double binomialCoefficient(int k, int n);
   double ln(double n);
@@ -32,11 +33,13 @@ class Utils
   void saveToCSVNoOverwriting(string buffer, string filename);
   void saveToTXT(string buffer, string filename);
   string getCurrentDateTime();
+  string extractFileName(string name);
   unsigned long int getSeed();
 
   ~Utils();
   private:
   long int calcFactorial(int n);
+  void generateFat();
   long int fat[11];
   unsigned long seed;
 };

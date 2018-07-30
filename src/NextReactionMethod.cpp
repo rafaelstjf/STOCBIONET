@@ -1,12 +1,14 @@
 #include "../include/NextReactionMethod.hpp"
 
-void NextReactionMethod::initialization(string filename, double simulTime)
+void NextReactionMethod::initialization(string filename, double simulTime, long int seed)
 {
     //instantiates the variables
     sucess = false;
     model = new Model();
-    ut = new Utils();
-    this->simulTime = simulTime;
+    if (seed >= 0)
+        ut = new Utils(seed); //instantiates the utility class
+    else
+        ut = new Utils(); //instantiates the utility class    this->simulTime = simulTime;
     model->loadModel(filename);
     reacCount = 0;
     reacPerSecond = 0.0;
@@ -119,10 +121,10 @@ void NextReactionMethod::reacExecution()
     }
     delete[] depArray;
 }
-void NextReactionMethod::perform(string filename, double simulTime, double beginTime)
+void NextReactionMethod::perform(string filename, double simulTime, double beginTime, long int seed)
 {
     cout << "-----------NEXT REACTION METHOD-----------" << endl;
-    initialization(filename, simulTime); //instantiates the variables
+    initialization(filename, simulTime, seed); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
     {

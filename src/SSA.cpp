@@ -8,14 +8,21 @@ SSA::~SSA()
     delete[] specQuantity;
     delete[] propArray;
 }
+Log *SSA::getLog()
+{
+    return log;
+}
 void SSA::saveToFile()
 {
-    cout << "SAVING SIMULATION LOG IN A FILE" << endl;
+    string date = ut->getCurrentDateTime();
+    string logName = "logs/" + ut->extractFileName(methodOutName) + "_" + date;
     stringstream buffer;
     map<string, long int> speciesNameNumber = model->getSpecNameNumber();
     map<string, long int>::iterator itSpecies = speciesNameNumber.begin();
     //get the name of the species
     string names[speciesNameNumber.size()];
+    cout << "SAVING SIMULATION RESULTS IN " << methodOutName << "_" << ut->getCurrentDateTime() << endl;
+    cout << "SAVING SIMULATION LOG IN " << logName << endl;
     while (itSpecies != speciesNameNumber.end())
     {
         names[itSpecies->second] = itSpecies->first;
@@ -32,13 +39,13 @@ void SSA::saveToFile()
     buffer << '\n';
     buffer << log->exportToStringStream().str();
     speciesNameNumber.clear();
-    ut->saveToCSVNoOverwriting(buffer.str(), methodOutName);
+    ut->saveToCSVNoOverwriting(buffer.str(), methodOutName + "_" + date);
     stringstream buffer2;
     buffer2 << "Number of reactions executed: " << log->getNumberReacExecuted() << '\n';
     buffer2 << "Reactions per second: " << log->getReacPerSecond() << '\n';
     buffer2 << "Seed: " << ut->getSeed() << '\n';
     cout << ("logs/" + ut->getCurrentDateTime()) << endl;
-    ut->saveToTXT(buffer2.str(), ("logs/" + ut->getCurrentDateTime()));
+    ut->saveToTXT(buffer2.str(), logName);
     buffer.clear();
     buffer2.clear();
 }

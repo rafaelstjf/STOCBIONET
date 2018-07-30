@@ -7,17 +7,16 @@
 #include "../include/IndexedPrioQueue.hpp"
 #include "../include/HeapNode.hpp"
 
-
 #define inf INT_MAX
 using namespace std;
 
 class SimplifiedNextReactionMethod : public SSA{
     public:
-    virtual void perform(string filename, double simulTime, double beginTime);
+    virtual void perform(string filename, double simulTime, double beginTime, long int seed);
     virtual ~SimplifiedNextReactionMethod();
 
     protected:
-    virtual void initialization(string filename, double simulTime);
+    virtual void initialization(string filename, double simulTime, long int seed);
     virtual void reacTimeGeneration();
     virtual void reacSelection();
     virtual void reacExecution();

@@ -1,11 +1,13 @@
 #include "../include/FirstReactionMethod.hpp"
 
-void FirstReactionMethod::initialization(string filename, double simulTime)
+void FirstReactionMethod::initialization(string filename, double simulTime, long int seed)
 {
     //instantiates the variables
     model = new Model();
-    ut = new Utils();
-    model->loadModel(filename);
+    if (seed >= 0)
+        ut = new Utils(seed); //instantiates the utility class
+    else
+        ut = new Utils(); //instantiates the utility class    model->loadModel(filename);
     sucess = false;
     this->simulTime = simulTime;
     reacCount = 0;
@@ -34,10 +36,10 @@ void FirstReactionMethod::initialization(string filename, double simulTime)
         }
     }
 }
-void FirstReactionMethod::perform(string filename, double simulTime, double beginTime)
+void FirstReactionMethod::perform(string filename, double simulTime, double beginTime, long int seed)
 {
     cout << "-----------FIRST REACTION METHOD-----------" << endl;
-    initialization(filename, simulTime);//instantiates the variables
+    initialization(filename, simulTime, seed); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
     {
@@ -51,7 +53,7 @@ void FirstReactionMethod::perform(string filename, double simulTime, double begi
     while (currentTime <= simulTime)
     {
         //saves the current species quantities on the log
-       log->insertNode(currentTime, specQuantity);
+        log->insertNode(currentTime, specQuantity);
         //generates simulation time
         reacTimeGeneration();
         //reaction's selection
@@ -61,7 +63,7 @@ void FirstReactionMethod::perform(string filename, double simulTime, double begi
     }
     double en = ut->getCurrentTime(); //ending of the simulation
     sucess = true;
-    reacPerSecond = (double)reacCount/(en-beg);
+    reacPerSecond = (double)reacCount / (en - beg);
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
     cout << "Reactions per second: " << reacPerSecond << endl;
     log->setReacPerSecond(reacPerSecond);
@@ -70,8 +72,7 @@ void FirstReactionMethod::perform(string filename, double simulTime, double begi
 void FirstReactionMethod::reacExecution()
 {
     //updates the species quantities of the selected reaction
-        updateSpeciesQuantities(selectedReaction);
-
+    updateSpeciesQuantities(selectedReaction);
 }
 void FirstReactionMethod::reacTimeGeneration()
 {

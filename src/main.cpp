@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-//#include "SSA.h"
 #include "../include/DirectMethod.hpp"
 #include "../include/FirstReactionMethod.hpp"
 #include "../include/NextReactionMethod.hpp"
@@ -32,7 +31,8 @@ int main(int argc, char *argv[])
         cin >> simulTime;
         cout << "Insert the initial time:" << endl;
         cin >> beginTime;
-        cout << "Operations:\nDM - Direct Method\nFRM - First Reaction Method\nNRM - Next Reaction Method\nNRMC - Next Reaction Method Compact\nMNRM - Modified Next Reaction Method\nSNRM - Simplified Next Reaction Method\n" << endl;
+        cout << "Operations:\nDM - Direct Method\nFRM - First Reaction Method\nNRM - Next Reaction Method\nNRMC - Next Reaction Method Compact\nMNRM - Modified Next Reaction Method\nSNRM - Simplified Next Reaction Method\n"
+             << endl;
         cin >> op;
     }
     if (op == "DM")
@@ -52,14 +52,30 @@ int main(int argc, char *argv[])
         cout << "Error. Invalid operation!" << endl;
         return -1;
     }
-    simulation->perform(filename, simulTime, beginTime);
+    cout << "Do you want to insert a custom seed? [y|n]" << endl;
+    cin >> printOp;
+    long int seed = -1;
+    if (printOp == 'y')
+    {
+        cout << "seed: ";
+        string seedstr;
+        cin >> seedstr;
+        cout << endl;
+        seed = atoi(seedstr.c_str());
+        if (seed < 0)
+        {
+            cout << "Invalid seed! Performing the simulation using a random seed." << endl;
+            seed = -1;
+        }
+    }
+    simulation->perform(filename, simulTime, beginTime, seed);
     if (simulation->checkSucess())
     {
-        cout << "Do you want to print the results? (y-yes or n-no)" << endl;
+        cout << "Do you want to print the results? [y|n]" << endl;
         cin >> printOp;
         if (printOp == 'y')
             simulation->printResult();
-        cout << "Do you want to save the results in a file? (y-yes or n-no)" << endl;
+        cout << "Do you want to save the results in a file? [y|n]" << endl;
         cin >> printOp;
         if (printOp == 'y')
             simulation->saveToFile();

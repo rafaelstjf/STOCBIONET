@@ -4,7 +4,7 @@
 #include <map>
 #include <vector>
 #include <string>
-#include <strstream>
+#include <sstream>
 #include <fstream>
 #include "../include/model/TReact.hpp"
 #include "../include/model/Reaction.hpp"

@@ -13,11 +13,11 @@ using namespace std;
 class NextReactionMethodCompact : public SSA
 {
 public:
-    virtual void perform(string filename, double simulTime, double beginTime);
+    virtual void perform(string filename, double simulTime, double beginTime, long int seed);
     virtual ~NextReactionMethodCompact();
 
 protected:
-    virtual void initialization(string filename, double simulTime);
+    virtual void initialization(string filename, double simulTime, long int seed);
     virtual void reacTimeGeneration();
     virtual void reacSelection();
     virtual void reacExecution();

@@ -35,6 +35,12 @@ unsigned long mix(unsigned long a, unsigned long b, unsigned long c)
 
 Utils::Utils()
 {
+    generateFat();
+    seed = mix(clock(), time(NULL), getpid());
+    //unsigned long seed = 1940740546;
+}
+void Utils::generateFat()
+{
     fat[0] = 1;
     fat[1] = 1;
     fat[2] = 2;
@@ -46,8 +52,11 @@ Utils::Utils()
     fat[8] = 40320;
     fat[9] = 362880;
     fat[10] = 3628800;
-    seed = mix(clock(), time(NULL), getpid());
-    //unsigned long seed = 1940740546;
+}
+Utils::Utils(unsigned long int seed)
+{
+    generateFat();
+    this->seed = seed;
 }
 Utils::~Utils()
 {
@@ -109,6 +118,25 @@ long int Utils::calcFactorial(int n)
         return 1;
     else
         return n * calcFactorial(n - 1);
+}
+string Utils::extractFileName(string name)
+{
+    string filename;
+    string temp;
+    temp.clear();
+    filename.clear();
+    for (int i = (name.size() - 1); i >= 0; i--)
+    {
+        if (name[i] != '/')
+            temp += (name[i]);
+        else
+            break;
+    }
+    for (int i = (temp.size() - 1); i >= 0; i--)
+    {
+        filename += temp[i];
+    }
+    return filename;
 }
 double Utils::ln(double n)
 {

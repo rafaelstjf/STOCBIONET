@@ -1,11 +1,13 @@
 #include "../include/SimplifiedNextReactionMethod.hpp"
 
-void SimplifiedNextReactionMethod::initialization(string filename, double simulTime)
+void SimplifiedNextReactionMethod::initialization(string filename, double simulTime, long int seed)
 {
     sucess = false;
     model = new Model();
-    ut = new Utils();
-    this->simulTime = simulTime;
+    if (seed >= 0)
+        ut = new Utils(seed); //instantiates the utility class
+    else
+        ut = new Utils(); //instantiates the utility class    this->simulTime = simulTime;
     for (int i = 0; i < filename.size(); i++)
     {
         if (filename[i] == '.')
@@ -42,10 +44,10 @@ void SimplifiedNextReactionMethod::reacTimeGeneration()
     {
         calcPropOne(i);
         u = ut->getRandomNumber();
-        P[i] = (-1.0*ut->ln(u));
+        P[i] = (-1.0 * ut->ln(u));
         U[i] = currentTime;
         T[i] = 0.0;
-        t1 = (P[i] - T[i])/propArray[i] + currentTime;
+        t1 = (P[i] - T[i]) / propArray[i] + currentTime;
         queue->insertKey(i, t1);
     }
 }
@@ -54,36 +56,34 @@ void SimplifiedNextReactionMethod::reacSelection()
     //selects the node with the minimal time and updates the time
     selectedNode = queue->getMin();
     currentTime = selectedNode->getTime();
-
 }
 void SimplifiedNextReactionMethod::reacExecution()
 {
-    double u; //random number
+    double u;  //random number
     double nt; //new time
     int index;
     int sIndex = selectedNode->getIndex();
     //updates the species quantities
     updateSpeciesQuantities(sIndex);
     u = ut->getRandomNumber();
-    P[sIndex] = P[sIndex] + (-1.0*ut->ln(u));
+    P[sIndex] = P[sIndex] + (-1.0 * ut->ln(u));
     int *depArray = dg->getDependencies(sIndex);
     int depSize = dg->getDependenciesSize(sIndex);
     for (int i = 0; i < depSize; i++)
     {
         index = depArray[i];
-        T[index] = T[index] + propArray[index]*(currentTime - U[index]);
+        T[index] = T[index] + propArray[index] * (currentTime - U[index]);
         U[index] = currentTime;
         calcPropOne(index);
-        nt = ((P[index] - T[index])/propArray[index]) + currentTime;
+        nt = ((P[index] - T[index]) / propArray[index]) + currentTime;
         queue->update(index, nt);
     }
     delete[] depArray;
-
 }
-void SimplifiedNextReactionMethod::perform(string filename, double simulTime, double beginTime)
+void SimplifiedNextReactionMethod::perform(string filename, double simulTime, double beginTime, long int seed)
 {
     cout << "-----------SIMPLIFIED NEXT REACTION METHOD-----------" << endl;
-    initialization(filename, simulTime);
+    initialization(filename, simulTime, seed);
     if (!model->isModelLoaded())
     {
         cout << "Error! Invalid model." << endl;
@@ -95,7 +95,7 @@ void SimplifiedNextReactionMethod::perform(string filename, double simulTime, do
     reacTimeGeneration();
     //saves the species quantities on beginTime
     reacSelection();
-    if(currentTime != inf)
+    if (currentTime != inf)
     {
         currentTime = beginTime;
         //currentTime = beginTime;
@@ -103,13 +103,13 @@ void SimplifiedNextReactionMethod::perform(string filename, double simulTime, do
         {
             log->insertNode(currentTime, specQuantity);
             reacSelection(); //selects a reaction
-            reacExecution();//executes the selected reaction
+            reacExecution(); //executes the selected reaction
         }
     }
     double en = ut->getCurrentTime(); //end
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
     sucess = true;
-    reacPerSecond = (double)reacCount/(en-beg);
+    reacPerSecond = (double)reacCount / (en - beg);
     cout << "Reactions per second: " << reacPerSecond << endl;
     log->setReacPerSecond(reacPerSecond);
     log->setNumberReacExecuted(reacCount);

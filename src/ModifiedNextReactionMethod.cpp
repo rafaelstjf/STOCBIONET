@@ -1,12 +1,14 @@
 #include "../include/ModifiedNextReactionMethod.hpp"
 
-void ModifiedNextReactionMethod::initialization(string filename, double simulTime)
+void ModifiedNextReactionMethod::initialization(string filename, double simulTime, long int seed)
 {
     //instantiates the variables
     sucess = false;
     model = new Model();
-    ut = new Utils();
-    this->simulTime = simulTime;
+    if (seed >= 0)
+        ut = new Utils(seed); //instantiates the utility class
+    else
+        ut = new Utils(); //instantiates the utility class    this->simulTime = simulTime;
     model->loadModel(filename);
     reacCount = 0;
     reacPerSecond = 0.0;
@@ -28,6 +30,7 @@ void ModifiedNextReactionMethod::initialization(string filename, double simulTim
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
         queue = new IndexedPrioQueue(model->getReacNumber());
+        dg = new DependencyGraph(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
         P = new double[model->getReacNumber()];
         T = new double[model->getReacNumber()];
         for (int i = 0; i < model->getSpecNumber(); i++)
@@ -62,23 +65,29 @@ void ModifiedNextReactionMethod::reacExecution()
     int sIndex = selectedNode->getIndex();
     //updates the species quantities
     updateSpeciesQuantities(sIndex);
-    for (int i = 0; i < model->getReacNumber(); i++)
-    {
-        T[i] = T[i] + propArray[i] * selectedNode->getTime();
-    }
     u = ut->getRandomNumber();
     P[sIndex] = P[sIndex] + (-1.0 * ut->ln(u));
     for (int i = 0; i < model->getReacNumber(); i++)
     {
-        calcPropOne(i);
+        T[i] = T[i] + propArray[i] * selectedNode->getTime();
+    }
+    int *depArray = dg->getDependencies(sIndex);
+    int depSize = dg->getDependenciesSize(sIndex);
+    for (int i = 0; i < depSize; i++)
+    {
+        calcPropOne(depArray[i]);
+    }
+    delete[] depArray;
+    for (int i = 0; i < model->getReacNumber(); i++)
+    {
         nt = (P[i] - T[i]) / propArray[i];
         queue->update(i, nt);
     }
 }
-void ModifiedNextReactionMethod::perform(string filename, double simulTime, double beginTime)
+void ModifiedNextReactionMethod::perform(string filename, double simulTime, double beginTime, long int seed)
 {
     cout << "-----------MODIFIED NEXT REACTION METHOD-----------" << endl;
-    initialization(filename, simulTime); //instantiates the variables
+    initialization(filename, simulTime, seed); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
     {
@@ -114,5 +123,6 @@ ModifiedNextReactionMethod::~ModifiedNextReactionMethod()
     delete[] T;
     delete[] P;
     delete queue;
+    delete dg;
     delete selectedNode;
 }
