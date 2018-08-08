@@ -9,13 +9,13 @@ Stochastic simulation algorithms for Gene Regulatory Networks for delayed and no
 
  * Direct method
  * First reaction method
-
+ * Next reaction method
+ * Modified next reaction method
+ * Simplified next reaction method
  
 ## Methods in development:
  
- * [Next reaction method](https://pubs.acs.org/doi/abs/10.1021/jp993732q) (__99.9%__)
- * [Modified next reaction method](https://aip.scitation.org/doi/abs/10.1063/1.2799998) (__99.9%__)
- * [Simplified next reaction method](http://repositorio.ufjf.br:8080/jspui/bitstream/ufjf/4828/1/camillodelellisfalcaodasilva.pdf) (__99.9%__)
+ 
  * Next reaction method compact (__99.9%__)
  * Rejection method (__0%__ )
  * Delayed modified next reaction method (__0%__ )
