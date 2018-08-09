@@ -1,5 +1,5 @@
 #include "../include/DirectMethod.hpp"
-void DirectMethod::initialization(string filename, double simultime, long int seed)
+void DirectMethod::initialization(string filename, double simulTime, long int seed)
 {
     //instantiates the variables
     model = new Model(); //instantiates the model
@@ -108,38 +108,6 @@ void DirectMethod::perform(string filename, double simulTime, double beginTime, 
     cout << "Reactions per second: " << reacPerSecond << endl;
     log->setReacPerSecond(reacPerSecond);
     log->setNumberReacExecuted(reacCount);
-}
-void DirectMethod::calcPropensity()
-{
-    //updates the entire array of propensities
-    //propensity of a reaction i is: reaction rate * productory(n=0; n=numSpecies) of binomialcoefficient(SpecQuantity[n],reactants[i][n]
-
-    double sum;
-    int **reactants = model->getReactants();
-    double *rate = model->getReacRateArray();
-    for (int i = 0; i < model->getReacNumber(); i++)
-    {
-        sum = 1;
-        for (int j = 0; j < model->getSpecNumber(); j++)
-        {
-            sum *= ut->binomialCoefficient(specQuantity[j], reactants[i][j]);
-        }
-        propArray[i] = rate[i] * sum;
-        totalPropensity += propArray[i];
-    }
-}
-void DirectMethod::calcPropOne(int index)
-{
-    //updates the propensity of the selected reaction
-    double sum = 1;
-    double propOld = propArray[index];
-    int *reactants = model->getReactants()[index];
-    for (int i = 0; i < model->getSpecNumber(); i++)
-    {
-        sum *= ut->binomialCoefficient(specQuantity[i], reactants[i]);
-    }
-    propArray[index] = model->getReacRateArray()[index] * sum;
-    totalPropensity = totalPropensity - propOld + propArray[index];
 }
 DirectMethod::~DirectMethod()
 {
