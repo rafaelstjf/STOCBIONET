@@ -6,7 +6,7 @@
 #include "../include/SSA.hpp"
 #include "../include/IndexedPrioQueue.hpp"
 #include "../include/HeapNode.hpp"
-#include "../include/DependencyGraphNRM.hpp"
+#include "../include/DependencyGraphNoSelfEdge.hpp"
 #include "../include/List.hpp"
 
 

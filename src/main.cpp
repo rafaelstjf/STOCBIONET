@@ -27,10 +27,10 @@ int main(int argc, char *argv[])
     {
         cout << "Insert the filename (with the extension):" << endl;
         cin >> filename;
-        cout << "Insert the simulation time:" << endl;
-        cin >> simulTime;
         cout << "Insert the initial time:" << endl;
         cin >> beginTime;
+        cout << "Insert the simulation time:" << endl;
+        cin >> simulTime;
         cout << "Operations:\nDM - Direct Method\nFRM - First Reaction Method\nNRM - Next Reaction Method\nNRMC - Next Reaction Method Compact\nMNRM - Modified Next Reaction Method\nSNRM - Simplified Next Reaction Method\n"
              << endl;
         cin >> op;

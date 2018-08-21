@@ -4,6 +4,7 @@
 #include <iostream>
 #include "../include/SSA.hpp"
 #include "../include/List.hpp"
+#include "../include/HeapNode.hpp"
 using namespace std;
 
 class RejectionMethod : public SSA
@@ -18,6 +19,7 @@ protected:
     virtual void reacSelection();
     virtual void reacExecution();
     List* list;
+    HeapNode* selectedNode;
 
 private:
 

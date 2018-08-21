@@ -33,7 +33,7 @@ void NextReactionMethodCompact::initialization(string filename, double simulTime
         propNonZero = new double[model->getReacNumber()];
         delta = new double[model->getReacNumber()];
         queue = new IndexedPrioQueue(model->getReacNumber());
-        dg = new DependencyGraphNRM(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
+        dg = new DependencyGraphNoSelfEdge(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
         for (int i = 0; i < model->getSpecNumber(); i++)
         {
             specQuantity[i] = model->getInitialQuantity()[i];

@@ -15,6 +15,8 @@ public:
     void print();
     HeapNode* getNode(int index);
     void sort();
+    HeapNode* getOnPosition(int pos);
+    int getSize();
 private:
     int capacity;
     int inUse;

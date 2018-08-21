@@ -42,9 +42,71 @@ void RejectionMethod::reacTimeGeneration()
 }
 void RejectionMethod::reacExecution()
 {
+    calcPropensity();
+    double tal;
+    while (currentTime <= simulTime)
+    {
+        double u = ut->getRandomNumber();
+        double teta = (-1 * ut->ln(u)) / totalPropensity;
+        selectedNode = list->getMin();
+        if (selectedNode != nullptr && (selectedNode->getTime() > currentTime && selectedNode->getTime() <= currentTime + teta))
+        {
+            tal = selectedNode->getTime();
+            int size = list->getSize();
+            for (int i = 0; i < size; i++)
+            {
+                HeapNode *currentNode = list->getOnPosition(i);
+                if (currentNode->getTime() == tal)
+                {
+                    int *depArray = dg->getDependencies(currentNode->getIndex());
+                    int depSize = dg->getDependenciesSize(currentNode->getIndex());
+                    for (int j = 0; j < depSize; j++)
+                    {
+                        calcPropOne(depArray[i]);
+                    }
+                    delete depArray;
+                }
+            }
+            currentTime = tal;
+        }
+        else
+        {
+            u = ut->getRandomNumber();
+            double selector;
+            selector = totalPropensity * u;
+            for (int i = 0; i < model->getReacNumber(); i++)
+            {
+                selector = selector - propArray[i];
+                if (selector <= EP)
+                {
+                    selectedReaction = i;
+                    break;
+                }
+            }
+            updateSpeciesQuantities(selectedReaction);
+            currentTime = currentTime + teta;
+            int *depArray = dg->getDependencies(selectedReaction);
+            int depSize = dg->getDependenciesSize(selectedReaction);
+            for (int j = 0; j < depSize; j++)
+            {
+                calcPropOne(depArray[j]);
+            }
+            delete depArray;
+        }
+    }
 }
 void RejectionMethod::perform(string filename, double simulTime, double beginTime, long int seed)
 {
+    cout << "-----------REJECTION METHOD-----------" << endl;
+    initialization(filename, simulTime, seed); //instantiates the variables
+    //checks if the model is loaded
+    if (!model->isModelLoaded())
+    {
+        cout << "Error! Invalid model." << endl;
+        return;
+    }
+    double beg = ut->getCurrentTime(); //beginning of the simulation
+    currentTime = beginTime;
 }
 RejectionMethod::~RejectionMethod()
 {

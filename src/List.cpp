@@ -2,8 +2,9 @@
 
 List::List(int c)
 {
+    //create a new array of HeapNode pointers with the capacity C
     capacity = c;
-    arr = new HeapNode *[capacity];
+    arr = new HeapNode* [capacity];
     inUse = 0;
 }
 List::~List()
@@ -98,4 +99,15 @@ HeapNode *List::getNode(int index)
             return arr[i];
     }
     return nullptr;
+}
+HeapNode *List::getOnPosition(int pos)
+{
+    if (pos >= 0 && pos < inUse)
+        return arr[pos];
+    else
+        return nullptr;
+}
+int List::getSize()
+{
+    return inUse;
 }

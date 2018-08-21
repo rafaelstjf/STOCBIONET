@@ -1,5 +1,4 @@
 #include "../../include/Log/Log.hpp"
-
 Log::Log(int size)
 {
     first = nullptr;
@@ -23,6 +22,7 @@ Log::~Log()
 }
 void Log::insertNode(double time, int *array)
 {
+    //increase the number of nodes, create a new node and insert the species
     numNodes++;
     Node *n = new Node();
     n->setTime(time);
@@ -40,6 +40,7 @@ void Log::insertNode(double time, int *array)
 }
 void Log::printLog()
 {
+    //print all the nodes using the array to update the different species
     int val;
     Node *it = first;
     while (it != nullptr)

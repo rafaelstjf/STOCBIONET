@@ -1,13 +1,13 @@
-#include "../include/DependencyGraphNRM.hpp"
+#include "../include/DependencyGraphNoSelfEdge.hpp"
 
-DependencyGraphNRM::DependencyGraphNRM(int numReactions, int **reactants, int **products, int numSpecies)
+DependencyGraphNoSelfEdge::DependencyGraphNoSelfEdge(int numReactions, int **reactants, int **products, int numSpecies)
 {
         createGraph(numReactions,reactants,products,numSpecies);
 }
-DependencyGraphNRM::~DependencyGraphNRM(){
+DependencyGraphNoSelfEdge::~DependencyGraphNoSelfEdge(){
     
 }
-void DependencyGraphNRM::createGraph(int numReactions, int **reactants, int **products, int numSpecies)
+void DependencyGraphNoSelfEdge::createGraph(int numReactions, int **reactants, int **products, int numSpecies)
 {
     int **affects; //set of substances that change quantity when the reaction i is executed
     //graph struct
