@@ -4,26 +4,29 @@
 #include "../include/HeapNode.hpp"
 using namespace std;
 
-class List{
-public:
+class List
+{
+  public:
     List(int c);
     ~List();
-    HeapNode* getMin();
+    HeapNode *getMin();
     void insertKey(int index, double time);
     void update(int index, double time);
     bool isSort();
     void print();
-    HeapNode* getNode(int index);
+    HeapNode *getNode(int index);
     void sort();
-    HeapNode* getOnPosition(int pos);
+    HeapNode *getOnPosition(int pos);
     int getSize();
-private:
+    void removeIndex(int index);
+    void removeFirst();
+
+  private:
     int capacity;
     int inUse;
-    int* arrayIndex;
-    HeapNode** arr;
+    int *arrayIndex;
+    HeapNode **arr;
     void swap(int i, int j);
-
 };
 
 #endif

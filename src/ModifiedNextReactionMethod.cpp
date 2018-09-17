@@ -103,7 +103,7 @@ void ModifiedNextReactionMethod::perform(string filename, double simulTime, doub
     if (currentTime != inf)
     {
         currentTime = beginTime;
-        while (currentTime <= simulTime)
+        while (currentTime < simulTime)
         {
             log->insertNode(currentTime, specQuantity);
             reacSelection();

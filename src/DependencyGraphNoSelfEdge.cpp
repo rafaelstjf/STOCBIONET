@@ -25,7 +25,7 @@ void DependencyGraphNoSelfEdge::createGraph(int numReactions, int **reactants, i
     for (int i = 0; i < numReactions; i++)
     {
         //affects = reactants U products
-        affects[i] = unionSet(reactants[i], products[i]);
+        affects[i] = unionSet(reactants, products, i);
     }
 
     for (int i = 0; i < numReactions; i++)
@@ -33,7 +33,7 @@ void DependencyGraphNoSelfEdge::createGraph(int numReactions, int **reactants, i
         for (int j = 0; j < numReactions; j++)
         {
             int count = 0;
-            int *inter = intersectionSet(affects[i], reactants[j]);
+            int *inter = intersectionSet(affects[i], reactants, j);
             //if the intersection isn't an empty set so there is a dependency
             for (int k = 0; k < numSpecies; k++)
             {

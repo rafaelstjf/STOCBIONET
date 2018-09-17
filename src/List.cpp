@@ -4,7 +4,7 @@ List::List(int c)
 {
     //create a new array of HeapNode pointers with the capacity C
     capacity = c;
-    arr = new HeapNode* [capacity];
+    arr = new HeapNode *[capacity];
     inUse = 0;
 }
 List::~List()
@@ -73,7 +73,39 @@ void List::print()
         cout << arr[i]->getIndex() << " : " << arr[i]->getTime() << endl;
     }
 }
-
+void List::removeFirst()
+{
+    for (int i = 1; i < inUse; i++)
+    {
+        arr[i - 1] = arr[i];
+    }
+    arr[inUse - 1] = nullptr;
+    inUse--;
+}
+void List::removeIndex(int index)
+{
+    if (index < inUse)
+    {
+        if (index == 0)
+        {
+            removeFirst();
+        }
+        else if (index == inUse - 1)
+        {
+            arr[index] = nullptr;
+            inUse--;
+        }
+        else
+        {
+            for (int i = index + 1; i < inUse; i++)
+            {
+                arr[i - 1] = arr[i];
+            }
+            arr[inUse - 1] = nullptr;
+            inUse--;
+        }
+    }
+}
 bool List::isSort()
 {
     if (inUse > 0)

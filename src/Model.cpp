@@ -50,20 +50,20 @@ void Model::loadModel(string filename)
         text.clear();
         specNumber = specNameNumber.size();
         reacNumber = reactions.size();
-        //Lines = reactions. Columns = species.
-        reactants = new int *[reacNumber];
-        products = new int *[reacNumber];
-        delaysValue = new double *[reacNumber];
-        delaysVariation = new double *[reacNumber];
+        //Lines = species; Columns = reactions
+        reactants = new int *[specNumber];
+        products = new int *[specNumber];
+        delaysValue = new double *[specNumber];
+        delaysVariation = new double *[specNumber];
         reacRate = new double[reacNumber];
         try
         {
-            for (i = 0; i < reacNumber; i++)
+            for (i = 0; i < specNumber; i++)
             {
-                reactants[i] = new int[specNumber];
-                products[i] = new int[specNumber];
-                delaysValue[i] = new double[specNumber];
-                delaysVariation[i] = new double[specNumber];
+                reactants[i] = new int[reacNumber];
+                products[i] = new int[reacNumber];
+                delaysValue[i] = new double[reacNumber];
+                delaysVariation[i] = new double[reacNumber];
             }
         }
         catch(bad_alloc &b)
@@ -72,9 +72,9 @@ void Model::loadModel(string filename)
             exit(1);
         }
         //clears all the matrices
-        for (i = 0; i < reacNumber; i++)
+        for (i = 0; i < specNumber; i++)
         {
-            for (j = 0; j < specNumber; j++)
+            for (j = 0; j < reacNumber; j++)
             {
                 reactants[i][j] = 0;
                 products[i][j] = 0;
@@ -88,15 +88,15 @@ void Model::loadModel(string filename)
             Reaction *r = reactions[i];
             sQ = r->getReactants();
             for (j = 0; j < sQ.size(); j++)
-                reactants[i][sQ[j]->getSpecie()->getNumber()] = sQ[j]->getQuantity();
+                reactants[sQ[j]->getSpecie()->getNumber()][i] = sQ[j]->getQuantity();
             sQ2 = r->getProducts();
             for (j = 0; j < sQ2.size(); j++)
             {
-                products[i][sQ2[j]->getSpecie()->getNumber()] = sQ2[j]->getQuantity();
+                products[sQ2[j]->getSpecie()->getNumber()][i] = sQ2[j]->getQuantity();
                 if (sQ2[j]->getDelay()->getValue() > 0.0)
-                    delaysValue[i][sQ2[j]->getSpecie()->getNumber()] = sQ2[j]->getDelay()->getValue();
+                    delaysValue[sQ2[j]->getSpecie()->getNumber()][i] = sQ2[j]->getDelay()->getValue();
                 if (sQ2[j]->getDelay()->getVariation() > 0.0)
-                    delaysValue[i][sQ2[j]->getSpecie()->getNumber()] = sQ2[j]->getDelay()->getVariation();
+                    delaysValue[sQ2[j]->getSpecie()->getNumber()][i] = sQ2[j]->getDelay()->getVariation();
             }
         }
         sQ.clear();
@@ -182,12 +182,12 @@ double* Model::getReacRateArray()
 }
 void Model::buildStoichiometryMatrix()
 {
-    stoiMatrix = new int*[reacNumber];
-    for(int i = 0; i < reacNumber; i++)
-        stoiMatrix[i] = new int[specNumber];
-    for(int i = 0; i < reacNumber; i++)
+    stoiMatrix = new int*[specNumber];
+    for(int i = 0; i < specNumber; i++)
+        stoiMatrix[i] = new int[reacNumber];
+    for(int i = 0; i < specNumber; i++)
     {
-        for(int j = 0; j < specNumber; j++)
+        for(int j = 0; j < reacNumber; j++)
         {
             stoiMatrix[i][j] = -1*reactants[i][j] + products[i][j];
         }

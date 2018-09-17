@@ -25,6 +25,7 @@ void RejectionMethod::initialization(string filename, double simultime, long int
     if (model->isModelLoaded())
     {
         log = new Log(model->getSpecNumber());
+        list = new List(model->getReacNumber());
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
         dg = new DependencyGraph(model->getReacNumber(), model->getReactants(), model->getProducts(), model->getSpecNumber());
@@ -42,57 +43,60 @@ void RejectionMethod::reacTimeGeneration()
 }
 void RejectionMethod::reacExecution()
 {
-    calcPropensity();
     double tal;
-    while (currentTime <= simulTime)
+    double u = ut->getRandomNumber();
+    double teta = (-1 * ut->ln(u)) / totalPropensity;
+    selectedNode = list->getMin();
+    if (selectedNode != nullptr && (selectedNode->getTime() > currentTime && selectedNode->getTime() <= currentTime + teta))
     {
-        double u = ut->getRandomNumber();
-        double teta = (-1 * ut->ln(u)) / totalPropensity;
-        selectedNode = list->getMin();
-        if (selectedNode != nullptr && (selectedNode->getTime() > currentTime && selectedNode->getTime() <= currentTime + teta))
+        tal = selectedNode->getTime();
+        int size = list->getSize();
+        for (int i = 0; i < size; i++)
         {
-            tal = selectedNode->getTime();
-            int size = list->getSize();
-            for (int i = 0; i < size; i++)
+            HeapNode *currentNode = list->getOnPosition(i);
+            if (currentNode->getTime() == tal)
             {
-                HeapNode *currentNode = list->getOnPosition(i);
-                if (currentNode->getTime() == tal)
+                list->removeIndex(i);
+                int *depArray = dg->getDependencies(currentNode->getIndex());
+                int depSize = dg->getDependenciesSize(currentNode->getIndex());
+                for (int j = 0; j < model->getSpecNumber(); j++)
                 {
-                    int *depArray = dg->getDependencies(currentNode->getIndex());
-                    int depSize = dg->getDependenciesSize(currentNode->getIndex());
-                    for (int j = 0; j < depSize; j++)
-                    {
-                        calcPropOne(depArray[i]);
-                    }
-                    delete depArray;
+                    int coef = model->getStoiMatrix()[j][currentNode->getIndex()];
+                    if(coef > 0)
+                        specQuantity[j] = specQuantity[j] + model->getStoiMatrix()[j][currentNode->getIndex()];
                 }
+                for (int j = 0; j < depSize; j++)
+                {
+                    calcPropOne(depArray[i]);
+                }
+                delete depArray;
             }
-            currentTime = tal;
         }
-        else
+        currentTime = tal;
+    }
+    else
+    {
+        u = ut->getRandomNumber();
+        double selector;
+        selector = totalPropensity * u;
+        for (int i = 0; i < model->getReacNumber(); i++)
         {
-            u = ut->getRandomNumber();
-            double selector;
-            selector = totalPropensity * u;
-            for (int i = 0; i < model->getReacNumber(); i++)
+            selector = selector - propArray[i];
+            if (selector <= EP)
             {
-                selector = selector - propArray[i];
-                if (selector <= EP)
-                {
-                    selectedReaction = i;
-                    break;
-                }
+                selectedReaction = i;
+                break;
             }
-            updateSpeciesQuantities(selectedReaction);
-            currentTime = currentTime + teta;
-            int *depArray = dg->getDependencies(selectedReaction);
-            int depSize = dg->getDependenciesSize(selectedReaction);
-            for (int j = 0; j < depSize; j++)
-            {
-                calcPropOne(depArray[j]);
-            }
-            delete depArray;
         }
+        updateSpeciesQuantities(selectedReaction);
+        currentTime = currentTime + teta;
+        int *depArray = dg->getDependencies(selectedReaction);
+        int depSize = dg->getDependenciesSize(selectedReaction);
+        for (int j = 0; j < depSize; j++)
+        {
+            calcPropOne(depArray[j]);
+        }
+        delete depArray;
     }
 }
 void RejectionMethod::perform(string filename, double simulTime, double beginTime, long int seed)
@@ -107,6 +111,13 @@ void RejectionMethod::perform(string filename, double simulTime, double beginTim
     }
     double beg = ut->getCurrentTime(); //beginning of the simulation
     currentTime = beginTime;
+    calcPropensity();
+    while (currentTime < simulTime)
+    {
+        reacExecution();
+        log->insertNode(currentTime, specQuantity);
+    }
+    log->insertNode(currentTime, specQuantity);
 }
 RejectionMethod::~RejectionMethod()
 {

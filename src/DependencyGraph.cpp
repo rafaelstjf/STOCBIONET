@@ -24,7 +24,7 @@ void DependencyGraph::createGraph(int numReactions, int **reactants, int **produ
     for (int i = 0; i < numReactions; i++)
     {
         //affects = reactants U products
-        affects[i] = unionSet(reactants[i], products[i]);
+        affects[i] = unionSet(reactants, products, i);
     }
 
     for (int i = 0; i < numReactions; i++)
@@ -32,7 +32,7 @@ void DependencyGraph::createGraph(int numReactions, int **reactants, int **produ
         for (int j = 0; j < numReactions; j++)
         {
             int count = 0;
-            int *inter = intersectionSet(affects[i], reactants[j]);
+            int *inter = intersectionSet(affects[i], reactants, j);
             //if the intersection isn't an empty set so there is a dependency
             for (int k = 0; k < numSpecies; k++)
             {
@@ -81,31 +81,31 @@ void DependencyGraph::printGraph()
         cout << endl;
     }
 }
-int *DependencyGraph::unionSet(int *a, int *b)
+int *DependencyGraph::unionSet(int **a, int **b, int reacIndex)
 //return a vector with the union of the arrays a and b
 {
     int *un = new int[numSpecies];
     for (int i = 0; i < numSpecies; i++)
     {
         //lado direito para o esquerdo
-        if (b[i] != a[i] && b[i] > a[i]) //a = 1
-            un[i] = b[i] - a[i];
-        else if(b[i] != a[i] && b[i] < a[i]) // a = 0
-            un[i] = a[i] - b[i];
-        else if(b[i] == a[i])
+        if (b[i][reacIndex] != a[i][reacIndex] && b[i][reacIndex] > a[i][reacIndex]) //a = 1
+            un[i] = b[i][reacIndex] - a[i][reacIndex];
+        else if(b[i][reacIndex] != a[i][reacIndex] && b[i][reacIndex] < a[i][reacIndex]) // a = 0
+            un[i] = a[i][reacIndex] - b[i][reacIndex];
+        else if(b[i][reacIndex] == a[i][reacIndex])
             un[i] = 0;
     }
     return un;
 }
-int *DependencyGraph::intersectionSet(int *a, int *b)
+int *DependencyGraph::intersectionSet(int *a, int **b, int reacIndex)
 //return a vector with the intersection of the arrays a and b
 {
     int *in = new int[numSpecies];
     for (int i = 0; i < numSpecies; i++)
     {
-        if (b[i] == 0 && a[i] == 0)
+        if (b[i][reacIndex] == 0 && a[i] == 0)
             in[i] = 0;
-        else if(b[i]!= 0 && a[i] != 0)
+        else if(b[i][reacIndex]!= 0 && a[i] != 0)
             in[i] = 1;
         else
             in[i] = 0;

@@ -90,7 +90,7 @@ void DirectMethod::perform(string filename, double simulTime, double beginTime, 
     t = 0.0;
     //peforms the simulation
     calcPropensity(); //calculate the reactions propensity
-    while (currentTime <= simulTime)
+    while (currentTime < simulTime)
     {
         //saves the current species quantities on the log
         log->insertNode(currentTime, specQuantity);

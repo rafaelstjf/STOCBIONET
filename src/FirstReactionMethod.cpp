@@ -50,7 +50,7 @@ void FirstReactionMethod::perform(string filename, double simulTime, double begi
     currentTime = beginTime;
     //performs the simulation
     calcPropensity();
-    while (currentTime <= simulTime)
+    while (currentTime < simulTime)
     {
         //saves the current species quantities on the log
         log->insertNode(currentTime, specQuantity);

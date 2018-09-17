@@ -132,7 +132,7 @@ void NextReactionMethodCompact::perform(string filename, double simulTime, doubl
     reacSelection();
     if (currentTime != INF)
     {
-        while (currentTime <= simulTime)
+        while (currentTime < simulTime)
         {
             reacExecution();
             log->insertNode(currentTime, specQuantity);

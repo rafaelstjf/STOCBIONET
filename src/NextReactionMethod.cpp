@@ -140,7 +140,7 @@ void NextReactionMethod::perform(string filename, double simulTime, double begin
     reacSelection(); //just to check if the time = inf
     if (currentTime != INF)
     {
-        while (currentTime <= simulTime)
+        while (currentTime < simulTime)
         {
             reacExecution(); //executes the reaction
             //saves the species quantities
