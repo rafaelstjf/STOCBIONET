@@ -5,6 +5,7 @@
 #include "../include/NextReactionMethod.hpp"
 #include "../include/NextReactionMethodCompact.hpp"
 #include "../include/SimplifiedNextReactionMethod.hpp"
+#include "../include/RejectionMethod.hpp"
 #include "../include/ModifiedNextReactionMethod.hpp"
 
 using namespace std;
@@ -31,7 +32,7 @@ int main(int argc, char *argv[])
         cin >> beginTime;
         cout << "Insert the simulation time:" << endl;
         cin >> simulTime;
-        cout << "Operations:\nDM - Direct Method\nFRM - First Reaction Method\nNRM - Next Reaction Method\nNRMC - Next Reaction Method Compact\nMNRM - Modified Next Reaction Method\nSNRM - Simplified Next Reaction Method\n"
+        cout << "Operations:\nDM - Direct Method\nFRM - First Reaction Method\nNRM - Next Reaction Method\nNRMC - Next Reaction Method Compact\nMNRM - Modified Next Reaction Method\nSNRM - Simplified Next Reaction Method\nRM - Rejection Method\n"
              << endl;
         cin >> op;
     }
@@ -47,6 +48,8 @@ int main(int argc, char *argv[])
         simulation = new ModifiedNextReactionMethod();
     else if (op == "SNRM")
         simulation = new SimplifiedNextReactionMethod();
+    else if (op == "RM")
+        simulation = new RejectionMethod();
     else
     {
         cout << "Error. Invalid operation!" << endl;

@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "../include/SSA.hpp"
-#include "../include/List.hpp"
+#include "../include/DelayList.hpp"
 #include "../include/HeapNode.hpp"
 using namespace std;
 
@@ -18,8 +18,8 @@ protected:
     virtual void reacTimeGeneration();
     virtual void reacSelection();
     virtual void reacExecution();
-    List* list;
-    HeapNode* selectedNode;
+    virtual void updateSpeciesQuantities(int index);
+    DelayList* list;
 
 private:
 

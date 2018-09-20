@@ -17,7 +17,7 @@ Stochastic simulation algorithms for Gene Regulatory Networks for delayed and no
  
  
  * Next reaction method compact (__99.9%__)
- * Rejection method (__0%__ )
+ * Rejection method (__85%__ )
  * Delayed modified next reaction method (__0%__ )
 
 ## Requirements:
@@ -36,6 +36,7 @@ NRM - Next Reaction Method
 NRMC - Next Reaction Method Compact
 MNRM - Modified Next Reaction Method
 SNRM - Simplified Next Reaction Method
+RM - Rejection Method
 ```
 
 ## Example of input file:
