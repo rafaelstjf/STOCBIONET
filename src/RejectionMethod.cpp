@@ -14,7 +14,7 @@ void RejectionMethod::initialization(string filename, double simultime, long int
     reacPerSecond = 0.0;
     for (int i = 0; i < filename.size(); i++)
     {
-        if (filename[i] = '.')
+        if (filename[i] == '.')
         {
             methodOutName += "_RM_output";
             break;
@@ -37,6 +37,7 @@ void RejectionMethod::initialization(string filename, double simultime, long int
 }
 void RejectionMethod::reacSelection()
 {
+    
     double u = ut->getRandomNumber();
     double selector;
     selector = totalPropensity * u;
@@ -55,20 +56,24 @@ void RejectionMethod::reacTimeGeneration()
 }
 void RejectionMethod::updateSpeciesQuantities(int index)
 {
+    reacCount++;
     //updates the reactants and add the product on the delay list if it has delay
     for (int i = 0; i < model->getSpecNumber(); i++)
     {
-        if (model->getDelaysValue()[i][index] > EP)
+        if (model->getDelaysValue()[i][index] > EP){
             list->insert(i, index, (currentTime + model->getDelaysValue()[i][index]));
+            specQuantity[i] = specQuantity[i] + model->getReactants()[i][index];
+        }
         else
             specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[i][index];
     }
 }
 void RejectionMethod::reacExecution()
 {
-    double tal;
+    double tal = 0.0;
     double u = ut->getRandomNumber();
     double teta = (-1 * ut->ln(u)) / totalPropensity;
+    cout << "ITERATION NUMBER " << reacCount << " Current Time: " << currentTime  << " Teta: "<< teta << endl;
     if (list->getArraySize() > 0 && (list->getDelayTime(0) > currentTime && list->getDelayTime(0) <= currentTime + teta))
     {
         tal = list->getDelayTime(0);
@@ -80,7 +85,7 @@ void RejectionMethod::reacExecution()
             if (delayTime == tal)
             {
                 //updates the specie quantity for each product in delay
-                specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[specIndex][reacIndex];
+                specQuantity[specIndex] = specQuantity[specIndex] + model->getProducts()[specIndex][reacIndex];
                 //updates the propensity for all the reactions that this one affects
                 int *depArray = dg->getDependencies(reacIndex);
                 int depSize = dg->getDependenciesSize(reacIndex);

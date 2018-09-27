@@ -72,7 +72,7 @@ stringstream Log::exportToStringStream()
     stringstream buffer;
     int val;
     Node *it = first;
-    if (numNodes >= 5000)
+    if (numNodes == 0)
     {
         //Simulation bigger than file
         int jump = ceil((double)numNodes / 5000);
