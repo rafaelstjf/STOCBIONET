@@ -51,19 +51,30 @@ void DirectMethod::reacSelection()
     double selector;
     double u2;
     u2 = ut->getRandomNumber();
-    selector = totalPropensity * u2;
-    for (int i = 0; i < model->getReacNumber(); i++)
+    if (totalPropensity <= EP)
+        selectedReaction = -1;
+    else
     {
-        selector = selector - propArray[i];
-        if (selector <= EP)
+
+        selector = totalPropensity * u2;
+        for (int i = 0; i < model->getReacNumber(); i++)
         {
-            selectedReaction = i;
-            break;
+            selector = selector - propArray[i];
+            if (selector <= EP)
+            {
+                selectedReaction = i;
+                break;
+            }
         }
     }
 }
 void DirectMethod::reacExecution()
 {
+    if (selectedReaction == -1)
+    {
+        currentTime = INF;
+        return;
+    }
     updateSpeciesQuantities(selectedReaction);
     //check the dependencies of the selected reaction and update the propensity array
     int *depArray = dg->getDependencies(selectedReaction);

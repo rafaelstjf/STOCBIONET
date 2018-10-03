@@ -37,19 +37,25 @@ void RejectionMethod::initialization(string filename, double simultime, long int
 }
 void RejectionMethod::reacSelection()
 {
-    
+
     double u = ut->getRandomNumber();
     double selector;
-    selector = totalPropensity * u;
-    for (int i = 0; i < model->getReacNumber(); i++)
+    if (totalPropensity <= EP)
+        selectedReaction = -1;
+    else
     {
-        selector = selector - propArray[i];
-        if (selector <= EP)
+        selector = totalPropensity * u;
+        for (int i = 0; i < model->getReacNumber(); i++)
         {
-            selectedReaction = i;
-            break;
+            selector = selector - propArray[i];
+            if (selector <= EP)
+            {
+                selectedReaction = i;
+                break;
+            }
         }
     }
+    cout << "Selected reaction: " << selectedReaction << endl;
 }
 void RejectionMethod::reacTimeGeneration()
 {
@@ -60,9 +66,10 @@ void RejectionMethod::updateSpeciesQuantities(int index)
     //updates the reactants and add the product on the delay list if it has delay
     for (int i = 0; i < model->getSpecNumber(); i++)
     {
-        if (model->getDelaysValue()[i][index] > EP){
+        if (model->getDelaysValue()[i][index] > EP)
+        {
             list->insert(i, index, (currentTime + model->getDelaysValue()[i][index]));
-            specQuantity[i] = specQuantity[i] + model->getReactants()[i][index];
+            specQuantity[i] = specQuantity[i] - model->getReactants()[i][index];
         }
         else
             specQuantity[i] = specQuantity[i] + model->getStoiMatrix()[i][index];
@@ -70,14 +77,20 @@ void RejectionMethod::updateSpeciesQuantities(int index)
 }
 void RejectionMethod::reacExecution()
 {
+    cout << "PROPENSITY: " << totalPropensity << endl;
     double tal = 0.0;
     double u = ut->getRandomNumber();
     double teta = (-1 * ut->ln(u)) / totalPropensity;
-    cout << "ITERATION NUMBER " << reacCount << " Current Time: " << currentTime  << " Teta: "<< teta << endl;
+    double sum = 0;
+    /*for (int i = 0; i < model->getSpecNumber(); i++)
+        sum += specQuantity[i];
+    cout << "ITERATION NUMBER " << reacCount << " Current Time: " << currentTime << " Teta: " << teta << " ESPECIES QUANTITY: " << sum << endl;
+    */
     if (list->getArraySize() > 0 && (list->getDelayTime(0) > currentTime && list->getDelayTime(0) <= currentTime + teta))
     {
         tal = list->getDelayTime(0);
-        for (int i = 0; i < list->getArraySize(); i++)
+        int i = 0;
+        while (i < list->getArraySize())
         {
             int specIndex = list->getSpecIndex(i);
             int reacIndex = list->getReacIndex(i);
@@ -87,31 +100,43 @@ void RejectionMethod::reacExecution()
                 //updates the specie quantity for each product in delay
                 specQuantity[specIndex] = specQuantity[specIndex] + model->getProducts()[specIndex][reacIndex];
                 //updates the propensity for all the reactions that this one affects
-                int *depArray = dg->getDependencies(reacIndex);
+                /* int *depArray = dg->getDependencies(reacIndex);
                 int depSize = dg->getDependenciesSize(reacIndex);
                 for (int j = 0; j < depSize; j++)
                 {
                     calcPropOne(depArray[j]);
                 }
-                delete depArray;
+                delete depArray; */
+                calcPropensity();
                 list->removeByArrayIndex(i);
                 i--; //reduces the iterator because of the removal
             }
+            i++;
         }
         currentTime = tal;
     }
     else
     {
         reacSelection();
-        updateSpeciesQuantities(selectedReaction);
-        currentTime = currentTime + teta;
-        int *depArray = dg->getDependencies(selectedReaction);
-        int depSize = dg->getDependenciesSize(selectedReaction);
-        for (int j = 0; j < depSize; j++)
+        if (selectedReaction == -1)
         {
-            calcPropOne(depArray[j]);
+            currentTime = INF;
         }
-        delete depArray;
+        else
+        {
+
+            updateSpeciesQuantities(selectedReaction);
+            currentTime = currentTime + teta;
+            /*
+            int *depArray = dg->getDependencies(selectedReaction);
+            int depSize = dg->getDependenciesSize(selectedReaction);
+            for (int j = 0; j < depSize; j++)
+            {
+                calcPropOne(depArray[j]);
+            }
+            delete depArray; */
+            calcPropensity();
+        }
     }
 }
 void RejectionMethod::perform(string filename, double simulTime, double beginTime, long int seed)
