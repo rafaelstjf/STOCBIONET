@@ -6,7 +6,6 @@
 #include "../include/HeapNode.hpp"
 #include "../include/IndexedPrioQueue.hpp"
 #include "../include/List.hpp"
-#include "../include/DependencyGraphNoSelfEdge.hpp"
 
 using namespace std;
 

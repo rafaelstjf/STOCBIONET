@@ -2,14 +2,15 @@
 DependencyGraph::DependencyGraph()
 {
 }
-DependencyGraph::DependencyGraph(int numReactions, int **reactants, int **products, int numSpecies)
+DependencyGraph::DependencyGraph(double selfEdges, int **reactants, int **products, int numReactions, int numSpecies)
 {
-    createGraph(numReactions,reactants,products,numSpecies);
+    createGraph(selfEdges, reactants, products, numReactions, numSpecies);
 }
-void DependencyGraph::createGraph(int numReactions, int **reactants, int **products, int numSpecies)
+void DependencyGraph::createGraph(double selfEdges, int **reactants, int **products, int numReactions, int numSpecies)
 {
     int **affects; //set of substances that change quantity when the reaction i is executed
     //graph struct
+    this->selfEdges = selfEdges;
     this->numReactions = numReactions;
     this->numSpecies = numSpecies;
     vertex = new DGVertex *[numReactions];
@@ -40,14 +41,27 @@ void DependencyGraph::createGraph(int numReactions, int **reactants, int **produ
                     count++;
             }
             delete[] inter;
-            if (count > 0 || i==j){ //i==j always insert a self-edge
-                insertDependency(i, j);
+            if (selfEdges == true)
+            {
+                if (count > 0 || i == j)
+                { //i==j always insert a self-edge
+                    insertDependency(i, j);
+                }
+            }
+            else
+            {
+                if (count > 0)
+                {
+                    if (i != j) //doesn't insert the self dependency
+                        insertDependency(i, j);
+                }
             }
 
             //j depends on i
         }
     }
-    for(int i = 0; i < numReactions; i++){
+    for (int i = 0; i < numReactions; i++)
+    {
         delete[] affects[i];
     }
     delete[] affects;
@@ -90,9 +104,9 @@ int *DependencyGraph::unionSet(int **a, int **b, int reacIndex)
         //lado direito para o esquerdo
         if (b[i][reacIndex] != a[i][reacIndex] && b[i][reacIndex] > a[i][reacIndex]) //a = 1
             un[i] = b[i][reacIndex] - a[i][reacIndex];
-        else if(b[i][reacIndex] != a[i][reacIndex] && b[i][reacIndex] < a[i][reacIndex]) // a = 0
+        else if (b[i][reacIndex] != a[i][reacIndex] && b[i][reacIndex] < a[i][reacIndex]) // a = 0
             un[i] = a[i][reacIndex] - b[i][reacIndex];
-        else if(b[i][reacIndex] == a[i][reacIndex])
+        else if (b[i][reacIndex] == a[i][reacIndex])
             un[i] = 0;
     }
     return un;
@@ -105,7 +119,7 @@ int *DependencyGraph::intersectionSet(int *a, int **b, int reacIndex)
     {
         if (b[i][reacIndex] == 0 && a[i] == 0)
             in[i] = 0;
-        else if(b[i][reacIndex]!= 0 && a[i] != 0)
+        else if (b[i][reacIndex] != 0 && a[i] != 0)
             in[i] = 1;
         else
             in[i] = 0;
@@ -114,8 +128,9 @@ int *DependencyGraph::intersectionSet(int *a, int **b, int reacIndex)
 }
 DependencyGraph::~DependencyGraph()
 {
-    for(int i = 0; i < numReactions; i++){
+    for (int i = 0; i < numReactions; i++)
+    {
         delete vertex[i];
     }
-    delete [] vertex;
+    delete[] vertex;
 }

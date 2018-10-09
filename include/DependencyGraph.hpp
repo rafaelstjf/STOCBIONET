@@ -8,15 +8,16 @@ class DependencyGraph
 {
 public:
   DependencyGraph();
-  DependencyGraph(int numReactions, int **reactants, int **products, int numSpecies);
+  DependencyGraph(double selfEdges, int **reactants, int **products,  int numReactions, int numSpecies);
   virtual int *getDependencies(int id);
   virtual void insertDependency(int id, int val);
   virtual void printGraph();
-  virtual void createGraph(int numReactions, int **reactants, int **products, int numSpecies);
+  virtual void createGraph(double selfEdges, int **reactants, int **products, int numReactions, int numSpecies);
   virtual int getDependenciesSize(int id);
   virtual ~DependencyGraph();
 
 protected:
+  double selfEdges;
   int numReactions; //size of the vector
   int numSpecies;
   DGVertex **vertex;
