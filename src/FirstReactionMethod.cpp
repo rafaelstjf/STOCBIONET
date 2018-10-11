@@ -7,7 +7,8 @@ void FirstReactionMethod::initialization(string filename, double simulTime, long
     if (seed >= 0)
         ut = new Utils(seed); //instantiates the utility class
     else
-        ut = new Utils(); //instantiates the utility class    model->loadModel(filename);
+        ut = new Utils(); //instantiates the utility class
+    model->loadModel(filename);
     sucess = false;
     this->simulTime = simulTime;
     reacCount = 0;
