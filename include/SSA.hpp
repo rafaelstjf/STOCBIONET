@@ -18,7 +18,7 @@ using namespace std;
 class SSA
 {
   public:
-    virtual void perform(string filename, double simulTime, double beginTime, long int seed) = 0;
+    virtual void perform(Model* model, double simulTime, double beginTime, long int seed) = 0;
     virtual bool checkSucess();
     virtual ~SSA();
     virtual void printResult();
@@ -43,7 +43,7 @@ class SSA
     bool sucess;          //boolean variable used to check if the simulation was performed
 
     //functions
-    virtual void initialization(string filename, double simultime, long int seed) = 0; //read the model and initialization data structures
+    virtual void initialization(Model* model, double simultime, long int seed) = 0; //read the model and initialization data structures
     virtual void calcPropensity();                                      //calculate the propensity function for each reaction
     virtual void calcPropOne(int index);
     virtual void reacTimeGeneration() = 0;

@@ -1,15 +1,16 @@
 #include "../include/ModifiedNextReactionMethod.hpp"
 
-void ModifiedNextReactionMethod::initialization(string filename, double simulTime, long int seed)
+void ModifiedNextReactionMethod::initialization(Model *model, double simulTime, long int seed)
 {
     //instantiates the variables
     sucess = false;
-    model = new Model();
+    string filename = model->getFilename();
+    this->model = model;
     if (seed >= 0)
         ut = new Utils(seed); //instantiates the utility class
     else
         ut = new Utils(); //instantiates the utility class    this->simulTime = simulTime;
-    model->loadModel(filename);
+
     reacCount = 0;
     reacPerSecond = 0.0;
     //creates the output file's name
@@ -84,10 +85,10 @@ void ModifiedNextReactionMethod::reacExecution()
         queue->update(i, nt);
     }
 }
-void ModifiedNextReactionMethod::perform(string filename, double simulTime, double beginTime, long int seed)
+void ModifiedNextReactionMethod::perform(Model* model, double simulTime, double beginTime, long int seed)
 {
     cout << "-----------MODIFIED NEXT REACTION METHOD-----------" << endl;
-    initialization(filename, simulTime, seed); //instantiates the variables
+    initialization(model, simulTime, seed); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
     {

@@ -1,14 +1,14 @@
 #include "../include/FirstReactionMethod.hpp"
 
-void FirstReactionMethod::initialization(string filename, double simulTime, long int seed)
+void FirstReactionMethod::initialization(Model* model, double simulTime, long int seed)
 {
     //instantiates the variables
-    model = new Model();
+    this->model = model;
+    string filename = model->getFilename();
     if (seed >= 0)
         ut = new Utils(seed); //instantiates the utility class
     else
         ut = new Utils(); //instantiates the utility class
-    model->loadModel(filename);
     sucess = false;
     this->simulTime = simulTime;
     reacCount = 0;
@@ -37,10 +37,10 @@ void FirstReactionMethod::initialization(string filename, double simulTime, long
         }
     }
 }
-void FirstReactionMethod::perform(string filename, double simulTime, double beginTime, long int seed)
+void FirstReactionMethod::perform(Model* model, double simulTime, double beginTime, long int seed)
 {
     cout << "-----------FIRST REACTION METHOD-----------" << endl;
-    initialization(filename, simulTime, seed); //instantiates the variables
+    initialization(model, simulTime, seed); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
     {

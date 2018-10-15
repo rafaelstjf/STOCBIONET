@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cstdlib>
 #include "../include/DirectMethod.hpp"
 #include "../include/FirstReactionMethod.hpp"
 #include "../include/NextReactionMethod.hpp"
@@ -7,58 +8,162 @@
 #include "../include/SimplifiedNextReactionMethod.hpp"
 #include "../include/RejectionMethod.hpp"
 #include "../include/ModifiedNextReactionMethod.hpp"
+#include "../include/Model.hpp"
+#if defined(_WIN32)
+#define PLATFORM_NAME "windows" // Windows
+#elif defined(_linux_)
+#define PLATFORM_NAME "linux" // Linux
+#endif
 
 using namespace std;
-
+void menu(Model *model, double &beginTime, double &simulTime, long int &seed, string &op);
+void chooseSimulation(string &op);
+void clearScreen();
+void postSimulation(SSA *simulation);
 int main(int argc, char *argv[])
 {
     char printOp;
     string filename;
     string op;
     double simulTime = 0.0, beginTime = 0.0;
-    SSA *simulation;
+    SSA *simulation = nullptr;
+    long int seed = -1;
+    Model *model = new Model();
+
     if (argc == 5)
     {
         filename = argv[1];
         op = argv[2];
         beginTime = atof(argv[3]);
         simulTime = atof(argv[4]);
+        chooseSimulation(op);
+        if (op == "DM")
+            simulation = new DirectMethod();
+        else if (op == "FRM")
+            simulation = new FirstReactionMethod();
+        else if (op == "NRM")
+            simulation = new NextReactionMethod();
+        else if (op == "NRMC")
+            simulation = new NextReactionMethodCompact();
+        else if (op == "MNRM")
+            simulation = new ModifiedNextReactionMethod();
+        else if (op == "SNRM")
+            simulation = new SimplifiedNextReactionMethod();
+        else if (op == "RM")
+            simulation = new RejectionMethod();
+        if (op == "error")
+            return -1;
+        else
+        {
+            cout << "Do you want to insert a custom seed? [y|n]" << endl;
+            cin >> printOp;
+            if (printOp == 'y')
+            {
+                cout << "seed: ";
+                string seedstr;
+                cin >> seedstr;
+                cout << endl;
+                seed = atoi(seedstr.c_str());
+                if (seed < 0)
+                {
+                    cout << "Invalid seed! Performing the simulation using a random seed." << endl;
+                    seed = -1;
+                }
+            }
+        }
+        model->loadModel(filename);
+        simulation->perform(model, simulTime, beginTime, seed);
+        postSimulation(simulation);
+        delete simulation;
     }
     else
     {
-        cout << "Insert the filename (with the extension):" << endl;
+        double repeat = true;
+        while (repeat)
+        {
+            menu(model, beginTime, simulTime, seed, op);
+            if (op == "DM")
+                simulation = new DirectMethod();
+            else if (op == "FRM")
+                simulation = new FirstReactionMethod();
+            else if (op == "NRM")
+                simulation = new NextReactionMethod();
+            else if (op == "NRMC")
+                simulation = new NextReactionMethodCompact();
+            else if (op == "MNRM")
+                simulation = new ModifiedNextReactionMethod();
+            else if (op == "SNRM")
+                simulation = new SimplifiedNextReactionMethod();
+            else if (op == "RM")
+                simulation = new RejectionMethod();
+            clearScreen();
+            simulation->perform(model, simulTime, beginTime, seed);
+            postSimulation(simulation);
+            delete simulation;
+            cout << "Do you want to perform another simulation? [y|n]" << endl;
+            cin >> printOp;
+            if (printOp != 'y' && printOp != 'Y')
+                repeat = false;
+            else
+            {
+                simulation = nullptr;
+            }
+        }
+    }
+
+    delete model;
+    return 0;
+}
+void menu(Model *model, double &beginTime, double &simulTime, long int &seed, string &op)
+{
+    string filename;
+    char printOp;
+    clearScreen();
+    //prints the menu
+    cout << "------------------------------------" << endl;
+    cout << "---------------SSA------------------" << endl;
+    cout << "------------------------------------" << endl;
+    if (model->getFilename() == "")
+    {
+        //load a new model if there is any other loaded
+        cout << "Insert the file path and name (with the extension):" << endl;
         cin >> filename;
-        cout << "Insert the initial time:" << endl;
-        cin >> beginTime;
-        cout << "Insert the simulation time:" << endl;
-        cin >> simulTime;
-        cout << "Operations:\nDM - Direct Method\nFRM - First Reaction Method\nNRM - Next Reaction Method\nNRMC - Next Reaction Method Compact\nMNRM - Modified Next Reaction Method\nSNRM - Simplified Next Reaction Method\nRM - Rejection Method\n"
-             << endl;
-        cin >> op;
+        model->loadModel(filename);
     }
-    if (op == "DM")
-        simulation = new DirectMethod();
-    else if (op == "FRM")
-        simulation = new FirstReactionMethod();
-    else if (op == "NRM")
-        simulation = new NextReactionMethod();
-    else if (op == "NRMC")
-        simulation = new NextReactionMethodCompact();
-    else if (op == "MNRM")
-        simulation = new ModifiedNextReactionMethod();
-    else if (op == "SNRM")
-        simulation = new SimplifiedNextReactionMethod();
-    else if (op == "RM")
-        simulation = new RejectionMethod();
     else
     {
-        cout << "Error. Invalid operation!" << endl;
-        return -1;
+        cout << "Current loaded model: " << model->getFilename() << endl;
+        cout << "Do you want to load a new model? [y|n]" << endl;
+        cin >> printOp;
+        if (printOp == 'y' || printOp == 'Y')
+        {
+            cout << "Insert the file path and name (with the extension):" << endl;
+            cin >> filename;
+            model->loadModel(filename);
+        }
+    }
+    cout << "Insert the initial time:" << endl;
+    cin >> beginTime;
+    cout << "Insert the simulation time:" << endl;
+    cin >> simulTime;
+    cout << "Methods:\nDM - Direct Method\nFRM - First Reaction Method\nNRM - Next Reaction Method\nNRMC - Next Reaction Method Compact\nMNRM - Modified Next Reaction Method\nSNRM - Simplified Next Reaction Method\nRM - Rejection Method\n"
+         << endl;
+    cout << "Insert the Method:" << endl;
+    double flag = true;
+    while (flag)
+    {
+        cin >> op;
+        chooseSimulation(op);
+        if (op != "error")
+            flag = false;
+        else
+        {
+            cout << "Insert the Method again:" << endl;
+        }
     }
     cout << "Do you want to insert a custom seed? [y|n]" << endl;
     cin >> printOp;
-    long int seed = -1;
-    if (printOp == 'y')
+    if (printOp == 'y' || printOp == 'Y')
     {
         cout << "seed: ";
         string seedstr;
@@ -71,18 +176,35 @@ int main(int argc, char *argv[])
             seed = -1;
         }
     }
-    simulation->perform(filename, simulTime, beginTime, seed);
+}
+void chooseSimulation(string &op)
+{
+    if (op != "DM" && op != "FRM" && op != "NRM" && op != "NRMC" && op != "MNRM" && op != "SNRM" && op != "RM")
+    {
+        cout << "Error. Invalid operation!" << endl;
+        op = "error";
+    }
+}
+void postSimulation(SSA *simulation)
+{
+    char printOp;
     if (simulation->checkSucess())
     {
         cout << "Do you want to print the results? [y|n]" << endl;
         cin >> printOp;
-        if (printOp == 'y')
+        if (printOp == 'y' || printOp == 'Y')
             simulation->printResult();
         cout << "Do you want to save the results in a file? [y|n]" << endl;
         cin >> printOp;
-        if (printOp == 'y')
+        if (printOp == 'y' || printOp == 'Y')
             simulation->saveToFile();
     }
-    delete simulation;
-    return 0;
+}
+void clearScreen()
+{
+    //clear the screen
+    if (PLATFORM_NAME == "windows")
+        system("cls");
+    if (PLATFORM_NAME == "linux")
+        system("clear");
 }

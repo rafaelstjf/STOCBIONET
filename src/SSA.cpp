@@ -2,7 +2,7 @@
 SSA::~SSA()
 {
     delete dg;
-    delete model;
+    //delete model;
     delete ut;
     delete log;
     delete[] specQuantity;

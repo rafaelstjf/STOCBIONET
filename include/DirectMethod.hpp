@@ -10,12 +10,12 @@ class DirectMethod : public SSA
 {
 public:
 
-    void perform(string filename, double simulTime, double beginTime, long int seed);
+    void perform(Model* model, double simulTime, double beginTime, long int seed);
     virtual ~DirectMethod();
 
 protected:
     double t;
-    virtual void initialization(string filename,  double simulTime, long int seed); //read the model and initialization data structures
+    virtual void initialization(Model* model,  double simulTime, long int seed); //read the model and initialization data structures
     virtual void reacTimeGeneration();
     virtual void reacSelection();
     virtual void reacExecution();

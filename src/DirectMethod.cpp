@@ -1,13 +1,13 @@
 #include "../include/DirectMethod.hpp"
-void DirectMethod::initialization(string filename, double simulTime, long int seed)
+void DirectMethod::initialization(Model *model, double simulTime, long int seed)
 {
     //instantiates the variables
-    model = new Model(); //instantiates the model
+    this->model = model; //instantiates the model
+    string filename = model->getFilename();
     if (seed >= 0)
         ut = new Utils(seed); //instantiates the utility class
     else
         ut = new Utils(); //instantiates the utility class
-    model->loadModel(filename);
     t = 0.0; //tal
     selectedReaction = 0;
     this->simulTime = simulTime;
@@ -86,10 +86,10 @@ void DirectMethod::reacExecution()
     delete[] depArray;
     currentTime = currentTime + t;
 }
-void DirectMethod::perform(string filename, double simulTime, double beginTime, long int seed)
+void DirectMethod::perform(Model* model, double simulTime, double beginTime, long int seed)
 {
     cout << "-----------DIRECT METHOD-----------" << endl;
-    initialization(filename, simulTime, seed); //instantiates the variables
+    initialization(model, simulTime, seed); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
     {

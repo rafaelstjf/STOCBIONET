@@ -10,11 +10,11 @@ using namespace std;
 class RejectionMethod : public SSA
 {
 public:
-    void perform(string filename, double simulTime, double beginTime, long int seed);
+    void perform(Model* model, double simulTime, double beginTime, long int seed);
     virtual ~RejectionMethod();
 
 protected:
-    virtual void initialization(string filename, double simultime, long int seed);
+    virtual void initialization(Model* model, double simultime, long int seed);
     virtual void reacTimeGeneration();
     virtual void reacSelection();
     virtual void reacExecution();

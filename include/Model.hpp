@@ -28,6 +28,7 @@ public:
     vector<string> getModelRepresentation();
     bool isModelLoaded();
     map<string, long int> getSpecNameNumber();
+    string getFilename();
 private:
     int** reactants; //reactants matrix
     int** products; //products matrix
@@ -35,6 +36,7 @@ private:
     double** delaysVariation; //delay variation matrix
     int specNumber; //number of species in the model
     int reacNumber; //number of reactions in the model
+    string filename;
     double* reacRate; //array with the rate used in each reaction
     bool modelLoaded; //boolean to show if the model is loaded or not
     int** stoiMatrix;
@@ -42,6 +44,7 @@ private:
     map<string, long int>specNameNumber; //associative container with the species' name and number
     vector<string> modelRepresentation;
     void buildStoichiometryMatrix();
+    void clear();
 };
 
 

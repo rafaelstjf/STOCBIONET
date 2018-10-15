@@ -1,9 +1,10 @@
 #include "../include/SimplifiedNextReactionMethod.hpp"
 
-void SimplifiedNextReactionMethod::initialization(string filename, double simulTime, long int seed)
+void SimplifiedNextReactionMethod::initialization(Model *model, double simulTime, long int seed)
 {
     sucess = false;
-    model = new Model();
+    this->model = model;
+    string filename = model->getFilename();
     if (seed >= 0)
         ut = new Utils(seed); //instantiates the utility class
     else
@@ -18,7 +19,6 @@ void SimplifiedNextReactionMethod::initialization(string filename, double simulT
         else
             methodOutName += filename[i];
     }
-    model->loadModel(filename);
     if (model->isModelLoaded())
     {
         log = new Log(model->getSpecNumber());
@@ -80,10 +80,10 @@ void SimplifiedNextReactionMethod::reacExecution()
     }
     delete[] depArray;
 }
-void SimplifiedNextReactionMethod::perform(string filename, double simulTime, double beginTime, long int seed)
+void SimplifiedNextReactionMethod::perform(Model* model, double simulTime, double beginTime, long int seed)
 {
     cout << "-----------SIMPLIFIED NEXT REACTION METHOD-----------" << endl;
-    initialization(filename, simulTime, seed);
+    initialization(model, simulTime, seed);
     if (!model->isModelLoaded())
     {
         cout << "Error! Invalid model." << endl;

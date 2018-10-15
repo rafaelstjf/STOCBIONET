@@ -1,13 +1,13 @@
 #include "../include/RejectionMethod.hpp"
 
-void RejectionMethod::initialization(string filename, double simultime, long int seed)
+void RejectionMethod::initialization(Model* model, double simultime, long int seed)
 {
-    model = new Model();
+    this->model = model;
     if (seed >= 0)
         ut = new Utils(seed);
     else
         ut = new Utils();
-    model->loadModel(filename);
+    string filename = model->getFilename();
     this->simulTime - simultime;
     sucess = false;
     reacCount = 0;
@@ -139,10 +139,10 @@ void RejectionMethod::reacExecution()
         }
     }
 }
-void RejectionMethod::perform(string filename, double simulTime, double beginTime, long int seed)
+void RejectionMethod::perform(Model* model, double simulTime, double beginTime, long int seed)
 {
     cout << "-----------REJECTION METHOD-----------" << endl;
-    initialization(filename, simulTime, seed); //instantiates the variables
+    initialization(model, simulTime, seed); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
     {
