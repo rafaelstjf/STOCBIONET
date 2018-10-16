@@ -1,6 +1,6 @@
 #include "../include/RejectionMethod.hpp"
 
-void RejectionMethod::initialization(Model* model, double simultime, long int seed)
+void RejectionMethod::initialization(Model *model, double simultime, long int seed)
 {
     this->model = model;
     if (seed >= 0)
@@ -29,6 +29,8 @@ void RejectionMethod::initialization(Model* model, double simultime, long int se
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
         dg = new DependencyGraph(true, model->getReactants(), model->getProducts(), model->getReacNumber(), model->getSpecNumber());
+        ddg = new DelayedDependencyGraph(model->getReactants(), model->getProducts(), model->getReacNumber(), model->getSpecNumber());
+        ddg->printGraph();
         for (int i = 0; i < model->getSpecNumber(); i++)
         {
             specQuantity[i] = model->getInitialQuantity()[i];
@@ -77,7 +79,7 @@ void RejectionMethod::updateSpeciesQuantities(int index)
 }
 void RejectionMethod::reacExecution()
 {
-    cout << "PROPENSITY: " << totalPropensity << endl;
+    //cout << "PROPENSITY: " << totalPropensity << endl;
     double tal = 0.0;
     double u = ut->getRandomNumber();
     double teta = (-1 * ut->ln(u)) / totalPropensity;
@@ -100,14 +102,14 @@ void RejectionMethod::reacExecution()
                 //updates the specie quantity for each product in delay
                 specQuantity[specIndex] = specQuantity[specIndex] + model->getProducts()[specIndex][reacIndex];
                 //updates the propensity for all the reactions that this one affects
-                /* int *depArray = dg->getDependencies(reacIndex);
-                int depSize = dg->getDependenciesSize(reacIndex);
+                int *depArray = ddg->getDependencies(specIndex);
+                int depSize = ddg->getDependenciesSize(specIndex);
                 for (int j = 0; j < depSize; j++)
                 {
                     calcPropOne(depArray[j]);
                 }
-                delete depArray; */
-                calcPropensity();
+                delete depArray;
+                //calcPropensity();
                 list->removeByArrayIndex(i);
                 i--; //reduces the iterator because of the removal
             }
@@ -134,12 +136,13 @@ void RejectionMethod::reacExecution()
             {
                 calcPropOne(depArray[j]);
             }
-            delete depArray; */
+            delete depArray;
+            */
             calcPropensity();
         }
     }
 }
-void RejectionMethod::perform(Model* model, double simulTime, double beginTime, long int seed)
+void RejectionMethod::perform(Model *model, double simulTime, double beginTime, long int seed)
 {
     cout << "-----------REJECTION METHOD-----------" << endl;
     initialization(model, simulTime, seed); //instantiates the variables

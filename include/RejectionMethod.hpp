@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "../include/SSA.hpp"
+#include "../include/DelayedDependencyGraph.hpp"
 #include "../include/DelayList.hpp"
 #include "../include/HeapNode.hpp"
 using namespace std;
@@ -20,6 +21,7 @@ protected:
     virtual void reacExecution();
     virtual void updateSpeciesQuantities(int index);
     DelayList* list;
+    DelayedDependencyGraph* ddg;
 
 private:
 

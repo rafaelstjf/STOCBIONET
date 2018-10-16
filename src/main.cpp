@@ -72,6 +72,8 @@ int main(int argc, char *argv[])
             }
         }
         model->loadModel(filename);
+        if (!model->isModelLoaded())
+            return -1;
         simulation->perform(model, simulTime, beginTime, seed);
         postSimulation(simulation);
         delete simulation;
@@ -96,7 +98,6 @@ int main(int argc, char *argv[])
                 simulation = new SimplifiedNextReactionMethod();
             else if (op == "RM")
                 simulation = new RejectionMethod();
-            clearScreen();
             simulation->perform(model, simulTime, beginTime, seed);
             postSimulation(simulation);
             delete simulation;
@@ -127,8 +128,11 @@ void menu(Model *model, double &beginTime, double &simulTime, long int &seed, st
     {
         //load a new model if there is any other loaded
         cout << "Insert the file path and name (with the extension):" << endl;
-        cin >> filename;
-        model->loadModel(filename);
+        while (!model->isModelLoaded())
+        {
+            cin >> filename;
+            model->loadModel(filename);
+        }
     }
     else
     {
@@ -137,9 +141,14 @@ void menu(Model *model, double &beginTime, double &simulTime, long int &seed, st
         cin >> printOp;
         if (printOp == 'y' || printOp == 'Y')
         {
+            delete model;
+            model = new Model();
             cout << "Insert the file path and name (with the extension):" << endl;
-            cin >> filename;
-            model->loadModel(filename);
+            while (!model->isModelLoaded())
+            {
+                cin >> filename;
+                model->loadModel(filename);
+            }
         }
     }
     cout << "Insert the initial time:" << endl;

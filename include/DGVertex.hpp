@@ -21,7 +21,7 @@ public:
 protected:
 
 private:
-    int m; //size of the dependencies vectory
+    int m; //size of the dependencies vector
     int n;//size of the list
     int id;//id of the vertex
     vector<int> dependencies;
