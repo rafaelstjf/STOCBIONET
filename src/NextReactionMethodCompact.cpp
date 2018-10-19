@@ -34,7 +34,7 @@ void NextReactionMethodCompact::initialization(Model *model, double simulTime, l
         delta = new double[model->getReacNumber()];
         queue = new IndexedPrioQueue(model->getReacNumber());
         //it needs to use the DG without the self edge
-        dg = new DependencyGraph(false, model->getReactants(), model->getProducts(), model->getReacNumber(), model->getSpecNumber());
+        dg = new DependencyGraph(false, model);
         for (int i = 0; i < model->getSpecNumber(); i++)
         {
             specQuantity[i] = model->getInitialQuantity()[i];
@@ -115,7 +115,7 @@ void NextReactionMethodCompact::reacExecution()
     }
     delete[] depArray;
 }
-void NextReactionMethodCompact::perform(Model* model, double simulTime, double beginTime, long int seed)
+void NextReactionMethodCompact::perform(Model *model, double simulTime, double beginTime, long int seed)
 {
     cout << "-----------NEXT REACTION METHOD COMPACT-----------" << endl;
     initialization(model, simulTime, seed); //instantiates the variables

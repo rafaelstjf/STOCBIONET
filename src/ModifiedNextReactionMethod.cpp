@@ -31,7 +31,7 @@ void ModifiedNextReactionMethod::initialization(Model *model, double simulTime, 
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
         queue = new IndexedPrioQueue(model->getReacNumber());
-        dg = new DependencyGraph(true, model->getReactants(), model->getProducts(), model->getReacNumber(), model->getSpecNumber());
+        dg = new DependencyGraph(true, model);
         P = new double[model->getReacNumber()];
         T = new double[model->getReacNumber()];
         for (int i = 0; i < model->getSpecNumber(); i++)

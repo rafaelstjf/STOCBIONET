@@ -25,7 +25,7 @@ void SimplifiedNextReactionMethod::initialization(Model *model, double simulTime
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
         queue = new IndexedPrioQueue(model->getReacNumber());
-        dg = new DependencyGraph(true, model->getReactants(), model->getProducts(), model->getReacNumber(), model->getSpecNumber());
+        dg = new DependencyGraph(true, model);
         P = new double[model->getReacNumber()];
         U = new double[model->getReacNumber()];
         T = new double[model->getReacNumber()];
@@ -80,7 +80,7 @@ void SimplifiedNextReactionMethod::reacExecution()
     }
     delete[] depArray;
 }
-void SimplifiedNextReactionMethod::perform(Model* model, double simulTime, double beginTime, long int seed)
+void SimplifiedNextReactionMethod::perform(Model *model, double simulTime, double beginTime, long int seed)
 {
     cout << "-----------SIMPLIFIED NEXT REACTION METHOD-----------" << endl;
     initialization(model, simulTime, seed);

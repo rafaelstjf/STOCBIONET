@@ -2,17 +2,18 @@
 DependencyGraph::DependencyGraph()
 {
 }
-DependencyGraph::DependencyGraph(double selfEdges, int **reactants, int **products, int numReactions, int numSpecies)
+DependencyGraph::DependencyGraph(double selfEdges, Model *model)
 {
-    createGraph(selfEdges, reactants, products, numReactions, numSpecies);
+    createGraph(selfEdges, model);
 }
-void DependencyGraph::createGraph(double selfEdges, int **reactants, int **products, int numReactions, int numSpecies)
+void DependencyGraph::createGraph(double selfEdges, Model *model)
 {
+
     int **affects; //set of substances that change quantity when the reaction i is executed
     //graph struct
     this->selfEdges = selfEdges;
-    this->numReactions = numReactions;
-    this->numSpecies = numSpecies;
+    numReactions = model->getReacNumber();
+    numSpecies = model->getSpecNumber();
     vertex = new DGVertex *[numReactions];
     for (int i = 0; i < numReactions; i++)
     {
@@ -25,7 +26,7 @@ void DependencyGraph::createGraph(double selfEdges, int **reactants, int **produ
     for (int i = 0; i < numReactions; i++)
     {
         //affects = reactants U products
-        affects[i] = unionSet(reactants, products, i);
+        affects[i] = unionSet(model->getReactants(), model->getProducts(), model->getDelaysValue(), i);
     }
 
     for (int i = 0; i < numReactions; i++)
@@ -33,7 +34,7 @@ void DependencyGraph::createGraph(double selfEdges, int **reactants, int **produ
         for (int j = 0; j < numReactions; j++)
         {
             int count = 0;
-            int *inter = intersectionSet(affects[i], reactants, j);
+            int *inter = intersectionSet(affects[i], model->getReactants(), j);
             //if the intersection isn't an empty set so there is a dependency
             for (int k = 0; k < numSpecies; k++)
             {
@@ -95,31 +96,33 @@ void DependencyGraph::printGraph()
         cout << endl;
     }
 }
-int *DependencyGraph::unionSet(int **a, int **b, int reacIndex)
-//return a vector with the union of the arrays a and b
+int *DependencyGraph::unionSet(int **reactants, int **products, double **delay, int reacIndex)
+//return reactants vector with the union of the arrays reactants and products
 {
     int *un = new int[numSpecies];
     for (int i = 0; i < numSpecies; i++)
     {
         //lado direito para o esquerdo
-        if (b[i][reacIndex] != a[i][reacIndex] && b[i][reacIndex] > a[i][reacIndex]) //a = 1
-            un[i] = b[i][reacIndex] - a[i][reacIndex];
-        else if (b[i][reacIndex] != a[i][reacIndex] && b[i][reacIndex] < a[i][reacIndex]) // a = 0
-            un[i] = a[i][reacIndex] - b[i][reacIndex];
-        else if (b[i][reacIndex] == a[i][reacIndex])
+        if (delay[i][reacIndex] > 0.0)
+            un[i] = reactants[i][reacIndex];
+        else if (products[i][reacIndex] != reactants[i][reacIndex] && products[i][reacIndex] > reactants[i][reacIndex]) //reactants = 1
+            un[i] = products[i][reacIndex] - reactants[i][reacIndex];
+        else if (products[i][reacIndex] != reactants[i][reacIndex] && products[i][reacIndex] < reactants[i][reacIndex]) // reactants = 0
+            un[i] = reactants[i][reacIndex] - products[i][reacIndex];
+        else if (products[i][reacIndex] == reactants[i][reacIndex])
             un[i] = 0;
     }
     return un;
 }
-int *DependencyGraph::intersectionSet(int *a, int **b, int reacIndex)
-//return a vector with the intersection of the arrays a and b
+int *DependencyGraph::intersectionSet(int *affects, int **reactants, int reacIndex)
+//return affects vector with the intersection of the arrays affects and reactants
 {
     int *in = new int[numSpecies];
     for (int i = 0; i < numSpecies; i++)
     {
-        if (b[i][reacIndex] == 0 && a[i] == 0)
+        if (reactants[i][reacIndex] == 0 && affects[i] == 0)
             in[i] = 0;
-        else if (b[i][reacIndex] != 0 && a[i] != 0)
+        else if (reactants[i][reacIndex] != 0 && affects[i] != 0)
             in[i] = 1;
         else
             in[i] = 0;

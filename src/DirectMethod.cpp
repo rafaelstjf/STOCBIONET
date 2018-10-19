@@ -33,7 +33,7 @@ void DirectMethod::initialization(Model *model, double simulTime, long int seed)
         log = new Log(model->getSpecNumber());
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
-        dg = new DependencyGraph(true, model->getReactants(), model->getProducts(), model->getReacNumber(), model->getSpecNumber());
+        dg = new DependencyGraph(true, model);
         for (int i = 0; i < model->getSpecNumber(); i++)
         {
             specQuantity[i] = model->getInitialQuantity()[i];

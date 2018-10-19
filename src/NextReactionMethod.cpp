@@ -1,6 +1,6 @@
 #include "../include/NextReactionMethod.hpp"
 
-void NextReactionMethod::initialization(Model* model, double simulTime, long int seed)
+void NextReactionMethod::initialization(Model *model, double simulTime, long int seed)
 {
     //instantiates the variables
     sucess = false;
@@ -33,7 +33,7 @@ void NextReactionMethod::initialization(Model* model, double simulTime, long int
         propNonZero = new double[model->getReacNumber()];
         queue = new IndexedPrioQueue(model->getReacNumber());
         //it needs to use the DG without the self edge
-        dg = new DependencyGraph(false, model->getReactants(), model->getProducts(), model->getReacNumber(), model->getSpecNumber());
+        dg = new DependencyGraph(false, model);
         for (int i = 0; i < model->getSpecNumber(); i++)
         {
             specQuantity[i] = model->getInitialQuantity()[i];
@@ -122,7 +122,7 @@ void NextReactionMethod::reacExecution()
     }
     delete[] depArray;
 }
-void NextReactionMethod::perform(Model* model, double simulTime, double beginTime, long int seed)
+void NextReactionMethod::perform(Model *model, double simulTime, double beginTime, long int seed)
 {
     cout << "-----------NEXT REACTION METHOD-----------" << endl;
     initialization(model, simulTime, seed); //instantiates the variables

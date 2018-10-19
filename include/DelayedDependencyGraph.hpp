@@ -2,6 +2,7 @@
 #define DELAYEDDEPENDENCYGRAHP_HPP
 
 #include "../include/DGVertex.hpp"
+#include "../include/Model.hpp"
 #include <iostream>
 using namespace std;
 
@@ -9,8 +10,8 @@ class DelayedDependencyGraph
 {
   public:
     DelayedDependencyGraph();
-    DelayedDependencyGraph(int **reactants, int **products, int numReactions, int numSpecies);
-    void createGraph(int **reactants, int **products, int numReactions, int numSpecies);
+    DelayedDependencyGraph(Model* model);
+    void createGraph(Model* model);
     int *getDependencies(int id);
     int getDependenciesSize(int id);
     void printGraph();

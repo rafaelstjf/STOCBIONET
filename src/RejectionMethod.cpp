@@ -28,9 +28,10 @@ void RejectionMethod::initialization(Model *model, double simultime, long int se
         list = new DelayList();
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
-        dg = new DependencyGraph(true, model->getReactants(), model->getProducts(), model->getReacNumber(), model->getSpecNumber());
-        ddg = new DelayedDependencyGraph(model->getReactants(), model->getProducts(), model->getReacNumber(), model->getSpecNumber());
+        dg = new DependencyGraph(true, model);
+        ddg = new DelayedDependencyGraph(model);
         ddg->printGraph();
+        dg->printGraph();
         for (int i = 0; i < model->getSpecNumber(); i++)
         {
             specQuantity[i] = model->getInitialQuantity()[i];
@@ -129,7 +130,7 @@ void RejectionMethod::reacExecution()
 
             updateSpeciesQuantities(selectedReaction);
             currentTime = currentTime + teta;
-            /*
+            
             int *depArray = dg->getDependencies(selectedReaction);
             int depSize = dg->getDependenciesSize(selectedReaction);
             for (int j = 0; j < depSize; j++)
@@ -137,8 +138,8 @@ void RejectionMethod::reacExecution()
                 calcPropOne(depArray[j]);
             }
             delete depArray;
-            */
-            calcPropensity();
+            
+            //calcPropensity();
         }
     }
 }
