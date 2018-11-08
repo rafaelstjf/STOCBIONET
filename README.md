@@ -12,12 +12,12 @@ Stochastic simulation algorithms for Gene Regulatory Networks for delayed and no
  * Next reaction method
  * Modified next reaction method
  * Simplified next reaction method
+ * Rejection method
  
 ## Methods in development:
  
- 
+ * Rejection method using Hash Tables (__0%__)
  * Next reaction method compact (__99.9%__)
- * Rejection method (__85%__ )
  * Delayed modified next reaction method (__0%__ )
 
 ## Requirements:
