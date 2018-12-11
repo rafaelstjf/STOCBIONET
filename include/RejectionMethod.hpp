@@ -4,8 +4,10 @@
 #include <iostream>
 #include "../include/SSA.hpp"
 #include "../include/DelayedDependencyGraph.hpp"
-#include "../include/DelayList.hpp"
-#include "../include/HeapNode.hpp"
+#include "../include/delay_structures/DelayList.hpp"
+#include "../include/delay_structures/DelayNode.hpp"
+#include "../include/delay_structures/RingBuffer.hpp"
+
 using namespace std;
 
 class RejectionMethod : public SSA
@@ -20,7 +22,8 @@ protected:
     virtual void reacSelection();
     virtual void reacExecution();
     virtual void updateSpeciesQuantities(int index);
-    DelayList* list;
+    //DelayList* list;
+    RingBuffer* delayStructure;
     DelayedDependencyGraph* ddg;
 
 private:

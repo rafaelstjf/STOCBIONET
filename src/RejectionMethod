@@ -25,12 +25,13 @@ void RejectionMethod::initialization(Model *model, double simultime, long int se
     if (model->isModelLoaded())
     {
         log = new Log(model->getSpecNumber());
-        delayStructure = new RingBuffer(model->getSpecNumber());
+        list = new DelayList();
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
         dg = new DependencyGraph(true, model);
-        dg->printGraph();
         ddg = new DelayedDependencyGraph(model);
+        ddg->printGraph();
+        dg->printGraph();
         for (int i = 0; i < model->getSpecNumber(); i++)
         {
             specQuantity[i] = model->getInitialQuantity()[i];
@@ -57,7 +58,7 @@ void RejectionMethod::reacSelection()
             }
         }
     }
-    //cout << "Selected reaction: " << selectedReaction << endl;
+    cout << "Selected reaction: " << selectedReaction << endl;
 }
 void RejectionMethod::reacTimeGeneration()
 {
@@ -70,7 +71,7 @@ void RejectionMethod::updateSpeciesQuantities(int index)
     {
         if (model->getDelaysValue()[i][index] > EP)
         {
-            delayStructure->insertKey(i, index, (currentTime + model->getDelaysValue()[i][index]));
+            list->insert(i, index, (currentTime + model->getDelaysValue()[i][index]));
             specQuantity[i] = specQuantity[i] - model->getReactants()[i][index];
         }
         else
@@ -79,36 +80,44 @@ void RejectionMethod::updateSpeciesQuantities(int index)
 }
 void RejectionMethod::reacExecution()
 {
+    //cout << "PROPENSITY: " << totalPropensity << endl;
     double tal = 0.0;
     double u = ut->getRandomNumber();
     double teta = (-1 * ut->ln(u)) / totalPropensity;
     double sum = 0;
-    DelayNode *first = delayStructure->getMinNode();
-    if (first != nullptr && first->getDelayTime() > currentTime && first->getDelayTime() <= (currentTime + teta))
+    /*for (int i = 0; i < model->getSpecNumber(); i++)
+        sum += specQuantity[i];
+    cout << "ITERATION NUMBER " << reacCount << " Current Time: " << currentTime << " Teta: " << teta << " ESPECIES QUANTITY: " << sum << endl;
+    */
+
+    if (list->getArraySize() && (list->getDelayTime(0) > currentTime && list->getDelayTime(0) <= currentTime + teta))
     {
-        tal = first->getDelayTime();
-        vector<DelayNode *> elements = delayStructure->extractEqual(tal);
-        for (int i = 0; i < elements.size(); i++)
+        tal = list->getDelayTime(0);
+        int i = 0;
+        while (i < list->getArraySize())
         {
-            int reacIndex = elements[i]->getReacIndex();
-            int specIndex = elements[i]->getSpecIndex();
-            double delayTime = elements[i]->getDelayTime();
-            //updates the specie quantity for each product in delay
-            specQuantity[specIndex] = specQuantity[specIndex] + model->getProducts()[specIndex][reacIndex];
-            //updates the propensity for all the reactions that this one affects
-            int *depArray = ddg->getDependencies(specIndex);
-            int depSize = ddg->getDependenciesSize(specIndex);
-            for (int j = 0; j < depSize; j++)
+            int specIndex = list->getSpecIndex(i);
+            int reacIndex = list->getReacIndex(i);
+            double delayTime = list->getDelayTime(i);
+            if (delayTime == tal)
             {
-                calcPropOne(depArray[j]);
+                //updates the specie quantity for each product in delay
+                specQuantity[specIndex] = specQuantity[specIndex] + model->getProducts()[specIndex][reacIndex];
+                //updates the propensity for all the reactions that this one affects
+                int *depArray = ddg->getDependencies(specIndex);
+                int depSize = ddg->getDependenciesSize(specIndex);
+                for (int j = 0; j < depSize; j++)
+                {
+                    calcPropOne(depArray[j]);
+                }
+                delete depArray;
+                //calcPropensity();
+                list->removeByArrayIndex(i);
+                i--; //reduces the iterator because of the removal
             }
-            delete depArray;
+            i++;
         }
         currentTime = tal;
-        for (int i = 0; i < elements.size(); i++)
-        {
-            delete elements[i];
-        }
     }
     else
     {
@@ -123,7 +132,6 @@ void RejectionMethod::reacExecution()
             updateSpeciesQuantities(selectedReaction);
             currentTime = currentTime + teta;
 
-            //calcPropensity();
             int *depArray = dg->getDependencies(selectedReaction);
             int depSize = dg->getDependenciesSize(selectedReaction);
             for (int j = 0; j < depSize; j++)
@@ -131,6 +139,8 @@ void RejectionMethod::reacExecution()
                 calcPropOne(depArray[j]);
             }
             delete depArray;
+
+            //calcPropensity();
         }
     }
 }
@@ -162,5 +172,5 @@ void RejectionMethod::perform(Model *model, double simulTime, double beginTime, 
 }
 RejectionMethod::~RejectionMethod()
 {
-    delete delayStructure;
+    delete list;
 }
