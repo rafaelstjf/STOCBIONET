@@ -25,7 +25,7 @@ class Utils
   Utils();
   Utils(unsigned long int seed);
   double getRandomNumber();
-  double binomialCoefficient(int k, int n);
+  double binomialCoefficient(int qnt, int coef);
   double ln(double n);
   double getCurrentTime();
   double getMinDouble(double* array, int size);

@@ -18,6 +18,7 @@ void DelayList::insertKey(int specIndex, int reacIndex, double delayTime)
 }
 void DelayList::sortList()
 {
+    //insertion sort
     int i, j;
     DelayNode *chosed;
     for (i = 1; i < array.size(); i++)
@@ -34,6 +35,7 @@ void DelayList::sortList()
 }
 void DelayList::removeByIndex(int arrayIndex)
 {
+    //it uses the default vector's function to remove an element
     if (arrayIndex < array.size())
         array.erase(array.begin() + arrayIndex);
 }
@@ -47,11 +49,12 @@ int DelayList::getArraySize()
 }
 vector<DelayNode *> DelayList::extractEqual(double value)
 {
+    
     DelayNode *n;
     vector<DelayNode *> tempArray;
     for (int i = 0; i < array.size(); i++)
     {
-        if (array[i]->getDelayTime() == value)
+        if (array[i]->getDelayTime() >= value - INT_MIN && array[i]->getDelayTime() <= value + INT_MIN)
         {
             n = new DelayNode(array[i]->getSpecIndex(), array[i]->getReacIndex(), array[i]->getDelayTime());
             tempArray.push_back(n);

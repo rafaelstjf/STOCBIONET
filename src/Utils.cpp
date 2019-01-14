@@ -88,25 +88,25 @@ string Utils::getCurrentDateTime()
     return buf;
 }
 
-double Utils::binomialCoefficient(int k, int n)
+double Utils::binomialCoefficient(int qnt, int coef)
 {
-    //k = quantity
-    //n = reactants
-    // k!/n!*(k-n)!
+    //qnt = quantity
+    //coef = stoichiometric coefficient 
+    // qnt!/coef!*(qnt-coef)!
     long int fatn = 1, fatk = 1;
-    if (n > k || (k == 0 && n != 0))
+    if (coef > qnt || (qnt == 0 && coef != 0))
         return 0;
-    if (n == 0)
+    if (coef == 0)
         return 1;
-    if (n > 10)
-        fatn = calcFactorial(n);
+    if (coef > 10)
+        fatn = calcFactorial(coef);
     else
-        fatn = fat[n];
-    //(k*(k-1)*...*(k-n)!)/(n!*(k-n)!)
-    //k*(k-1)*...*(k-n-1)/n!
-    for (int i = k; i >= k - (n - 1); i--)
+        fatn = fat[coef];
+    //(qnt*(qnt-1)*...*(qnt-coef)!)/(coef!*(qnt-coef)!)
+    //qnt*(qnt-1)*...*(qnt-coef-1)/coef!
+    for (int i = qnt; i >= qnt - (coef - 1); i--)
     {
-        if (k > 0)
+        if (qnt > 0)
             fatk *= i;
     }
     double result = (1.0 * fatk) / fatn;

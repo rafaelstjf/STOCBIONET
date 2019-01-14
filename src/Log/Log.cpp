@@ -72,7 +72,8 @@ stringstream Log::exportToStringStream()
     stringstream buffer;
     int val;
     Node *it = first;
-    if (numNodes == 0)
+    /*
+    if (numNodes >= 50000)
     {
         //Simulation bigger than file
         int jump = ceil((double)numNodes / 5000);
@@ -117,28 +118,29 @@ stringstream Log::exportToStringStream()
     }
     else
     {
-        while (it != nullptr)
+    */
+    while (it != nullptr)
+    {
+        buffer << it->getTime() << "; ";
+        for (int i = 0; i < size; i++)
         {
-            buffer << it->getTime() << "; ";
-            for (int i = 0; i < size; i++)
+            if (it->checkExists(i))
             {
-                if (it->checkExists(i))
-                {
-                    val = it->getValIndex(i);
-                    buffer << val;
-                    currentArray[i] = val;
-                }
-                else
-                {
-                    buffer << currentArray[i];
-                }
-                if (i < size - 1)
-                    buffer << "; ";
+                val = it->getValIndex(i);
+                buffer << val;
+                currentArray[i] = val;
             }
-            buffer << '\n';
-            it = it->getNext();
+            else
+            {
+                buffer << currentArray[i];
+            }
+            if (i < size - 1)
+                buffer << "; ";
         }
+        buffer << '\n';
+        it = it->getNext();
     }
+    //}
     return buffer;
 }
 void Log::setNumberReacExecuted(int reacCount)

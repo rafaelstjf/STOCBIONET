@@ -1,8 +1,9 @@
 #ifndef RINGBUFFER_HPP
-#define LINKEDLIST_HPP
+#define RINGBUFFER_HPP
 
 #include <iostream>
 #include <cmath>
+#include <climits>
 #include "DelayNode.hpp"
 #include <vector>
 using namespace std;

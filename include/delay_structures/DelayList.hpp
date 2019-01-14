@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <climits>
 #include "DelayNode.hpp"
 using namespace std;
 class DelayList

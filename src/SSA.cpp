@@ -21,13 +21,12 @@ void SSA::saveToFile()
     map<string, long int>::iterator itSpecies = speciesNameNumber.begin();
     //get the name of the species
     string names[speciesNameNumber.size()];
-    cout << "SAVING SIMULATION RESULTS IN " << methodOutName << "_" << ut->getCurrentDateTime() << endl;
-    cout << "SAVING SIMULATION LOG IN " << logName << endl;
     while (itSpecies != speciesNameNumber.end())
     {
         names[itSpecies->second] = itSpecies->first;
         itSpecies++;
     }
+    cout << "SAVING SIMULATION RESULTS IN " << methodOutName << "_" << date << endl;
     buffer.clear();
     buffer << "Time; ";
     for (int i = 0; i < speciesNameNumber.size(); i++)
@@ -40,6 +39,8 @@ void SSA::saveToFile()
     buffer << log->exportToStringStream().str();
     speciesNameNumber.clear();
     ut->saveToCSVNoOverwriting(buffer.str(), methodOutName + "_" + date);
+    //saving log
+    cout << "SAVING SIMULATION LOG IN " << logName << endl;
     stringstream buffer2;
     buffer2 << "Number of reactions executed: " << log->getNumberReacExecuted() << '\n';
     buffer2 << "Reactions per second: " << log->getReacPerSecond() << '\n';

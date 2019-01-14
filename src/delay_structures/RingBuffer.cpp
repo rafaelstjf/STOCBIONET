@@ -95,14 +95,16 @@ void RingBuffer::removeFirst()
 }
 void RingBuffer::removeByIndex(int index)
 {
-    if (index == first)
+    if (index == first) //if it's the first so call removeFirst()
         removeFirst();
     else
     {
+        //goes from the end to the beginning moving 1 position until gets in the desirable index
         delete array[index];
         array[index] = nullptr;
         if (index < last)
         {
+            //if the index is lower than the last so goes from index to last increasing
             for (int i = index; i < last; i++)
             {
                 array[i] = array[i + 1];
@@ -113,6 +115,7 @@ void RingBuffer::removeByIndex(int index)
         }
         else if (index > last)
         {
+            //if not so goes from index to last decreasing
             for (int i = index; i > last; i--)
             {
                 array[i] = array[i - 1];
@@ -122,7 +125,8 @@ void RingBuffer::removeByIndex(int index)
             last = (last + 1) % capacity;
         }
         else
-        {
+        { 
+            //index == last
             delete array[last];
             array[last] = nullptr;
             last = (last <= 0) ? capacity - 1 : ((last - 1) % capacity);
@@ -134,7 +138,7 @@ void RingBuffer::print()
     for (int i = 0; i < capacity; i++)
     {
         if (array[i] != nullptr)
-            cout << "Index: " << i << " Delay" << array[i]->getDelayTime() << " SpecIndex: " << array[i]->getSpecIndex() << " ReacIndex: " << array[i]->getReacIndex() << endl;
+            cout << "Index: " << i << " Delay: " << array[i]->getDelayTime() << " SpecIndex: " << array[i]->getSpecIndex() << " ReacIndex: " << array[i]->getReacIndex() << endl;
     }
 }
 bool RingBuffer::isEmpty()
@@ -162,6 +166,7 @@ DelayNode *RingBuffer::getNode(int index)
 }
 vector<DelayNode *> RingBuffer::extractEqual(double value)
 {
+    //it searches for the value in the whole array, adds it on the vector and removes from the array
     vector<DelayNode *> tempArray;
     DelayNode *n;
     int count = 0;
@@ -170,7 +175,7 @@ vector<DelayNode *> RingBuffer::extractEqual(double value)
     {
         if (array[i] != nullptr)
         {
-            if (array[i]->getDelayTime() == value)
+            if (array[i]->getDelayTime() >= value - INT_MIN && array[i]->getDelayTime() <= value + INT_MIN)
             {
                 n = new DelayNode(array[i]->getSpecIndex(), array[i]->getReacIndex(), array[i]->getDelayTime());
                 tempArray.push_back(n);
@@ -189,6 +194,7 @@ vector<DelayNode *> RingBuffer::extractEqual(double value)
 }
 DelayNode *RingBuffer::getMinNode()
 {
+    //it returns the first element of the array
     if (first == -1)
         return nullptr;
     else
