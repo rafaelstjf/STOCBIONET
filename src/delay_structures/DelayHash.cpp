@@ -4,8 +4,8 @@ DelayHash::DelayHash(int capacity)
 {
     this->capacity = capacity;
     inUse = 0;
-    firstIndex = 0;
-    firstDelay = 0;
+    firstIndex = -1;
+    firstDelay = -1;
     array = new RingBuffer *[capacity];
     for (int i = 0; i < capacity; i++)
     {

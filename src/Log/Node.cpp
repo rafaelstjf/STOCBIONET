@@ -53,6 +53,8 @@ bool Node::checkExists(int index)
 }
 int Node::getValIndexFather(int index)
 {
+    //checks if there is an element in the desirable index then returns it
+    //if there isn't an element then check on the previous node
     Node* it = previous;
     if(checkExists(index))
         return getValIndex(index);
