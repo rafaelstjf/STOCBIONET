@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "../include/SSA.hpp"
-#include "../include/DelayedDependencyGraph.hpp"
+#include "../include/Dependency_Graph/DelayedDependencyGraph.hpp"
 #include "../include/delay_structures/DelayList.hpp"
 #include "../include/delay_structures/DelayNode.hpp"
 #include "../include/delay_structures/RingBuffer.hpp"

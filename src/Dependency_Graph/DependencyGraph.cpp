@@ -1,4 +1,4 @@
-#include "../include/DependencyGraph.hpp"
+#include "../../include/Dependency_Graph/DependencyGraph.hpp"
 DependencyGraph::DependencyGraph()
 {
 }

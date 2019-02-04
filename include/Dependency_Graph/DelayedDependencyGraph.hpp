@@ -1,8 +1,8 @@
 #ifndef DELAYEDDEPENDENCYGRAHP_HPP
 #define DELAYEDDEPENDENCYGRAHP_HPP
 
-#include "../include/DGVertex.hpp"
-#include "../include/Model.hpp"
+#include "DGVertex.hpp"
+#include "../../include/Model.hpp"
 #include <iostream>
 using namespace std;
 

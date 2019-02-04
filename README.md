@@ -8,6 +8,7 @@ Stochastic simulation algorithms for Gene Regulatory Networks for delayed and no
 ## Avaiable methods:
 
  * Direct method
+ * Sorting direct method
  * First reaction method
  * Next reaction method
  * Modified next reaction method
@@ -31,6 +32,7 @@ If you are using it in the terminal you can run it without arguments or with the
 The current operation's codes are:
 ```
 DM - Direct Method
+SDM - Direct Method
 FRM - First Reaction Method
 NRM - Next Reaction Method
 NRMC - Next Reaction Method Compact

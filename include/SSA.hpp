@@ -7,7 +7,7 @@
 #include <climits>
 #include <map>
 #include "../include/Model.hpp"
-#include "../include/DependencyGraph.hpp"
+#include "../include/Dependency_Graph/DependencyGraph.hpp"
 #include "../include/Utils.hpp"
 #include "../include/Log/Log.hpp"
 

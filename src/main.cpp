@@ -2,6 +2,7 @@
 #include <string>
 #include <cstdlib>
 #include "../include/DirectMethod.hpp"
+#include "../include/SortingDirectMethod.hpp"
 #include "../include/FirstReactionMethod.hpp"
 #include "../include/NextReactionMethod.hpp"
 #include "../include/NextReactionMethodCompact.hpp"
@@ -39,6 +40,8 @@ int main(int argc, char *argv[])
         chooseSimulation(op);
         if (op == "DM")
             simulation = new DirectMethod();
+        if (op == "SDM")
+            simulation = new SortingDirectMethod();
         else if (op == "FRM")
             simulation = new FirstReactionMethod();
         else if (op == "NRM")
@@ -86,6 +89,8 @@ int main(int argc, char *argv[])
             menu(model, beginTime, simulTime, seed, op);
             if (op == "DM")
                 simulation = new DirectMethod();
+            if (op == "SDM")
+                simulation = new SortingDirectMethod();
             else if (op == "FRM")
                 simulation = new FirstReactionMethod();
             else if (op == "NRM")
@@ -155,7 +160,7 @@ void menu(Model *model, double &beginTime, double &simulTime, long int &seed, st
     cin >> beginTime;
     cout << "Insert the simulation time:" << endl;
     cin >> simulTime;
-    cout << "Methods:\nDM - Direct Method\nFRM - First Reaction Method\nNRM - Next Reaction Method\nNRMC - Next Reaction Method Compact\nMNRM - Modified Next Reaction Method\nSNRM - Simplified Next Reaction Method\nRM - Rejection Method\n"
+    cout << "Methods:\nDM - Direct Method\nSDM - Sorting Direct Method\nFRM - First Reaction Method\nNRM - Next Reaction Method\nNRMC - Next Reaction Method Compact\nMNRM - Modified Next Reaction Method\nSNRM - Simplified Next Reaction Method\nRM - Rejection Method\n"
          << endl;
     cout << "Insert the Method:" << endl;
     double flag = true;
@@ -188,7 +193,7 @@ void menu(Model *model, double &beginTime, double &simulTime, long int &seed, st
 }
 void chooseSimulation(string &op)
 {
-    if (op != "DM" && op != "FRM" && op != "NRM" && op != "NRMC" && op != "MNRM" && op != "SNRM" && op != "RM")
+    if (op != "DM" && op != "SDM" && op != "FRM" && op != "NRM" && op != "NRMC" && op != "MNRM" && op != "SNRM" && op != "RM")
     {
         cout << "Error. Invalid operation!" << endl;
         op = "error";

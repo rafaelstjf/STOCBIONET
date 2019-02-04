@@ -2,7 +2,7 @@
 #define DELAYHASH_HPP
 
 #include <iostream>
-#include "../include/delay_structures/RingBuffer.hpp"
+#include "RingBuffer.hpp"
 #include <vector>
 using namespace std;
 

@@ -1,5 +1,5 @@
-#include "../include/DelayedDependencyGraph.hpp"
-DelayedDependencyGraph::DelayedDependencyGraph()
+#include "../../include/Dependency_Graph/DelayedDependencyGraph.hpp"
+DelayedDependencyGraph::~DelayedDependencyGraph()
 {
     for (int i = 0; i < numSpecies; i++)
     {
@@ -7,11 +7,17 @@ DelayedDependencyGraph::DelayedDependencyGraph()
     }
     delete[] vertex;
 }
-DelayedDependencyGraph::DelayedDependencyGraph(Model* model)
+DelayedDependencyGraph::DelayedDependencyGraph(Model *model)
 {
     createGraph(model);
 }
-void DelayedDependencyGraph::createGraph(Model* model)
+DelayedDependencyGraph::DelayedDependencyGraph()
+{
+    numSpecies = 0;
+    numReactions = 0;
+    vertex = nullptr;
+}
+void DelayedDependencyGraph::createGraph(Model *model)
 {
     numReactions = model->getReacNumber();
     numSpecies = model->getSpecNumber();

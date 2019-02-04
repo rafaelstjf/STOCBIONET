@@ -2,8 +2,8 @@
 #define DEPENDENCYGRAPH_HPP
 
 #include <iostream>
-#include "../include/DGVertex.hpp"
-#include "../include/Model.hpp"
+#include "DGVertex.hpp"
+#include "../../include/Model.hpp"
 using namespace std;
 class DependencyGraph
 {
