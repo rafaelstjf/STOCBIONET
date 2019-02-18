@@ -6,6 +6,7 @@
 #include "../include/Dependency_Graph/DelayedDependencyGraph.hpp"
 #include "../include/delay_structures/DelayList.hpp"
 #include "../include/delay_structures/DelayNode.hpp"
+#include "../include/delay_structures/DelayHash.hpp"
 #include "../include/delay_structures/RingBuffer.hpp"
 
 using namespace std;
@@ -23,7 +24,7 @@ protected:
     virtual void reacExecution();
     virtual void updateSpeciesQuantities(int index);
     //DelayList* list;
-    RingBuffer* delayStructure;
+    DelayHash* delayStructure;
     DelayedDependencyGraph* ddg;
 
 private:

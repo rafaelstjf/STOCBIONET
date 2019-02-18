@@ -25,7 +25,7 @@ void RejectionMethod::initialization(Model *model, double simultime, long int se
     if (model->isModelLoaded())
     {
         log = new Log(model->getSpecNumber());
-        delayStructure = new RingBuffer(model->getSpecNumber());
+        delayStructure = new DelayHash(model->getSpecNumber());
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
         dg = new DependencyGraph(true, model);
@@ -151,6 +151,7 @@ void RejectionMethod::perform(Model *model, double simulTime, double beginTime, 
     {
         log->insertNode(currentTime, specQuantity);
         reacExecution();
+        delayStructure->print();
     }
     double en = ut->getCurrentTime(); //ending of the simulation
     sucess = true;
