@@ -1,6 +1,6 @@
 #include "../include/ModifiedNextReactionMethod.hpp"
 
-void ModifiedNextReactionMethod::initialization(Model *model, double simulTime, long int seed)
+void ModifiedNextReactionMethod::initialization(Model *model, double maximumTime, double initialTime, long int seed)
 {
     //instantiates the variables
     sucess = false;
@@ -9,7 +9,7 @@ void ModifiedNextReactionMethod::initialization(Model *model, double simulTime, 
     if (seed >= 0)
         ut = new Utils(seed); //instantiates the utility class
     else
-        ut = new Utils(); //instantiates the utility class    this->simulTime = simulTime;
+        ut = new Utils(); //instantiates the utility class    this->maximumTime = maximumTime;
 
     reacCount = 0;
     reacPerSecond = 0.0;
@@ -85,10 +85,10 @@ void ModifiedNextReactionMethod::reacExecution()
         queue->update(i, nt);
     }
 }
-void ModifiedNextReactionMethod::perform(Model* model, double simulTime, double beginTime, long int seed)
+void ModifiedNextReactionMethod::perform(Model* model, double maximumTime, double initialTime, long int seed)
 {
     cout << "-----------MODIFIED NEXT REACTION METHOD-----------" << endl;
-    initialization(model, simulTime, seed); //instantiates the variables
+     initialization(model, maximumTime, initialTime, seed); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
     {
@@ -97,14 +97,14 @@ void ModifiedNextReactionMethod::perform(Model* model, double simulTime, double 
     }
     double beg = ut->getCurrentTime(); //beginning of the simulation
     //performs the simulation
-    currentTime = beginTime;
+    currentTime = initialTime;
     //calculates the propensity of all the reactions and generates the simulation time
     reacTimeGeneration();
     reacSelection();
     if (currentTime != inf)
     {
-        currentTime = beginTime;
-        while (currentTime < simulTime)
+        currentTime = initialTime;
+        while (currentTime < maximumTime)
         {
             log->insertNode(currentTime, specQuantity);
             reacSelection();

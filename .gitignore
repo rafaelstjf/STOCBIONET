@@ -7,8 +7,7 @@
 *.o
 *.so
 *.bat
-main
-conversor
+
 # Algorithm generated files #
 #############################
 *.csv
@@ -34,3 +33,4 @@ logs/*.txt
 bin/
 obj/
 Models/
+build/

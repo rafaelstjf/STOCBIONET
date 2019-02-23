@@ -1,5 +1,5 @@
 #include "../include/DirectMethod.hpp"
-void DirectMethod::initialization(Model *model, double simulTime, long int seed)
+void DirectMethod::initialization(Model *model, double maximumTime, double initialTime, long int seed)
 {
     //instantiates the variables
     this->model = model; //instantiates the model
@@ -10,7 +10,7 @@ void DirectMethod::initialization(Model *model, double simulTime, long int seed)
         ut = new Utils(); //instantiates the utility class
     t = 0.0; //tal
     selectedReaction = 0;
-    this->simulTime = simulTime;
+    this->maximumTime = maximumTime;
     totalPropensity = 0;
     sucess = false;
     reacCount = 0;
@@ -86,10 +86,10 @@ void DirectMethod::reacExecution()
     delete[] depArray;
     currentTime = currentTime + t;
 }
-void DirectMethod::perform(Model* model, double simulTime, double beginTime, long int seed)
+void DirectMethod::perform(Model* model, double maximumTime, double initialTime, long int seed)
 {
     cout << "-----------DIRECT METHOD-----------" << endl;
-    initialization(model, simulTime, seed); //instantiates the variables
+     initialization(model, maximumTime, initialTime, seed); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
     {
@@ -97,11 +97,11 @@ void DirectMethod::perform(Model* model, double simulTime, double beginTime, lon
         return;
     }
     double beg = ut->getCurrentTime(); //beginning of the simulation
-    currentTime = beginTime;
+    currentTime = initialTime;
     t = 0.0;
     //peforms the simulation
     calcPropensity(); //calculate the reactions propensity
-    while (currentTime < simulTime)
+    while (currentTime < maximumTime)
     {
         //saves the current species quantities on the log
         log->insertNode(currentTime, specQuantity);

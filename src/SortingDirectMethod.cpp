@@ -1,6 +1,6 @@
 #include "../include/SortingDirectMethod.hpp"
 
-void SortingDirectMethod::initialization(Model *model, double simulTime, long int seed)
+void SortingDirectMethod::initialization(Model *model, double maximumTime, double initialTime, long int seed)
 {
     //instantiates the variables
     this->model = model;
@@ -9,7 +9,7 @@ void SortingDirectMethod::initialization(Model *model, double simulTime, long in
         ut = new Utils(seed);
     else
         ut = new Utils();
-    this->simulTime = simulTime;
+    this->maximumTime = maximumTime;
     totalPropensity = 0.0;
     sucess = false;
     reacCount = 0;
@@ -95,10 +95,10 @@ void SortingDirectMethod::reacExecution()
     delete[] depArray;
     currentTime = currentTime + t;
 }
-void SortingDirectMethod::perform(Model *model, double simulTime, double beginTime, long int seed)
+void SortingDirectMethod::perform(Model *model, double maximumTime, double initialTime, long int seed)
 {
     cout << "-----------SORTING DIRECT METHOD-----------" << endl;
-    initialization(model, simulTime, seed); //instantiates the variables
+     initialization(model, maximumTime, initialTime, seed); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
     {
@@ -106,10 +106,10 @@ void SortingDirectMethod::perform(Model *model, double simulTime, double beginTi
         return;
     }
     double beg = ut->getCurrentTime(); //beginning of the simulation
-    currentTime = beginTime;
+    currentTime = initialTime;
     //peforms the simulation
     calcPropensity(); //calculate the reactions propensity
-    while (currentTime < simulTime)
+    while (currentTime < maximumTime)
     {
         //saves the current species quantities on the log
         log->insertNode(currentTime, specQuantity);

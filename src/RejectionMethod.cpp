@@ -1,14 +1,15 @@
 #include "../include/RejectionMethod.hpp"
 
-void RejectionMethod::initialization(Model *model, double simultime, long int seed)
+void RejectionMethod::initialization(Model *model, double maximumTime, double initialTime, long int seed)
 {
+    
     this->model = model;
+    cout << "this->maximumTime: " << this->maximumTime << "maximumTime: " << maximumTime << " this->initialTime: " << this->initialTime << " initialTime: " << initialTime << endl;
     if (seed >= 0)
         ut = new Utils(seed);
     else
         ut = new Utils();
     string filename = model->getFilename();
-    this->simulTime - simultime;
     sucess = false;
     reacCount = 0;
     reacPerSecond = 0.0;
@@ -25,7 +26,7 @@ void RejectionMethod::initialization(Model *model, double simultime, long int se
     if (model->isModelLoaded())
     {
         log = new Log(model->getSpecNumber());
-        delayStructure = new DelayHash(model->getSpecNumber());
+        delayStructure = new DelayHash(model->getSpecNumber(), initialTime, maximumTime, 0.01);
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
         dg = new DependencyGraph(true, model);
@@ -134,10 +135,13 @@ void RejectionMethod::reacExecution()
         }
     }
 }
-void RejectionMethod::perform(Model *model, double simulTime, double beginTime, long int seed)
+void RejectionMethod::perform(Model *model, double maximumTime, double initialTime, long int seed)
 {
+    cout << "MaxTime: " << maximumTime << endl;
+    this->maximumTime = maximumTime;
+    this->initialTime = initialTime;
     cout << "-----------REJECTION METHOD-----------" << endl;
-    initialization(model, simulTime, seed); //instantiates the variables
+    initialization(model, maximumTime, initialTime, seed); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
     {
@@ -145,9 +149,9 @@ void RejectionMethod::perform(Model *model, double simulTime, double beginTime, 
         return;
     }
     double beg = ut->getCurrentTime(); //beginning of the simulation
-    currentTime = beginTime;
+    currentTime = initialTime;
     calcPropensity();
-    while (currentTime < simulTime)
+    while (currentTime < maximumTime)
     {
         log->insertNode(currentTime, specQuantity);
         reacExecution();

@@ -1,6 +1,6 @@
 #include "../include/SimplifiedNextReactionMethod.hpp"
 
-void SimplifiedNextReactionMethod::initialization(Model *model, double simulTime, long int seed)
+void SimplifiedNextReactionMethod::initialization(Model *model, double maximumTime, double initialTime, long int seed)
 {
     sucess = false;
     this->model = model;
@@ -8,7 +8,7 @@ void SimplifiedNextReactionMethod::initialization(Model *model, double simulTime
     if (seed >= 0)
         ut = new Utils(seed); //instantiates the utility class
     else
-        ut = new Utils(); //instantiates the utility class    this->simulTime = simulTime;
+        ut = new Utils(); //instantiates the utility class    this->maximumTime = maximumTime;
     for (int i = 0; i < filename.size(); i++)
     {
         if (filename[i] == '.')
@@ -80,26 +80,26 @@ void SimplifiedNextReactionMethod::reacExecution()
     }
     delete[] depArray;
 }
-void SimplifiedNextReactionMethod::perform(Model *model, double simulTime, double beginTime, long int seed)
+void SimplifiedNextReactionMethod::perform(Model *model, double maximumTime, double initialTime, long int seed)
 {
     cout << "-----------SIMPLIFIED NEXT REACTION METHOD-----------" << endl;
-    initialization(model, simulTime, seed);
+     initialization(model, maximumTime, initialTime, seed);
     if (!model->isModelLoaded())
     {
         cout << "Error! Invalid model." << endl;
         return;
     }
     double beg = ut->getCurrentTime();
-    currentTime = beginTime;
+    currentTime = initialTime;
     //calculates the propensity of all the reactions and generates the simulation time
     reacTimeGeneration();
-    //saves the species quantities on beginTime
+    //saves the species quantities on initialTime
     reacSelection();
     if (currentTime != inf)
     {
-        currentTime = beginTime;
-        //currentTime = beginTime;
-        while (currentTime <= simulTime)
+        currentTime = initialTime;
+        //currentTime = initialTime;
+        while (currentTime <= maximumTime)
         {
             log->insertNode(currentTime, specQuantity);
             reacSelection(); //selects a reaction

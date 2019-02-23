@@ -1,6 +1,6 @@
 #include "../include/NextReactionMethod.hpp"
 
-void NextReactionMethod::initialization(Model *model, double simulTime, long int seed)
+void NextReactionMethod::initialization(Model *model, double maximumTime, double initialTime, long int seed)
 {
     //instantiates the variables
     sucess = false;
@@ -8,7 +8,7 @@ void NextReactionMethod::initialization(Model *model, double simulTime, long int
     if (seed >= 0)
         ut = new Utils(seed); //instantiates the utility class
     else
-        ut = new Utils(); //instantiates the utility class    this->simulTime = simulTime;
+        ut = new Utils(); //instantiates the utility class    this->maximumTime = maximumTime;
     string filename = model->getFilename();
     reacCount = 0;
     reacPerSecond = 0.0;
@@ -122,10 +122,10 @@ void NextReactionMethod::reacExecution()
     }
     delete[] depArray;
 }
-void NextReactionMethod::perform(Model *model, double simulTime, double beginTime, long int seed)
+void NextReactionMethod::perform(Model *model, double maximumTime, double initialTime, long int seed)
 {
     cout << "-----------NEXT REACTION METHOD-----------" << endl;
-    initialization(model, simulTime, seed); //instantiates the variables
+     initialization(model, maximumTime, initialTime, seed); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
     {
@@ -133,15 +133,15 @@ void NextReactionMethod::perform(Model *model, double simulTime, double beginTim
         return;
     }
     double beg = ut->getCurrentTime(); //beginning of the simulation
-    currentTime = beginTime;
+    currentTime = initialTime;
     //calculates the propensity of all the reactions and generates the simulation time
     reacTimeGeneration();
-    //saves the species quantities on beginTime
+    //saves the species quantities on initialTime
     log->insertNode(currentTime, specQuantity);
     reacSelection(); //just to check if the time = inf
     if (currentTime != INF)
     {
-        while (currentTime < simulTime)
+        while (currentTime < maximumTime)
         {
             reacExecution(); //executes the reaction
             //saves the species quantities

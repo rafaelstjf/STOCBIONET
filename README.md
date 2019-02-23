@@ -17,14 +17,30 @@ Stochastic simulation algorithms for Gene Regulatory Networks for delayed and no
  
 ## Methods in development:
  
- * Rejection method using Hash Tables (__0%__)
- * Next reaction method compact (__99.9%__)
+ * Rejection method using Hash Tables (__99.9%__)
+ * Next reaction method compact (__98.0%__)
  * Delayed modified next reaction method (__0%__ )
 
 ## Requirements:
 
  * C++11
+ * CMake 3.1 or newer (only if you want to build it using CMake)
 
+## Building
+* Linux
+    ```sh
+    mkdir build
+    cd build
+    cmake ..
+    make
+    ```
+* Windows (using MinGW)
+    ```cmd
+    mkdir build
+    cd build
+    cmake .. -G "MinGW Makefiles"
+    mingw32-make
+    ```
 ## Example of use:
 
 If you are using it in the terminal you can run it without arguments or with the following arguments: Input-file Operation-code Initial-time Maximum-time

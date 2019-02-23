@@ -14,10 +14,13 @@ class DelayHash
     int inUse;
     int firstIndex;
     int firstDelay;
+    double precision;
+    double low;
+    double high;
     RingBuffer **array;
     int hashingFunction(double delayTime);
   public:
-    DelayHash(int capacity);
+    DelayHash(int capacity, double low, double high, double precision);
     ~DelayHash();
     void insertKey(int specIndex, int reacIndex, double delayTime);
     void print();

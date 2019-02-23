@@ -1,6 +1,6 @@
 #include "../include/FirstReactionMethod.hpp"
 
-void FirstReactionMethod::initialization(Model* model, double simulTime, long int seed)
+void FirstReactionMethod::initialization(Model* model, double maximumTime, double initialTime, long int seed)
 {
     //instantiates the variables
     this->model = model;
@@ -10,7 +10,7 @@ void FirstReactionMethod::initialization(Model* model, double simulTime, long in
     else
         ut = new Utils(); //instantiates the utility class
     sucess = false;
-    this->simulTime = simulTime;
+    this->maximumTime = maximumTime;
     reacCount = 0;
     reacPerSecond = 0.0;
     //creates the output file's name
@@ -37,10 +37,10 @@ void FirstReactionMethod::initialization(Model* model, double simulTime, long in
         }
     }
 }
-void FirstReactionMethod::perform(Model* model, double simulTime, double beginTime, long int seed)
+void FirstReactionMethod::perform(Model* model, double maximumTime, double initialTime, long int seed)
 {
     cout << "-----------FIRST REACTION METHOD-----------" << endl;
-    initialization(model, simulTime, seed); //instantiates the variables
+     initialization(model, maximumTime, initialTime, seed); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
     {
@@ -48,10 +48,10 @@ void FirstReactionMethod::perform(Model* model, double simulTime, double beginTi
         return;
     }
     double beg = ut->getCurrentTime(); //beginning of the simulation
-    currentTime = beginTime;
+    currentTime = initialTime;
     //performs the simulation
     calcPropensity();
-    while (currentTime < simulTime)
+    while (currentTime < maximumTime)
     {
         //saves the current species quantities on the log
         log->insertNode(currentTime, specQuantity);

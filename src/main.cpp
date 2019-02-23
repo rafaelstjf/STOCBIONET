@@ -17,7 +17,7 @@
 #endif
 
 using namespace std;
-void menu(Model *model, double &beginTime, double &simulTime, long int &seed, string &op);
+void menu(Model *model, double &initialTime, double &maximumTime, long int &seed, string &op);
 void chooseSimulation(string &op);
 void clearScreen();
 void postSimulation(SSA *simulation);
@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     char printOp;
     string filename;
     string op;
-    double simulTime = 0.0, beginTime = 0.0;
+    double maximumTime = 0.0, initialTime = 0.0;
     SSA *simulation = nullptr;
     long int seed = -1;
     Model *model = new Model();
@@ -35,8 +35,8 @@ int main(int argc, char *argv[])
     {
         filename = argv[1];
         op = argv[2];
-        beginTime = atof(argv[3]);
-        simulTime = atof(argv[4]);
+        initialTime = atof(argv[3]);
+        maximumTime = atof(argv[4]);
         chooseSimulation(op);
         if (op == "DM")
             simulation = new DirectMethod();
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
         model->loadModel(filename);
         if (!model->isModelLoaded())
             return -1;
-        simulation->perform(model, simulTime, beginTime, seed);
+        simulation->perform(model, maximumTime, initialTime, seed);
         postSimulation(simulation);
         delete simulation;
     }
@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
         double repeat = true;
         while (repeat)
         {
-            menu(model, beginTime, simulTime, seed, op);
+            menu(model, initialTime, maximumTime, seed, op);
             if (op == "DM")
                 simulation = new DirectMethod();
             if (op == "SDM")
@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
                 simulation = new SimplifiedNextReactionMethod();
             else if (op == "RM")
                 simulation = new RejectionMethod();
-            simulation->perform(model, simulTime, beginTime, seed);
+            simulation->perform(model, maximumTime, initialTime, seed);
             postSimulation(simulation);
             delete simulation;
             cout << "Do you want to perform another simulation? [y|n]" << endl;
@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
     delete model;
     return 0;
 }
-void menu(Model *model, double &beginTime, double &simulTime, long int &seed, string &op)
+void menu(Model *model, double &initialTime, double &maximumTime, long int &seed, string &op)
 {
     string filename;
     char printOp;
@@ -157,9 +157,9 @@ void menu(Model *model, double &beginTime, double &simulTime, long int &seed, st
         }
     }
     cout << "Insert the initial time:" << endl;
-    cin >> beginTime;
+    cin >> initialTime;
     cout << "Insert the simulation time:" << endl;
-    cin >> simulTime;
+    cin >> maximumTime;
     cout << "Methods:\nDM - Direct Method\nSDM - Sorting Direct Method\nFRM - First Reaction Method\nNRM - Next Reaction Method\nNRMC - Next Reaction Method Compact\nMNRM - Modified Next Reaction Method\nSNRM - Simplified Next Reaction Method\nRM - Rejection Method\n"
          << endl;
     cout << "Insert the Method:" << endl;

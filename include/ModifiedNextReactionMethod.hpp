@@ -13,11 +13,11 @@ using namespace std;
 
 class ModifiedNextReactionMethod : public SSA{
     public:
-    virtual void perform(Model* model, double simulTime, double beginTime, long int seed);
+    virtual void perform(Model* model, double maximumTime, double initialTime, long int seed);
     virtual ~ModifiedNextReactionMethod();
 
     protected:
-    virtual void initialization(Model* model, double simulTime, long int seed);
+    virtual void initialization(Model* model, double maximumTime, double initialTime, long int seed);
     virtual void reacTimeGeneration();
     virtual void reacSelection();
     virtual void reacExecution();

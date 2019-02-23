@@ -1,7 +1,9 @@
 #include "../../include/delay_structures/DelayHash.hpp"
 
-DelayHash::DelayHash(int capacity)
+DelayHash::DelayHash(int capacity, double low, double high, double precision)
 {
+    this->low = low;
+    this->high = high;
     this->capacity = capacity;
     inUse = 0;
     firstIndex = INT_MAX;
@@ -42,9 +44,17 @@ void DelayHash::print()
 }
 int DelayHash::hashingFunction(double delayTime)
 {
+
+    /*
     int whole = floor(delayTime);
     int decimal = floor((delayTime - whole) * 100);
     return (decimal + whole) % capacity;
+    */
+    //R = inf + ((sup-inf)/(1.0/precision))*int
+    cout << "High: " << high << " Low: " << low << endl;
+    long int key = (delayTime - low) * ((1.0 /  precision)/(high - low));
+    cout << "key: " << key << " D: " << (delayTime - low) << " E: " <<  ((1.0 /  precision)/(high - low)) << endl;
+    return 10 % capacity;
 }
 bool DelayHash::isEmpty()
 {

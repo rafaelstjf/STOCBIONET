@@ -1,13 +1,13 @@
 #include "../include/NextReactionMethodCompact.hpp"
 
-void NextReactionMethodCompact::initialization(Model *model, double simulTime, long int seed)
+void NextReactionMethodCompact::initialization(Model *model, double maximumTime, double initialTime, long int seed)
 {
     sucess = false;
     this->model = model;
     if (seed >= 0)
         ut = new Utils(seed); //instantiates the utility class
     else
-        ut = new Utils(); //instantiates the utility class    this->simulTime = simulTime;
+        ut = new Utils(); //instantiates the utility class    this->maximumTime = maximumTime;
     string filename = model->getFilename();
     reacCount = 0;
     reacPerSecond = 0.0;
@@ -115,10 +115,10 @@ void NextReactionMethodCompact::reacExecution()
     }
     delete[] depArray;
 }
-void NextReactionMethodCompact::perform(Model *model, double simulTime, double beginTime, long int seed)
+void NextReactionMethodCompact::perform(Model *model, double maximumTime, double initialTime, long int seed)
 {
     cout << "-----------NEXT REACTION METHOD COMPACT-----------" << endl;
-    initialization(model, simulTime, seed); //instantiates the variables
+     initialization(model, maximumTime, initialTime, seed); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
     {
@@ -126,14 +126,14 @@ void NextReactionMethodCompact::perform(Model *model, double simulTime, double b
         return;
     }
     double beg = ut->getCurrentTime(); //beginning of the simulation
-    currentTime = beginTime;
+    currentTime = initialTime;
     //calculates the propensity of all the reactions and generates the simulation time
     reacTimeGeneration();
-    log->insertNode(currentTime, specQuantity); //saves the species quantities on beginTime
+    log->insertNode(currentTime, specQuantity); //saves the species quantities on initialTime
     reacSelection();
     if (currentTime != INF)
     {
-        while (currentTime < simulTime)
+        while (currentTime < maximumTime)
         {
             reacExecution();
             log->insertNode(currentTime, specQuantity);
