@@ -1,7 +1,7 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 #include <iostream>
-#include "../include/HeapNode.hpp"
+#include "HeapNode.hpp"
 using namespace std;
 
 class List

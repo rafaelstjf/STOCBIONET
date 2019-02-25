@@ -1,4 +1,4 @@
-#include "../include/List.hpp"
+#include "List.hpp"
 
 List::List(int c)
 {

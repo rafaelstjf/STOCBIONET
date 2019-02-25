@@ -2,12 +2,12 @@
 #define REJECTIONMETHOD_HPP
 
 #include <iostream>
-#include "../include/SSA.hpp"
-#include "../include/Dependency_Graph/DelayedDependencyGraph.hpp"
-#include "../include/delay_structures/DelayList.hpp"
-#include "../include/delay_structures/DelayNode.hpp"
-#include "../include/delay_structures/DelayHash.hpp"
-#include "../include/delay_structures/RingBuffer.hpp"
+#include "SSA.hpp"
+#include "Dependency_Graph/DelayedDependencyGraph.hpp"
+#include "delay_structures/DelayList.hpp"
+#include "delay_structures/DelayNode.hpp"
+#include "delay_structures/DelayHash.hpp"
+#include "delay_structures/RingBuffer.hpp"
 
 using namespace std;
 

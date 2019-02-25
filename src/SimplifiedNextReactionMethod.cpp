@@ -1,24 +1,16 @@
-#include "../include/SimplifiedNextReactionMethod.hpp"
+#include "SimplifiedNextReactionMethod.hpp"
 
 void SimplifiedNextReactionMethod::initialization(Model *model, double maximumTime, double initialTime, long int seed)
 {
     sucess = false;
     this->model = model;
-    string filename = model->getFilename();
+    this->maximumTime = maximumTime;
+    this->initialTime = initialTime;
     if (seed >= 0)
         ut = new Utils(seed); //instantiates the utility class
     else
         ut = new Utils(); //instantiates the utility class    this->maximumTime = maximumTime;
-    for (int i = 0; i < filename.size(); i++)
-    {
-        if (filename[i] == '.')
-        {
-            methodOutName += "_SNRM_output";
-            break;
-        }
-        else
-            methodOutName += filename[i];
-    }
+    methodOutName = (ut->extractFileName(model->getFilename() + "_SNRM_output"));
     if (model->isModelLoaded())
     {
         log = new Log(model->getSpecNumber());
@@ -83,7 +75,7 @@ void SimplifiedNextReactionMethod::reacExecution()
 void SimplifiedNextReactionMethod::perform(Model *model, double maximumTime, double initialTime, long int seed)
 {
     cout << "-----------SIMPLIFIED NEXT REACTION METHOD-----------" << endl;
-     initialization(model, maximumTime, initialTime, seed);
+    initialization(model, maximumTime, initialTime, seed);
     if (!model->isModelLoaded())
     {
         cout << "Error! Invalid model." << endl;

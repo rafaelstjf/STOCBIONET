@@ -1,7 +1,7 @@
 #ifndef INDEXEDPRIOQUEUE_HPP
 #define INDEXEDPRIOQUEUE_HPP
 
-#include "../include/HeapNode.hpp"
+#include "HeapNode.hpp"
 #include <iostream>
 using namespace std;
 

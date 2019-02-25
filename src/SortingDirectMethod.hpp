@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <climits>
-#include "../include/SSA.hpp"
+#include "SSA.hpp"
 
 using namespace std;
 class SortingDirectMethod : public SSA{

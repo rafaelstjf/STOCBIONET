@@ -1,4 +1,4 @@
-#include "../../include/model/StringManager.hpp"
+#include "StringManager.hpp"
 
 StringManager::StringManager()
 {

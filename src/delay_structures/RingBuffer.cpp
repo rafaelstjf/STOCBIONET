@@ -1,4 +1,4 @@
-#include "../../include/delay_structures/RingBuffer.hpp"
+#include "RingBuffer.hpp"
 
 RingBuffer::RingBuffer(int capacity)
 {

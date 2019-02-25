@@ -1,15 +1,15 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
-#include "../include/DirectMethod.hpp"
-#include "../include/SortingDirectMethod.hpp"
-#include "../include/FirstReactionMethod.hpp"
-#include "../include/NextReactionMethod.hpp"
-#include "../include/NextReactionMethodCompact.hpp"
-#include "../include/SimplifiedNextReactionMethod.hpp"
-#include "../include/RejectionMethod.hpp"
-#include "../include/ModifiedNextReactionMethod.hpp"
-#include "../include/Model.hpp"
+#include "DirectMethod.hpp"
+#include "SortingDirectMethod.hpp"
+#include "FirstReactionMethod.hpp"
+#include "NextReactionMethod.hpp"
+#include "NextReactionMethodCompact.hpp"
+#include "SimplifiedNextReactionMethod.hpp"
+#include "RejectionMethod.hpp"
+#include "ModifiedNextReactionMethod.hpp"
+#include "Model.hpp"
 #if defined(_WIN32)
 #define PLATFORM_NAME "windows" // Windows
 #elif defined(_linux_)
@@ -132,7 +132,7 @@ void menu(Model *model, double &initialTime, double &maximumTime, long int &seed
     if (model->getFilename() == "")
     {
         //load a new model if there is any other loaded
-        cout << "Insert the file path and name (with the extension):" << endl;
+        cout << "Insert the file's path and name (with the extension):" << endl;
         while (!model->isModelLoaded())
         {
             cin >> filename;

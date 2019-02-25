@@ -1,29 +1,20 @@
-#include "../include/SortingDirectMethod.hpp"
+#include "SortingDirectMethod.hpp"
 
 void SortingDirectMethod::initialization(Model *model, double maximumTime, double initialTime, long int seed)
 {
     //instantiates the variables
     this->model = model;
-    string filename = model->getFilename();
+    this->maximumTime = maximumTime;
+    this->initialTime = initialTime;
     if (seed >= 0) //instantiates the utility class
         ut = new Utils(seed);
     else
         ut = new Utils();
-    this->maximumTime = maximumTime;
     totalPropensity = 0.0;
     sucess = false;
     reacCount = 0;
     reacPerSecond = 0.0;
-    for (int i = 0; i < filename.size(); i++)
-    {
-        if (filename[i] == '.')
-        {
-            methodOutName += "_SDM_output";
-            break;
-        }
-        else
-            methodOutName += filename[i];
-    }
+    methodOutName = (ut->extractFileName(model->getFilename() + "_SDM_output"));
     if (model->isModelLoaded())
     {
         log = new Log(model->getSpecNumber());
@@ -98,7 +89,7 @@ void SortingDirectMethod::reacExecution()
 void SortingDirectMethod::perform(Model *model, double maximumTime, double initialTime, long int seed)
 {
     cout << "-----------SORTING DIRECT METHOD-----------" << endl;
-     initialization(model, maximumTime, initialTime, seed); //instantiates the variables
+    initialization(model, maximumTime, initialTime, seed); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
     {
@@ -130,5 +121,5 @@ void SortingDirectMethod::perform(Model *model, double maximumTime, double initi
 }
 SortingDirectMethod::~SortingDirectMethod()
 {
-    delete [] reactionSO;
+    delete[] reactionSO;
 }

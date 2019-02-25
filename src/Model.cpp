@@ -1,4 +1,4 @@
-#include "../include/Model.hpp"
+#include "Model.hpp"
 void Model::clear()
 {
     reactants = NULL;

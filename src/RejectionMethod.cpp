@@ -1,32 +1,23 @@
-#include "../include/RejectionMethod.hpp"
+#include "RejectionMethod.hpp"
 
 void RejectionMethod::initialization(Model *model, double maximumTime, double initialTime, long int seed)
 {
-    
+
     this->model = model;
-    cout << "this->maximumTime: " << this->maximumTime << "maximumTime: " << maximumTime << " this->initialTime: " << this->initialTime << " initialTime: " << initialTime << endl;
+    this->maximumTime = maximumTime;
+    this->initialTime = initialTime;
     if (seed >= 0)
         ut = new Utils(seed);
     else
         ut = new Utils();
-    string filename = model->getFilename();
     sucess = false;
     reacCount = 0;
     reacPerSecond = 0.0;
-    for (int i = 0; i < filename.size(); i++)
-    {
-        if (filename[i] == '.')
-        {
-            methodOutName += "_RM_output";
-            break;
-        }
-        else
-            methodOutName += filename[i];
-    }
+    methodOutName = (ut->extractFileName(model->getFilename() + "_RM_output"));
     if (model->isModelLoaded())
     {
         log = new Log(model->getSpecNumber());
-        delayStructure = new DelayHash(model->getSpecNumber(), initialTime, maximumTime, 0.01);
+        delayStructure = new DelayHash(model->getSpecNumber(), initialTime, maximumTime, 0.000001);
         specQuantity = new int[model->getSpecNumber()];
         propArray = new double[model->getReacNumber()];
         dg = new DependencyGraph(true, model);
@@ -137,9 +128,6 @@ void RejectionMethod::reacExecution()
 }
 void RejectionMethod::perform(Model *model, double maximumTime, double initialTime, long int seed)
 {
-    cout << "MaxTime: " << maximumTime << endl;
-    this->maximumTime = maximumTime;
-    this->initialTime = initialTime;
     cout << "-----------REJECTION METHOD-----------" << endl;
     initialization(model, maximumTime, initialTime, seed); //instantiates the variables
     //checks if the model is loaded

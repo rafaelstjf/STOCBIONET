@@ -6,10 +6,10 @@
 #include <stdlib.h>
 #include <climits>
 #include <map>
-#include "../include/Model.hpp"
-#include "../include/Dependency_Graph/DependencyGraph.hpp"
-#include "../include/Utils.hpp"
-#include "../include/Log/Log.hpp"
+#include "Model.hpp"
+#include "Dependency_Graph/DependencyGraph.hpp"
+#include "Utils.hpp"
+#include "Log/Log.hpp"
 
 #define INF 1.0E9
 #define EP 1.0E-5

@@ -2,10 +2,10 @@
 #define NEXTREACTIONMETHODCOMPACT_HPP
 #include <iostream>
 #include <climits>
-#include "../include/SSA.hpp"
-#include "../include/HeapNode.hpp"
-#include "../include/IndexedPrioQueue.hpp"
-#include "../include/List.hpp"
+#include "SSA.hpp"
+#include "HeapNode.hpp"
+#include "IndexedPrioQueue.hpp"
+#include "List.hpp"
 
 using namespace std;
 

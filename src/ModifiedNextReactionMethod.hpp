@@ -3,9 +3,9 @@
 
 #include <iostream>
 #include <climits>
-#include "../include/SSA.hpp"
-#include "../include/IndexedPrioQueue.hpp"
-#include "../include/HeapNode.hpp"
+#include "SSA.hpp"
+#include "IndexedPrioQueue.hpp"
+#include "HeapNode.hpp"
 
 
 #define inf INT_MAX

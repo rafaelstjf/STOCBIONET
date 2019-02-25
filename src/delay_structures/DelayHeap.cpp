@@ -1,4 +1,4 @@
-#include "../../include/delay_structures/DelayHeap.hpp"
+#include "DelayHeap.hpp"
 DelayHeap::DelayHeap(int capacity)
 {
     this->capacity = capacity;

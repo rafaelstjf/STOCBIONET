@@ -1,32 +1,22 @@
-#include "../include/DirectMethod.hpp"
+#include "DirectMethod.hpp"
 void DirectMethod::initialization(Model *model, double maximumTime, double initialTime, long int seed)
 {
     //instantiates the variables
-    this->model = model; //instantiates the model
-    string filename = model->getFilename();
+    this->model = model;
+    this->maximumTime = maximumTime;
+    this->initialTime = initialTime;
     if (seed >= 0)
         ut = new Utils(seed); //instantiates the utility class
     else
         ut = new Utils(); //instantiates the utility class
-    t = 0.0; //tal
+    t = 0.0;              //tal
     selectedReaction = 0;
-    this->maximumTime = maximumTime;
     totalPropensity = 0;
     sucess = false;
     reacCount = 0;
     reacPerSecond = 0.0;
     //creates the output file's name
-    for (int i = 0; i < filename.size(); i++)
-    {
-        if (filename[i] == '.')
-        {
-            methodOutName += "_DM_output";
-            break;
-        }
-
-        else
-            methodOutName += filename[i];
-    }
+    methodOutName = (ut->extractFileName(model->getFilename() + "_DM_output"));
     //loads both log and the depedency graph
     if (model->isModelLoaded())
     {
@@ -86,10 +76,10 @@ void DirectMethod::reacExecution()
     delete[] depArray;
     currentTime = currentTime + t;
 }
-void DirectMethod::perform(Model* model, double maximumTime, double initialTime, long int seed)
+void DirectMethod::perform(Model *model, double maximumTime, double initialTime, long int seed)
 {
     cout << "-----------DIRECT METHOD-----------" << endl;
-     initialization(model, maximumTime, initialTime, seed); //instantiates the variables
+    initialization(model, maximumTime, initialTime, seed); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
     {

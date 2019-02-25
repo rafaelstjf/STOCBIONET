@@ -1,4 +1,4 @@
-#include "../include/IndexedPrioQueue.hpp"
+#include "IndexedPrioQueue.hpp"
 
 
 IndexedPrioQueue::IndexedPrioQueue(int capacity)

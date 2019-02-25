@@ -1,4 +1,4 @@
-#include "../../include/delay_structures/DelayNode.hpp"
+#include "DelayNode.hpp"
 
 DelayNode::DelayNode(int specIndex, int reacIndex, double delayTime)
 {

@@ -1,29 +1,20 @@
-#include "../include/FirstReactionMethod.hpp"
+#include "FirstReactionMethod.hpp"
 
-void FirstReactionMethod::initialization(Model* model, double maximumTime, double initialTime, long int seed)
+void FirstReactionMethod::initialization(Model *model, double maximumTime, double initialTime, long int seed)
 {
     //instantiates the variables
     this->model = model;
-    string filename = model->getFilename();
+    this->maximumTime = maximumTime;
+    this->initialTime = initialTime;
     if (seed >= 0)
         ut = new Utils(seed); //instantiates the utility class
     else
         ut = new Utils(); //instantiates the utility class
     sucess = false;
-    this->maximumTime = maximumTime;
     reacCount = 0;
     reacPerSecond = 0.0;
     //creates the output file's name
-    for (int i = 0; i < filename.size(); i++)
-    {
-        if (filename[i] == '.')
-        {
-            methodOutName += "_FRM_output";
-            break;
-        }
-        else
-            methodOutName += filename[i];
-    }
+    methodOutName = (ut->extractFileName(model->getFilename() + "_FRM_output"));
     //loads both log, the depedency graph and the tal array
     if (model->isModelLoaded())
     {
@@ -37,10 +28,10 @@ void FirstReactionMethod::initialization(Model* model, double maximumTime, doubl
         }
     }
 }
-void FirstReactionMethod::perform(Model* model, double maximumTime, double initialTime, long int seed)
+void FirstReactionMethod::perform(Model *model, double maximumTime, double initialTime, long int seed)
 {
     cout << "-----------FIRST REACTION METHOD-----------" << endl;
-     initialization(model, maximumTime, initialTime, seed); //instantiates the variables
+    initialization(model, maximumTime, initialTime, seed); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
     {

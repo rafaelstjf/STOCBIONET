@@ -1,4 +1,4 @@
-#include "../include/SSA.hpp"
+#include "SSA.hpp"
 SSA::~SSA()
 {
     delete dg;
@@ -15,7 +15,7 @@ Log *SSA::getLog()
 void SSA::saveToFile()
 {
     string date = ut->getCurrentDateTime();
-    string logName = "logs/" + ut->extractFileName(methodOutName) + "_" + date;
+    string logName = "log_" + methodOutName + "_" + date;
     stringstream buffer;
     map<string, long int> speciesNameNumber = model->getSpecNameNumber();
     map<string, long int>::iterator itSpecies = speciesNameNumber.begin();
@@ -40,7 +40,7 @@ void SSA::saveToFile()
     speciesNameNumber.clear();
     ut->saveToCSVNoOverwriting(buffer.str(), methodOutName + "_" + date);
     //saving log
-    cout << "SAVING SIMULATION LOG IN " << logName << endl;
+    cout << "SAVING SIMULATION DETAILS IN " << logName << endl;
     stringstream buffer2;
     buffer2 << "Number of reactions executed: " << log->getNumberReacExecuted() << '\n';
     buffer2 << "Reactions per second: " << log->getReacPerSecond() << '\n';

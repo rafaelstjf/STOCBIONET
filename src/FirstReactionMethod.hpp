@@ -2,7 +2,7 @@
 #define FIRSTREACTIONMETHOD_HPP
 
 #include <iostream>
-#include "../include/SSA.hpp"
+#include "SSA.hpp"
 
 using namespace std;
 

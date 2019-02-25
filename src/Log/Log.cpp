@@ -1,4 +1,4 @@
-#include "../../include/Log/Log.hpp"
+#include "Log.hpp"
 Log::Log(int size)
 {
     first = nullptr;

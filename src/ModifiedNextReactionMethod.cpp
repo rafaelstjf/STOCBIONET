@@ -1,29 +1,20 @@
-#include "../include/ModifiedNextReactionMethod.hpp"
+#include "ModifiedNextReactionMethod.hpp"
 
 void ModifiedNextReactionMethod::initialization(Model *model, double maximumTime, double initialTime, long int seed)
 {
     //instantiates the variables
     sucess = false;
-    string filename = model->getFilename();
     this->model = model;
+    this->maximumTime = maximumTime;
+    this->initialTime = initialTime;
     if (seed >= 0)
         ut = new Utils(seed); //instantiates the utility class
     else
         ut = new Utils(); //instantiates the utility class    this->maximumTime = maximumTime;
-
     reacCount = 0;
     reacPerSecond = 0.0;
     //creates the output file's name
-    for (int i = 0; i < filename.size(); i++)
-    {
-        if (filename[i] == '.')
-        {
-            methodOutName += "_MNRM_output";
-            break;
-        }
-        else
-            methodOutName += filename[i];
-    }
+    methodOutName = (ut->extractFileName(model->getFilename() + "_MNRM_output"));
     //loads both log and the depedency graph
     if (model->isModelLoaded())
     {
@@ -85,10 +76,10 @@ void ModifiedNextReactionMethod::reacExecution()
         queue->update(i, nt);
     }
 }
-void ModifiedNextReactionMethod::perform(Model* model, double maximumTime, double initialTime, long int seed)
+void ModifiedNextReactionMethod::perform(Model *model, double maximumTime, double initialTime, long int seed)
 {
     cout << "-----------MODIFIED NEXT REACTION METHOD-----------" << endl;
-     initialization(model, maximumTime, initialTime, seed); //instantiates the variables
+    initialization(model, maximumTime, initialTime, seed); //instantiates the variables
     //checks if the model is loaded
     if (!model->isModelLoaded())
     {

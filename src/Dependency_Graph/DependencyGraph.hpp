@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "DGVertex.hpp"
-#include "../../include/Model.hpp"
+#include "../Model.hpp"
 using namespace std;
 class DependencyGraph
 {

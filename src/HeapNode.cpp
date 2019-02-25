@@ -1,4 +1,4 @@
-#include "../include/HeapNode.hpp"
+#include "HeapNode.hpp"
 
 HeapNode::HeapNode(){
     index = 0;

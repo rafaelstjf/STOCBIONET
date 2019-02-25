@@ -1,4 +1,4 @@
-#include "../../include/delay_structures/DelayList.hpp"
+#include "DelayList.hpp"
 DelayList::DelayList()
 {
 }

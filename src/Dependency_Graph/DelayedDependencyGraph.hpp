@@ -2,7 +2,7 @@
 #define DELAYEDDEPENDENCYGRAHP_HPP
 
 #include "DGVertex.hpp"
-#include "../../include/Model.hpp"
+#include "../Model.hpp"
 #include <iostream>
 using namespace std;
 

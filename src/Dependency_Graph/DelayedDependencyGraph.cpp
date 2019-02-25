@@ -1,4 +1,4 @@
-#include "../../include/Dependency_Graph/DelayedDependencyGraph.hpp"
+#include "DelayedDependencyGraph.hpp"
 DelayedDependencyGraph::~DelayedDependencyGraph()
 {
     for (int i = 0; i < numSpecies; i++)

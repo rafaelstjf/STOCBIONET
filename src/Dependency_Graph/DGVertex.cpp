@@ -1,4 +1,4 @@
-#include "../../include/Dependency_Graph/DGVertex.hpp"
+#include "DGVertex.hpp"
 
 DGVertex::DGVertex()
 {
