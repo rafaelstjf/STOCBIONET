@@ -3,33 +3,16 @@
 void NextReactionMethod::initialization(Model *model, double maximumTime, double initialTime, long int seed)
 {
     //instantiates the variables
-    sucess = false;
-    this->model = model;
-    this->maximumTime = maximumTime;
-    this->initialTime = initialTime;
-    if (seed >= 0)
-        ut = new Utils(seed); //instantiates the utility class
-    else
-        ut = new Utils(); //instantiates the utility class    this->maximumTime = maximumTime;
-    reacCount = 0;
-    reacPerSecond = 0.0;
-    //creates the output file's name
-    methodOutName = (ut->extractFileName(model->getFilename() + "_NRM_output"));
+    SSA::initialization(model, maximumTime, initialTime, seed);
+    methodOutName += "_NRM_output";
     //loads both log and the depedency graph
     if (model->isModelLoaded())
     {
-        log = new Log(model->getSpecNumber());
-        specQuantity = new int[model->getSpecNumber()];
-        propArray = new double[model->getReacNumber()];
         timePropZero = new double[model->getReacNumber()];
         propNonZero = new double[model->getReacNumber()];
         queue = new IndexedPrioQueue(model->getReacNumber());
         //it needs to use the DG without the self edge
         dg = new DependencyGraph(false, model);
-        for (int i = 0; i < model->getSpecNumber(); i++)
-        {
-            specQuantity[i] = model->getInitialQuantity()[i];
-        }
     }
 }
 void NextReactionMethod::reacTimeGeneration()

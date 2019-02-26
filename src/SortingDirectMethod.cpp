@@ -3,29 +3,12 @@
 void SortingDirectMethod::initialization(Model *model, double maximumTime, double initialTime, long int seed)
 {
     //instantiates the variables
-    this->model = model;
-    this->maximumTime = maximumTime;
-    this->initialTime = initialTime;
-    if (seed >= 0) //instantiates the utility class
-        ut = new Utils(seed);
-    else
-        ut = new Utils();
-    totalPropensity = 0.0;
-    sucess = false;
-    reacCount = 0;
-    reacPerSecond = 0.0;
-    methodOutName = (ut->extractFileName(model->getFilename() + "_SDM_output"));
+    SSA::initialization(model, maximumTime, initialTime, seed);
+    methodOutName += "_SDM_output";
     if (model->isModelLoaded())
     {
-        log = new Log(model->getSpecNumber());
-        specQuantity = new int[model->getSpecNumber()];
-        propArray = new double[model->getReacNumber()];
         reactionSO = new int[model->getReacNumber()]; //creates an array to sort the most used reactions
         dg = new DependencyGraph(true, model);
-        for (int i = 0; i < model->getSpecNumber(); i++)
-        {
-            specQuantity[i] = model->getInitialQuantity()[i];
-        }
         for (int i = 0; i < model->getReacNumber(); i++)
         {
             reactionSO[i] = i;

@@ -12,6 +12,28 @@ Log *SSA::getLog()
 {
     return log;
 }
+void SSA::initialization(Model *model, double maximumTime, double initialTime, long int seed){
+     //instantiates the variables
+    this->model = model;
+    this->maximumTime = maximumTime;
+    this->initialTime = initialTime;
+    this->sucess = false;
+    this->reacCount = 0;
+    this->reacPerSecond = 0;
+        //creates the output file's name
+    this->methodOutName = ut->extractFileName(model->getFilename());
+    if(seed >= 0 )
+        this->ut = new Utils(seed); //instantiates the utility class with a custom seed
+    else
+        this->ut = new Utils(); //instantiates the utility class with a generated seed
+    if(model->isModelLoaded()){
+        this->log = new Log(model->getSpecNumber());
+        this->specQuantity = new int[model->getSpecNumber()];
+        this->propArray = new double[model->getReacNumber()];
+        for (int i = 0; i < model->getSpecNumber(); i++)
+            this->specQuantity[i] = model->getInitialQuantity()[i];
+    }
+}
 void SSA::saveToFile()
 {
     string date = ut->getCurrentDateTime();

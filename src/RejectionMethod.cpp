@@ -3,30 +3,13 @@
 void RejectionMethod::initialization(Model *model, double maximumTime, double initialTime, long int seed)
 {
 
-    this->model = model;
-    this->maximumTime = maximumTime;
-    this->initialTime = initialTime;
-    if (seed >= 0)
-        ut = new Utils(seed);
-    else
-        ut = new Utils();
-    sucess = false;
-    reacCount = 0;
-    reacPerSecond = 0.0;
-    methodOutName = (ut->extractFileName(model->getFilename() + "_RM_output"));
+    SSA::initialization(model, maximumTime, initialTime, seed);
+    methodOutName += "_RM_output";
     if (model->isModelLoaded())
     {
-        log = new Log(model->getSpecNumber());
         delayStructure = new DelayHash(model->getSpecNumber(), initialTime, maximumTime, 0.000001);
-        specQuantity = new int[model->getSpecNumber()];
-        propArray = new double[model->getReacNumber()];
         dg = new DependencyGraph(true, model);
-        dg->printGraph();
         ddg = new DelayedDependencyGraph(model);
-        for (int i = 0; i < model->getSpecNumber(); i++)
-        {
-            specQuantity[i] = model->getInitialQuantity()[i];
-        }
     }
 }
 void RejectionMethod::reacSelection()

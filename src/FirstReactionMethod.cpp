@@ -2,31 +2,12 @@
 
 void FirstReactionMethod::initialization(Model *model, double maximumTime, double initialTime, long int seed)
 {
-    //instantiates the variables
-    this->model = model;
-    this->maximumTime = maximumTime;
-    this->initialTime = initialTime;
-    if (seed >= 0)
-        ut = new Utils(seed); //instantiates the utility class
-    else
-        ut = new Utils(); //instantiates the utility class
-    sucess = false;
-    reacCount = 0;
-    reacPerSecond = 0.0;
-    //creates the output file's name
-    methodOutName = (ut->extractFileName(model->getFilename() + "_FRM_output"));
-    //loads both log, the depedency graph and the tal array
+    SSA::initialization(model, maximumTime, initialTime, seed);
+    //adds the method on filename
+    methodOutName +="_FRM_output";
+    //instantiates the tal array
     if (model->isModelLoaded())
-    {
-        log = new Log(model->getSpecNumber());
-        specQuantity = new int[model->getSpecNumber()];
-        propArray = new double[model->getReacNumber()];
         t = new double[model->getReacNumber()];
-        for (int i = 0; i < model->getSpecNumber(); i++)
-        {
-            specQuantity[i] = model->getInitialQuantity()[i];
-        }
-    }
 }
 void FirstReactionMethod::perform(Model *model, double maximumTime, double initialTime, long int seed)
 {

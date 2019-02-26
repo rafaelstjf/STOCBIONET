@@ -43,7 +43,7 @@ class SSA
     bool sucess;          //boolean variable used to check if the simulation was performed
 
     //functions
-    virtual void initialization(Model* model, double maximumTime, double initialTime, long int seed) = 0; //read the model and initialization data structures
+    virtual void initialization(Model* model, double maximumTime, double initialTime, long int seed); //read the model and initialization data structures
     virtual void calcPropensity();                                      //calculate the propensity function for each reaction
     virtual void calcPropOne(int index);
     virtual void reacTimeGeneration() = 0;

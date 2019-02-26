@@ -2,32 +2,16 @@
 
 void SimplifiedNextReactionMethod::initialization(Model *model, double maximumTime, double initialTime, long int seed)
 {
-    sucess = false;
-    this->model = model;
-    this->maximumTime = maximumTime;
-    this->initialTime = initialTime;
-    if (seed >= 0)
-        ut = new Utils(seed); //instantiates the utility class
-    else
-        ut = new Utils(); //instantiates the utility class    this->maximumTime = maximumTime;
-    methodOutName = (ut->extractFileName(model->getFilename() + "_SNRM_output"));
+    SSA::initialization(model, maximumTime, initialTime, seed);
+    methodOutName += "_SNRM_output";
     if (model->isModelLoaded())
     {
-        log = new Log(model->getSpecNumber());
-        specQuantity = new int[model->getSpecNumber()];
-        propArray = new double[model->getReacNumber()];
         queue = new IndexedPrioQueue(model->getReacNumber());
         dg = new DependencyGraph(true, model);
         P = new double[model->getReacNumber()];
         U = new double[model->getReacNumber()];
         T = new double[model->getReacNumber()];
-        for (int i = 0; i < model->getSpecNumber(); i++)
-        {
-            specQuantity[i] = model->getInitialQuantity()[i];
-        }
     }
-    reacCount = 0;
-    reacPerSecond = 0.0;
 }
 void SimplifiedNextReactionMethod::reacTimeGeneration()
 {
