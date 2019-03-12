@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include "DirectMethod.hpp"
 #include "SortingDirectMethod.hpp"
+#include "OptimizedDirectMethod.hpp"
 #include "FirstReactionMethod.hpp"
 #include "NextReactionMethod.hpp"
 #include "NextReactionMethodCompact.hpp"
@@ -12,8 +13,10 @@
 #include "Model.hpp"
 #if defined(_WIN32)
 #define PLATFORM_NAME "windows" // Windows
-#elif defined(_linux_)
+#elif defined(__linux__)
 #define PLATFORM_NAME "linux" // Linux
+#else
+#define PLATFORM_NAME "unknown"
 #endif
 
 using namespace std;
@@ -40,8 +43,10 @@ int main(int argc, char *argv[])
         chooseSimulation(op);
         if (op == "DM")
             simulation = new DirectMethod();
-        if (op == "SDM")
+        else if (op == "SDM")
             simulation = new SortingDirectMethod();
+        else if (op == "ODM")
+            simulation = new OptimizedDirectMethod();
         else if (op == "FRM")
             simulation = new FirstReactionMethod();
         else if (op == "NRM")
@@ -89,8 +94,10 @@ int main(int argc, char *argv[])
             menu(model, initialTime, maximumTime, seed, op);
             if (op == "DM")
                 simulation = new DirectMethod();
-            if (op == "SDM")
+            else if (op == "SDM")
                 simulation = new SortingDirectMethod();
+            else if (op == "ODM")
+                simulation = new OptimizedDirectMethod();
             else if (op == "FRM")
                 simulation = new FirstReactionMethod();
             else if (op == "NRM")
@@ -160,7 +167,7 @@ void menu(Model *model, double &initialTime, double &maximumTime, long int &seed
     cin >> initialTime;
     cout << "Insert the simulation time:" << endl;
     cin >> maximumTime;
-    cout << "Methods:\nDM - Direct Method\nSDM - Sorting Direct Method\nFRM - First Reaction Method\nNRM - Next Reaction Method\nNRMC - Next Reaction Method Compact\nMNRM - Modified Next Reaction Method\nSNRM - Simplified Next Reaction Method\nRM - Rejection Method\n"
+    cout << "Methods:\nDM - Direct Method\nSDM - Sorting Direct Method\nODM - Optimized Direct Method\nFRM - First Reaction Method\nNRM - Next Reaction Method\nNRMC - Next Reaction Method Compact\nMNRM - Modified Next Reaction Method\nSNRM - Simplified Next Reaction Method\nRM - Rejection Method\n"
          << endl;
     cout << "Insert the Method:" << endl;
     double flag = true;
@@ -193,7 +200,7 @@ void menu(Model *model, double &initialTime, double &maximumTime, long int &seed
 }
 void chooseSimulation(string &op)
 {
-    if (op != "DM" && op != "SDM" && op != "FRM" && op != "NRM" && op != "NRMC" && op != "MNRM" && op != "SNRM" && op != "RM")
+    if (op != "DM" && op != "SDM" && op != "ODM" && op != "FRM" && op != "NRM" && op != "NRMC" && op != "MNRM" && op != "SNRM" && op != "RM")
     {
         cout << "Error. Invalid operation!" << endl;
         op = "error";
@@ -219,6 +226,6 @@ void clearScreen()
     //clear the screen
     if (PLATFORM_NAME == "windows")
         system("cls");
-    if (PLATFORM_NAME == "linux")
+    else if (PLATFORM_NAME == "linux")
         system("clear");
 }

@@ -17,9 +17,9 @@ Stochastic simulation algorithms for Gene Regulatory Networks for delayed and no
  
 ## Methods in development:
  
+ * Optimized direct method (__99.9%__)
  * Rejection method using Hash Tables (__99.9%__)
- * Next reaction method compact (__98.0%__)
- * Delayed modified next reaction method (__0%__ )
+ * Next reaction method compact (__0.0%__)
 
 ## Requirements:
 
@@ -47,14 +47,15 @@ If you are using it in the terminal you can run it without arguments or with the
 
 The current operation's codes are:
 ```
-DM - Direct Method
-SDM - Direct Method
-FRM - First Reaction Method
-NRM - Next Reaction Method
+  DM - Direct Method
+ ODM - Optimized Direct Method
+ SDM - Sorting Direct Method
+ FRM - First Reaction Method
+ NRM - Next Reaction Method
 NRMC - Next Reaction Method Compact
 MNRM - Modified Next Reaction Method
 SNRM - Simplified Next Reaction Method
-RM - Rejection Method
+  RM - Rejection Method
 ```
 
 ## Example of input file:
@@ -85,6 +86,7 @@ transcription,k2:B + C -> D;
 transcription,k3:D + E -> E + F;
 transcription,k4:F -> D + G;
 transcription,k5:E + G -> A;
-#IMPORTANT: Comments not supported
 ```
+__IMPORTANT:__ Comments are not supported in the input file
+
 :+1: Credits for the input file structure: Camillo de Lellis Falcão da Silva

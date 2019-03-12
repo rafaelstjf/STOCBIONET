@@ -25,7 +25,6 @@ void SortingDirectMethod::reacSelection()
 {
     double selector;
     double u2;
-    int reactionSOindex;
     u2 = ut->getRandomNumber();
     if (totalPropensity <= EP)
         selectedReaction = -1;
