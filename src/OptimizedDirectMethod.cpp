@@ -135,6 +135,7 @@ void OptimizedDirectMethod::preSimul()
         }
         reactionSO[k + 1] = key;
         temp[k + 1] = key2;
+        delete [] temp;
     }
     for (int i = 0; i < model->getReacNumber(); i++)
     {

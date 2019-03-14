@@ -1,6 +1,7 @@
 #include "Log.hpp"
-Log::Log(int size)
+Log::Log(int size, map<string, long int> specNameNumber)
 {
+    this->specNameNumber = specNameNumber;
     first = nullptr;
     numNodes = 0;
     last = nullptr;
@@ -41,6 +42,7 @@ void Log::insertNode(double time, int *array)
 void Log::printLog()
 {
     //print all the nodes using the array to update the different species
+
     int val;
     Node *it = first;
     while (it != nullptr)
@@ -67,58 +69,10 @@ void Log::printLog()
 }
 stringstream Log::exportToStringStream()
 {
-    //exports the log into a string, if the number of nodes is bigger than the maximum, the algorithm
-    //will jump some nodes
+    //exports the log into a stringstream
     stringstream buffer;
     int val;
     Node *it = first;
-    /*
-    if (numNodes >= 50000)
-    {
-        //Simulation bigger than file
-        int jump = ceil((double)numNodes / 5000);
-        int j = jump;
-        while (it != nullptr)
-        {
-            if (j == jump)
-            {
-                buffer << it->getTime() << "; ";
-                for (int i = 0; i < size; i++)
-                {
-                    if (it->checkExists(i))
-                    {
-                        val = it->getValIndex(i);
-                        buffer << val;
-                        currentArray[i] = val;
-                    }
-                    else
-                    {
-                        buffer << currentArray[i];
-                    }
-                    if (i < size - 1)
-                        buffer << "; ";
-                }
-                buffer << '\n';
-                j = 1;
-            }
-            else
-            {
-                for (int i = 0; i < size; i++)
-                {
-                    if (it->checkExists(i))
-                    {
-                        val = it->getValIndex(i);
-                        currentArray[i] = val;
-                    }
-                }
-                j++;
-            }
-            it = it->getNext();
-        }
-    }
-    else
-    {
-    */
     while (it != nullptr)
     {
         buffer << it->getTime() << "; ";
@@ -140,7 +94,6 @@ stringstream Log::exportToStringStream()
         buffer << '\n';
         it = it->getNext();
     }
-    //}
     return buffer;
 }
 void Log::setNumberReacExecuted(int reacCount)
@@ -158,4 +111,71 @@ void Log::setReacPerSecond(double reacPerSecond)
 double Log::getReacPerSecond()
 {
     return reacPerSecond;
+}
+void Log::saveDetailsToFile(string filename, unsigned long int seed)
+{
+    fstream outputFile;
+    try
+    {
+        outputFile.open(filename, fstream::out | fstream::trunc);
+        outputFile << "Number of reactions executed: " << reacCount << '\n';
+        outputFile << "Reactions per second: " << reacPerSecond << '\n';
+        outputFile << "Seed: " << seed << '\n';
+        outputFile.close();
+    }
+    catch (const std::exception &e)
+    {
+        cout << "Impossible to save the file!" << endl;
+    }
+}
+void Log::saveResultsToFile(string filename)
+{
+    fstream outputFile;
+    try
+    {
+        outputFile.open(filename, fstream::out | fstream::trunc);
+        int val;
+        Node *it = first;
+        map<string, long int>::iterator itSpecies = specNameNumber.begin();
+        string names[specNameNumber.size()];
+        while (itSpecies != specNameNumber.end())
+        {
+            names[itSpecies->second] = itSpecies->first;
+            itSpecies++;
+        }
+        outputFile << "Time; ";
+        for (int i = 0; i < specNameNumber.size(); i++)
+        {
+            outputFile << names[i];
+            if (i < specNameNumber.size() - 1)
+                outputFile << "; ";
+        }
+        outputFile << '\n';
+        while (it != nullptr)
+        {
+            outputFile << it->getTime() << "; ";
+            for (int i = 0; i < size; i++)
+            {
+                if (it->checkExists(i))
+                {
+                    val = it->getValIndex(i);
+                    outputFile << val;
+                    currentArray[i] = val;
+                }
+                else
+                {
+                    outputFile << currentArray[i];
+                }
+                if (i < size - 1)
+                    outputFile << "; ";
+            }
+            outputFile << '\n';
+            it = it->getNext();
+        }
+        outputFile.close();
+    }
+    catch (const std::exception &e)
+    {
+        cout << "Impossible to save the file!" << endl;
+    }
 }

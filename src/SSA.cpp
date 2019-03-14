@@ -27,7 +27,7 @@ void SSA::initialization(Model *model, double maximumTime, double initialTime, l
     else
         this->ut = new Utils(); //instantiates the utility class with a generated seed
     if(model->isModelLoaded()){
-        this->log = new Log(model->getSpecNumber());
+        this->log = new Log(model->getSpecNumber(), model->getSpecNameNumber());
         this->specQuantity = new int[model->getSpecNumber()];
         this->propArray = new double[model->getReacNumber()];
         for (int i = 0; i < model->getSpecNumber(); i++)
@@ -37,39 +37,14 @@ void SSA::initialization(Model *model, double maximumTime, double initialTime, l
 void SSA::saveToFile()
 {
     string date = ut->getCurrentDateTime();
-    string logName = "log_" + methodOutName + "_" + date;
-    stringstream buffer;
-    map<string, long int> speciesNameNumber = model->getSpecNameNumber();
-    map<string, long int>::iterator itSpecies = speciesNameNumber.begin();
-    //get the name of the species
-    string names[speciesNameNumber.size()];
-    while (itSpecies != speciesNameNumber.end())
-    {
-        names[itSpecies->second] = itSpecies->first;
-        itSpecies++;
-    }
-    cout << "SAVING SIMULATION RESULTS IN " << methodOutName << "_" << date << endl;
-    buffer.clear();
-    buffer << "Time; ";
-    for (int i = 0; i < speciesNameNumber.size(); i++)
-    {
-        buffer << names[i];
-        if (i < speciesNameNumber.size() - 1)
-            buffer << "; ";
-    }
-    buffer << '\n';
-    buffer << log->exportToStringStream().str();
-    speciesNameNumber.clear();
-    ut->saveToCSVNoOverwriting(buffer.str(), methodOutName + "_" + date);
+    string logName = "log_" + methodOutName + "_" + date + ".txt";
+    string resultName = methodOutName + "_" + date + ".csv";
+    cout << "SAVING SIMULATION RESULTS IN " <<resultName<< endl;
+    log->saveResultsToFile(resultName);
     //saving log
     cout << "SAVING SIMULATION DETAILS IN " << logName << endl;
-    stringstream buffer2;
-    buffer2 << "Number of reactions executed: " << log->getNumberReacExecuted() << '\n';
-    buffer2 << "Reactions per second: " << log->getReacPerSecond() << '\n';
-    buffer2 << "Seed: " << ut->getSeed() << '\n';
-    ut->saveToTXT(buffer2.str(), logName);
-    buffer.clear();
-    buffer2.clear();
+    log->saveDetailsToFile(logName, ut->getSeed());
+
 }
 void SSA::printResult()
 {
