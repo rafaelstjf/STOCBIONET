@@ -21,7 +21,6 @@ class NextReactionMethod : public SSA{
     virtual void reacTimeGeneration();
     virtual void reacSelection();
     virtual void reacExecution();
-    double c;
     IndexedPrioQueue* queue;
     HeapNode* selectedNode;
     double* timePropZero; //time when ak becomes 0

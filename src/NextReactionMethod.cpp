@@ -36,11 +36,8 @@ void NextReactionMethod::reacTimeGeneration()
 }
 void NextReactionMethod::reacSelection()
 {
-    c = currentTime;
     selectedNode = queue->getMin();
     currentTime = selectedNode->getTime();
-    if (c >= currentTime)
-        cout << "Wrong" << endl;
 }
 void NextReactionMethod::reacExecution()
 {
@@ -126,7 +123,6 @@ void NextReactionMethod::perform(Model *model, double maximumTime, double initia
         }
         log->insertNode(currentTime, specQuantity);
     }
-    cout << c << endl;
     double en = ut->getCurrentTime(); //ending of the simulation
     sucess = true;
     reacPerSecond = (double)reacCount / (en - beg);

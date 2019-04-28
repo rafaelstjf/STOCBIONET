@@ -137,11 +137,6 @@ void OptimizedDirectMethod::preSimul()
         temp[k + 1] = key2;
         delete [] temp;
     }
-    for (int i = 0; i < model->getReacNumber(); i++)
-    {
-        cout << reactionSO[i] << " : " << temp[i] << endl;
-        reactionSO[i] = temp[i];
-    }
 }
 void OptimizedDirectMethod::perform(Model *model, double maximumTime, double initialTime, long int seed)
 {

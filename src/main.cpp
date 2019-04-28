@@ -165,7 +165,7 @@ void menu(Model *model, double &initialTime, double &maximumTime, long int &seed
     }
     cout << "Insert the initial time:" << endl;
     cin >> initialTime;
-    cout << "Insert the simulation time:" << endl;
+    cout << "Insert the maximum time:" << endl;
     cin >> maximumTime;
     cout << "Methods:\nDM - Direct Method\nSDM - Sorting Direct Method\nODM - Optimized Direct Method\nFRM - First Reaction Method\nNRM - Next Reaction Method\nNRMC - Next Reaction Method Compact\nMNRM - Modified Next Reaction Method\nSNRM - Simplified Next Reaction Method\nRM - Rejection Method\n"
          << endl;

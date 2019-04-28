@@ -46,14 +46,14 @@ void DelayHash::print()
 int DelayHash::hashingFunction(double delayTime)
 {
 
-    /*
+    
     int whole = floor(delayTime);
     int decimal = floor((delayTime - whole) * 100);
     return (decimal + whole) % capacity;
-    */
     //R = inf + ((sup-inf)/(1.0/precision))*int
-    int key = (delayTime - low) * ((1.0 /  precision)/(high - (1+low)));
+    int key = (delayTime - low) * ((1.0 / precision) / (high - (1 + low)));
     return key % capacity;
+   
 }
 bool DelayHash::isEmpty()
 {

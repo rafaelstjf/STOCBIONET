@@ -126,7 +126,6 @@ void RejectionMethod::perform(Model *model, double maximumTime, double initialTi
     {
         log->insertNode(currentTime, specQuantity);
         reacExecution();
-        delayStructure->print();
     }
     double en = ut->getCurrentTime(); //ending of the simulation
     sucess = true;
