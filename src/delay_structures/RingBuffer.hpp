@@ -5,27 +5,29 @@
 #include <cmath>
 #include <climits>
 #include "DelayNode.hpp"
+#include "../DelayStructure.hpp"
 #include <vector>
 using namespace std;
-class RingBuffer
+class RingBuffer : public DelayStructure
 {
 public:
   RingBuffer(int capacity);
   ~RingBuffer();
-  bool isEmpty();
   void insertKey(int specIndex, int reacIndex, double delayTime);
-  void removeFirst();
   void print();
-  void removeByIndex(int index);
+  vector<DelayNode *> extractEqual(double value);
+  DelayNode *getNode(int index);
+  DelayNode *getMinNode();
+  //
+  bool isEmpty();
   int getFirstIndex();
-  int getCapacity();
   int getLastIndex();
-  DelayNode* getNode(int index);
-  vector<DelayNode*>  extractEqual(double value);
-  DelayNode* getMinNode();
+  int getCapacity();
+  void removeByIndex(int index);
+  void removeFirst();
 
 private:
-  DelayNode** array;
+  DelayNode **array;
   int inUse;
   int capacity;
   int first;

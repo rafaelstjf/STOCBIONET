@@ -7,8 +7,9 @@
 #include "delay_structures/DelayList.hpp"
 #include "delay_structures/DelayNode.hpp"
 #include "delay_structures/DelayHash.hpp"
+#include "delay_structures/DelayHeap.hpp"
 #include "delay_structures/RingBuffer.hpp"
-
+#include "DelayStructure.hpp"
 using namespace std;
 
 class RejectionMethod : public SSA
@@ -23,12 +24,11 @@ protected:
     virtual void reacSelection();
     virtual void reacExecution();
     virtual void updateSpeciesQuantities(int index);
-    //DelayList* list;
-    DelayHash* delayStructure;
+    DelayStructure* delayStructure;
     DelayedDependencyGraph* ddg;
 
 private:
-
+    void chooseStructure();
 };
 
 #endif

@@ -4,11 +4,12 @@
 #include <iostream>
 #include <climits>
 #include "DelayNode.hpp"
+#include "../DelayStructure.hpp"
 #include <vector>
 #include <cmath>
 using namespace std;
 
-class DelayHeap
+class DelayHeap : public DelayStructure
 {
 
 private:

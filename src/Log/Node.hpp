@@ -16,7 +16,6 @@ class Node {
 
     public:
     Node();
-    void batata();
     ~Node();
     Node* getNext();
     void setNext(Node* next);

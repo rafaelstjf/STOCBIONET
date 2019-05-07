@@ -7,7 +7,7 @@ void RejectionMethod::initialization(Model *model, double maximumTime, double in
     methodOutName += "_RM_output";
     if (model->isModelLoaded())
     {
-        delayStructure = new DelayHash(model->getSpecNumber(), initialTime, maximumTime, 0.000001);
+        chooseStructure();
         dg = new DependencyGraph(true, model);
         ddg = new DelayedDependencyGraph(model);
     }
@@ -134,6 +134,40 @@ void RejectionMethod::perform(Model *model, double maximumTime, double initialTi
     cout << "Reactions per second: " << reacPerSecond << endl;
     log->setReacPerSecond(reacPerSecond);
     log->setNumberReacExecuted(reacCount);
+}
+void RejectionMethod::chooseStructure()
+{
+    int option = 0;
+    bool flag = false;
+    cout << "Choose the delay structure" << endl;
+    cout << "1 - List \n2 - Heap \n3 - Ring Buffer \n4 - Hash Table" << endl;
+    cin >> option;
+    while (!flag)
+    {
+        switch (option)
+        {
+        case 1:
+            delayStructure = new DelayList();
+            flag = true;
+            break;
+        case 2:
+            delayStructure = new DelayHeap(model->getReacNumber());
+            flag = true;
+            break;
+        case 3:
+            delayStructure = new RingBuffer(model->getReacNumber());
+            flag = true;
+            break;
+        case 4:
+            delayStructure = new DelayHash(model->getReacNumber(), initialTime, maximumTime, 0.00001);
+            flag = true;
+            break;
+        default:
+            cout << "Wrong option! Try again." << endl;
+            cin >> option;
+            break;
+        }
+    }
 }
 RejectionMethod::~RejectionMethod()
 {

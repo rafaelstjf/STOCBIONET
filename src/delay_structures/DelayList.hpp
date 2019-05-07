@@ -4,9 +4,10 @@
 #include <iostream>
 #include <vector>
 #include <climits>
+#include "../DelayStructure.hpp"
 #include "DelayNode.hpp"
 using namespace std;
-class DelayList
+class DelayList : public DelayStructure
 {
 private:
   vector<DelayNode *> array;

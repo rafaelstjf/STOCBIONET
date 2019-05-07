@@ -3,10 +3,11 @@
 
 #include <iostream>
 #include "RingBuffer.hpp"
+#include "../DelayStructure.hpp"
 #include <vector>
 using namespace std;
 
-class DelayHash
+class DelayHash : public DelayStructure
 {
 
   private:
