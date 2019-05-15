@@ -23,6 +23,7 @@ class SSA
     virtual ~SSA();
     virtual void printResult();
     virtual void saveToFile();
+    virtual void saveDetailsToFile();
     virtual Log *getLog();
 
   protected:

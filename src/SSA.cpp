@@ -46,6 +46,12 @@ void SSA::saveToFile()
     log->saveDetailsToFile(logName, ut->getSeed());
 
 }
+void SSA::saveDetailsToFile(){
+     string date = ut->getCurrentDateTime();
+    string logName = "log_" + methodOutName + "_" + date + ".txt";
+    cout << "SAVING SIMULATION DETAILS IN " << logName << endl;
+    log->saveDetailsToFile(logName, ut->getSeed());
+}
 void SSA::printResult()
 {
     log->printLog();

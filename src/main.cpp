@@ -33,9 +33,15 @@ int main(int argc, char *argv[])
     SSA *simulation = nullptr;
     long int seed = -1;
     Model *model = new Model();
-
-    if (argc == 5)
+    bool batch = false;
+    int numSimulations = 0;
+    if (argc >= 5)
     {
+        if(argc == 6){
+
+            batch = true;
+            numSimulations = atoi(argv[5]);
+        }
         filename = argv[1];
         op = argv[2];
         initialTime = atof(argv[3]);
@@ -82,8 +88,38 @@ int main(int argc, char *argv[])
         model->loadModel(filename);
         if (!model->isModelLoaded())
             return -1;
-        simulation->perform(model, maximumTime, initialTime, seed);
-        postSimulation(simulation);
+        if(batch){
+            int cSimult = 0;
+            while(cSimult < numSimulations){
+                cSimult++;
+                if (op == "DM")
+                simulation = new DirectMethod();
+            else if (op == "SDM")
+                simulation = new SortingDirectMethod();
+            else if (op == "ODM")
+                simulation = new OptimizedDirectMethod();
+            else if (op == "FRM")
+                simulation = new FirstReactionMethod();
+            else if (op == "NRM")
+                simulation = new NextReactionMethod();
+            else if (op == "NRMC")
+                simulation = new NextReactionMethodCompact();
+            else if (op == "MNRM")
+                simulation = new ModifiedNextReactionMethod();
+            else if (op == "SNRM")
+                simulation = new SimplifiedNextReactionMethod();
+            else if (op == "RM")
+                simulation = new RejectionMethod();
+                simulation->perform(model, maximumTime, initialTime, seed);
+                simulation->saveDetailsToFile();
+                delete simulation;
+            }
+        }else
+        {
+            simulation->perform(model, maximumTime, initialTime, seed);
+            postSimulation(simulation);
+        }
+        
         delete simulation;
     }
     else
@@ -119,7 +155,7 @@ int main(int argc, char *argv[])
                 repeat = false;
             else
             {
-                simulation = nullptr;
+                delete simulation;
             }
         }
     }

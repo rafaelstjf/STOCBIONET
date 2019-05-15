@@ -179,8 +179,8 @@ const vector<string> StringManager::multExplodeString(const string &str, const s
             v2.push_back(buffer);
             buffer = "";
         }
-        return v2;
     }
+        return v2;
 }
 bool StringManager::isdigit(char c)
 {

@@ -67,6 +67,7 @@ int Node::getValIndexFather(int index)
         if(it!= nullptr)
             return it->getValIndex(index);
     }
+    return -1;
 }
 void Node::insertSpecie(int index, int value, int* array)
 {
