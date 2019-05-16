@@ -46,14 +46,12 @@ void DelayHash::print()
 int DelayHash::hashingFunction(double delayTime)
 {
 
-    
     int whole = floor(delayTime);
     int decimal = floor((delayTime - whole) * 100);
     return (decimal + whole) % capacity;
     //R = inf + ((sup-inf)/(1.0/precision))*int
     int key = (delayTime - low) * ((1.0 / precision) / (high - (1 + low)));
     return key % capacity;
-   
 }
 bool DelayHash::isEmpty()
 {
@@ -82,17 +80,11 @@ vector<DelayNode *> DelayHash::extractEqual(double value)
     inUse = inUse - vec.size();
     if (inUse != 0)
     {
-        bool first = true;
         for (int i = 0; i < capacity; i++)
         {
             if (!array[i]->isEmpty())
             {
-                if (first)
-                {
-                    firstIndex = i;
-                    firstDelay = array[i]->getMinNode()->getDelayTime();
-                }
-                else if (array[i]->getMinNode()->getDelayTime() < firstDelay)
+                if (array[i]->getMinNode()->getDelayTime() < firstDelay)
                 {
                     firstDelay = array[i]->getMinNode()->getDelayTime();
                     firstIndex = i;

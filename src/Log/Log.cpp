@@ -45,6 +45,7 @@ void Log::printLog()
 
     int val;
     Node *it = first;
+    int* tempArray = new int[size];
     while (it != nullptr)
     {
         cout << "time: " << it->getTime() << endl;
@@ -54,11 +55,11 @@ void Log::printLog()
             {
                 val = it->getValIndex(i);
                 cout << val;
-                currentArray[i] = val;
+                tempArray[i] = val;
             }
             else
             {
-                cout << currentArray[i];
+                cout << tempArray[i];
             }
             if (i < size - 1)
                 cout << ": ";
@@ -66,10 +67,12 @@ void Log::printLog()
         cout << endl;
         it = it->getNext();
     }
+    delete[] tempArray;
 }
 stringstream Log::exportToStringStream()
 {
     //exports the log into a stringstream
+    int* tempArray = new int[size];
     stringstream buffer;
     int val;
     Node *it = first;
@@ -82,11 +85,11 @@ stringstream Log::exportToStringStream()
             {
                 val = it->getValIndex(i);
                 buffer << val;
-                currentArray[i] = val;
+                tempArray[i] = val;
             }
             else
             {
-                buffer << currentArray[i];
+                buffer << tempArray[i];
             }
             if (i < size - 1)
                 buffer << "; ";
@@ -94,6 +97,7 @@ stringstream Log::exportToStringStream()
         buffer << '\n';
         it = it->getNext();
     }
+    delete[] tempArray;
     return buffer;
 }
 void Log::setNumberReacExecuted(int reacCount)
