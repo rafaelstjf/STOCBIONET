@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <cstdlib>
 #include "DirectMethod.hpp"
 #include "SortingDirectMethod.hpp"
 #include "OptimizedDirectMethod.hpp"
@@ -18,150 +17,156 @@
 #else
 #define PLATFORM_NAME "unknown"
 #endif
-
-using namespace std;
-void menu(Model *model, double &initialTime, double &maximumTime, long int &seed, string &op);
-void chooseSimulation(string &op);
-void clearScreen();
+SSA *allocateSimulation(string &op);
 void postSimulation(SSA *simulation);
+void runBatchSimulation(Model *model, SSA *simulation, double &initialTime, double &maximumTime, string &op, long int &seed, int &numSimulations);
+void menu(Model *model, double &initialTime, double &maximumTime, long int &seed, string &op);
+void clearScreen();
+using namespace std;
 int main(int argc, char *argv[])
 {
     char printOp;
-    string filename;
-    string op;
+    string filename, op;
     double maximumTime = 0.0, initialTime = 0.0;
     SSA *simulation = nullptr;
     long int seed = -1;
     Model *model = new Model();
-    bool batch = false;
     int numSimulations = 0;
+    //set variables
     if (argc >= 5)
     {
-        if(argc == 6){
-
-            batch = true;
-            numSimulations = atoi(argv[5]);
-        }
         filename = argv[1];
         op = argv[2];
         initialTime = atof(argv[3]);
         maximumTime = atof(argv[4]);
-        chooseSimulation(op);
-        if (op == "DM")
-            simulation = new DirectMethod();
-        else if (op == "SDM")
-            simulation = new SortingDirectMethod();
-        else if (op == "ODM")
-            simulation = new OptimizedDirectMethod();
-        else if (op == "FRM")
-            simulation = new FirstReactionMethod();
-        else if (op == "NRM")
-            simulation = new NextReactionMethod();
-        else if (op == "NRMC")
-            simulation = new NextReactionMethodCompact();
-        else if (op == "MNRM")
-            simulation = new ModifiedNextReactionMethod();
-        else if (op == "SNRM")
-            simulation = new SimplifiedNextReactionMethod();
-        else if (op == "RM")
-            simulation = new RejectionMethod();
-        if (op == "error")
-            return -1;
-        else
-        {
-            cout << "Do you want to insert a custom seed? [y|n]" << endl;
-            cin >> printOp;
-            if (printOp == 'y')
-            {
-                cout << "seed: ";
-                string seedstr;
-                cin >> seedstr;
-                cout << endl;
-                seed = atoi(seedstr.c_str());
-                if (seed < 0)
-                {
-                    cout << "Invalid seed! Performing the simulation using a random seed." << endl;
-                    seed = -1;
-                }
-            }
-        }
         model->loadModel(filename);
         if (!model->isModelLoaded())
-            return -1;
-        if(batch){
-            int cSimult = 0;
-            while(cSimult < numSimulations){
-                cSimult++;
-                if (op == "DM")
-                simulation = new DirectMethod();
-            else if (op == "SDM")
-                simulation = new SortingDirectMethod();
-            else if (op == "ODM")
-                simulation = new OptimizedDirectMethod();
-            else if (op == "FRM")
-                simulation = new FirstReactionMethod();
-            else if (op == "NRM")
-                simulation = new NextReactionMethod();
-            else if (op == "NRMC")
-                simulation = new NextReactionMethodCompact();
-            else if (op == "MNRM")
-                simulation = new ModifiedNextReactionMethod();
-            else if (op == "SNRM")
-                simulation = new SimplifiedNextReactionMethod();
-            else if (op == "RM")
-                simulation = new RejectionMethod();
-                simulation->perform(model, maximumTime, initialTime, seed);
-                simulation->saveDetailsToFile();
-                delete simulation;
-            }
-        }else
+            return -2;
+        if (argc == 6)
         {
-            simulation->perform(model, maximumTime, initialTime, seed);
-            postSimulation(simulation);
+            //run the batch simulation
+            numSimulations = atoi(argv[5]);
+            runBatchSimulation(model, simulation, initialTime, maximumTime, op, seed, numSimulations);
         }
-        
-        delete simulation;
+        else
+        {
+            //run single simulation
+            simulation = allocateSimulation(op);
+            if (simulation != nullptr)
+            {
+                simulation->perform(model, maximumTime, initialTime, seed);
+                postSimulation(simulation);
+            }
+            else
+            {
+                delete model;
+                delete simulation;
+                return -1;
+            }
+        }
     }
     else
     {
-        double repeat = true;
+        //run interative simulation
+        bool repeat = true;
         while (repeat)
         {
             menu(model, initialTime, maximumTime, seed, op);
-            if (op == "DM")
-                simulation = new DirectMethod();
-            else if (op == "SDM")
-                simulation = new SortingDirectMethod();
-            else if (op == "ODM")
-                simulation = new OptimizedDirectMethod();
-            else if (op == "FRM")
-                simulation = new FirstReactionMethod();
-            else if (op == "NRM")
-                simulation = new NextReactionMethod();
-            else if (op == "NRMC")
-                simulation = new NextReactionMethodCompact();
-            else if (op == "MNRM")
-                simulation = new ModifiedNextReactionMethod();
-            else if (op == "SNRM")
-                simulation = new SimplifiedNextReactionMethod();
-            else if (op == "RM")
-                simulation = new RejectionMethod();
-            simulation->perform(model, maximumTime, initialTime, seed);
-            postSimulation(simulation);
-            delete simulation;
-            cout << "Do you want to perform another simulation? [y|n]" << endl;
+            cout << "Do you want to perform a batch simulation? [y|n]" << endl;
             cin >> printOp;
-            if (printOp != 'y' && printOp != 'Y')
+            if (printOp == 'y')
+            {
                 repeat = false;
+                cout << "Insert the number of simulations:" << endl;
+                cin >> numSimulations;
+                runBatchSimulation(model, simulation, initialTime, maximumTime, op, seed, numSimulations);
+            }
             else
             {
-                delete simulation;
+                allocateSimulation(op);
+                simulation->perform(model, maximumTime, initialTime, seed);
+                postSimulation(simulation);
+                clearScreen();
+                cout << "Do you want to perform another simulation? [y|n]" << endl;
+                cin >> printOp;
+                if (printOp != 'y' && printOp != 'Y')
+                    repeat = false;
+                else
+                {
+                    delete simulation;
+                }
             }
         }
     }
-
     delete model;
+    delete simulation;
     return 0;
+}
+SSA *allocateSimulation(string &op)
+{
+    SSA *simulation = nullptr;
+    if (op == "DM")
+        simulation = new DirectMethod();
+    else if (op == "SDM")
+        simulation = new SortingDirectMethod();
+    else if (op == "ODM")
+        simulation = new OptimizedDirectMethod();
+    else if (op == "FRM")
+        simulation = new FirstReactionMethod();
+    else if (op == "NRM")
+        simulation = new NextReactionMethod();
+    else if (op == "NRMC")
+        simulation = new NextReactionMethodCompact();
+    else if (op == "MNRM")
+        simulation = new ModifiedNextReactionMethod();
+    else if (op == "SNRM")
+        simulation = new SimplifiedNextReactionMethod();
+    else if (op == "RM")
+        simulation = new RejectionMethod();
+    return simulation;
+}
+void postSimulation(SSA *simulation)
+{
+    char printOp;
+    if (simulation->checkSucess())
+    {
+        cout << "Do you want to print the results? [y|n]" << endl;
+        cin >> printOp;
+        if (printOp == 'y' || printOp == 'Y')
+            simulation->printResult();
+        cout << "Do you want to save the results in a file? [y|n]" << endl;
+        cin >> printOp;
+        if (printOp == 'y' || printOp == 'Y')
+            simulation->saveToFile();
+    }
+}
+void runBatchSimulation(Model *model, SSA *simulation, double &initialTime, double &maximumTime, string &op, long int &seed, int &numSimulations)
+{
+    int curSimulation = 0;
+    char saveOp1 = 'n', saveOp2 = 'n';
+    cout << "Do you want to save the simulation's log and the details in a file? [y|n]" << endl;
+    cin >> saveOp1;
+    cout << "Do you want to save only the simulation's details in a file? [y|n]" << endl;
+    cin >> saveOp2;
+    while (curSimulation < numSimulations)
+    {
+        curSimulation++;
+        simulation = allocateSimulation(op);
+        if (simulation == nullptr)
+        {
+            cout << "Error during batch simulation!" << endl;
+            break;
+        }
+        else
+        {
+            simulation->perform(model, maximumTime, initialTime, seed);
+            if (saveOp1 == 'y')
+                simulation->saveToFile();
+            else if (saveOp2 == 'y')
+                simulation->saveDetailsToFile();
+            delete simulation;
+        }
+    }
 }
 void menu(Model *model, double &initialTime, double &maximumTime, long int &seed, string &op)
 {
@@ -172,7 +177,7 @@ void menu(Model *model, double &initialTime, double &maximumTime, long int &seed
     cout << "------------------------------------" << endl;
     cout << "---------------SSA------------------" << endl;
     cout << "------------------------------------" << endl;
-    if (model->getFilename() == "")
+    if (!model->isModelLoaded())
     {
         //load a new model if there is any other loaded
         cout << "Insert the file's path and name (with the extension):" << endl;
@@ -205,18 +210,19 @@ void menu(Model *model, double &initialTime, double &maximumTime, long int &seed
     cin >> maximumTime;
     cout << "Methods:\nDM - Direct Method\nSDM - Sorting Direct Method\nODM - Optimized Direct Method\nFRM - First Reaction Method\nNRM - Next Reaction Method\nNRMC - Next Reaction Method Compact\nMNRM - Modified Next Reaction Method\nSNRM - Simplified Next Reaction Method\nRM - Rejection Method\n"
          << endl;
-    cout << "Insert the Method:" << endl;
+
     double flag = true;
     while (flag)
     {
+        cout << "Insert the Method:" << endl;
         cin >> op;
-        chooseSimulation(op);
-        if (op != "error")
-            flag = false;
-        else
+        if (op != "DM" && op != "SDM" && op != "ODM" && op != "FRM" && op != "NRM" && op != "NRMC" && op != "MNRM" && op != "SNRM" && op != "RM")
         {
-            cout << "Insert the Method again:" << endl;
+            cout << "Error. Invalid operation!" << endl;
+            op = "error";
         }
+        else
+            flag = false;
     }
     cout << "Do you want to insert a custom seed? [y|n]" << endl;
     cin >> printOp;
@@ -232,29 +238,6 @@ void menu(Model *model, double &initialTime, double &maximumTime, long int &seed
             cout << "Invalid seed! Performing the simulation using a random seed." << endl;
             seed = -1;
         }
-    }
-}
-void chooseSimulation(string &op)
-{
-    if (op != "DM" && op != "SDM" && op != "ODM" && op != "FRM" && op != "NRM" && op != "NRMC" && op != "MNRM" && op != "SNRM" && op != "RM")
-    {
-        cout << "Error. Invalid operation!" << endl;
-        op = "error";
-    }
-}
-void postSimulation(SSA *simulation)
-{
-    char printOp;
-    if (simulation->checkSucess())
-    {
-        cout << "Do you want to print the results? [y|n]" << endl;
-        cin >> printOp;
-        if (printOp == 'y' || printOp == 'Y')
-            simulation->printResult();
-        cout << "Do you want to save the results in a file? [y|n]" << endl;
-        cin >> printOp;
-        if (printOp == 'y' || printOp == 'Y')
-            simulation->saveToFile();
     }
 }
 void clearScreen()

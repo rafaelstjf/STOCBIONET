@@ -13,6 +13,7 @@ def weaklyCoupled():
             text_file.write("transcription,k1:" + "A{}".format(i) + "-> A{}".format((i + 1) % m)+ ";\n")
 
 def tightlyCoupled():
+    #Colloidal Aggregation Model
     print("S[n] + S[m] -> S[n+m]\nS[n+m] -> S[n] + S[m]\n (m+n) = 2..Number of reactions\n")
     n = int(input("Type the number of reactions\n"))
     text_file = open("tightlyCoupled-1-" + str(n) + ".txt", "w")
