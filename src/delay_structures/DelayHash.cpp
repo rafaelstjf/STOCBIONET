@@ -1,7 +1,21 @@
 #include "DelayHash.hpp"
 
-DelayHash::DelayHash(int capacity, double low, double high, double precision)
+DelayHash::DelayHash(int capacity, double low, double high, double precision, double **delaysValue, int reacNumber, int specNumber)
 {
+
+    lowestDelay = delaysValue[0][0];
+    biggestDelay = delaysValue[0][0];
+    for (int i = 1; i < specNumber; i++)
+    {
+        for (int j = 1; j < reacNumber; j++)
+        {
+
+            if (biggestDelay < delaysValue[i][j])
+                biggestDelay = delaysValue[i][j];
+            if (lowestDelay > delaysValue[i][j])
+                lowestDelay = delaysValue[i][j];
+        }
+    }
     this->low = low;
     this->high = high;
     this->precision = precision;
@@ -80,15 +94,19 @@ vector<DelayNode *> DelayHash::extractEqual(double value)
     inUse = inUse - vec.size();
     if (inUse != 0)
     {
-        for (int i = 0; i < capacity; i++)
+        int ind = firstIndex;
+        int indMax = hashingFunction((firstDelay + biggestDelay));
+        while (ind != indMax)
         {
-            if (!array[i]->isEmpty())
+            if (ind >= capacity)
             {
-                if (array[i]->getMinNode()->getDelayTime() < firstDelay)
-                {
-                    firstDelay = array[i]->getMinNode()->getDelayTime();
-                    firstIndex = i;
-                }
+                ind = ind % capacity;
+            }
+            if (array[ind] != nullptr && !array[ind]->isEmpty())
+            {
+                firstDelay = array[ind]->getMinNode()->getDelayTime();
+                firstIndex = ind;
+                break;
             }
         }
     }

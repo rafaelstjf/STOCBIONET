@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
             }
             else
             {
-                allocateSimulation(op);
+                simulation = allocateSimulation(op);
                 simulation->perform(model, maximumTime, initialTime, seed);
                 postSimulation(simulation);
                 clearScreen();

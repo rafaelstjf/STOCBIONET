@@ -159,7 +159,7 @@ void RejectionMethod::chooseStructure()
             flag = true;
             break;
         case 4:
-            delayStructure = new DelayHash(model->getReacNumber(), initialTime, maximumTime, 0.00001);
+            delayStructure = new DelayHash(model->getReacNumber(), initialTime, maximumTime, 0.00001, model->getDelaysValue(), model->getReacNumber(), model->getSpecNumber());
             flag = true;
             break;
         default:

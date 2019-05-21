@@ -18,10 +18,12 @@ class DelayHash : public DelayStructure
     double precision;
     double low;
     double high;
+    double lowestDelay;
+    double biggestDelay;
     RingBuffer **array;
     int hashingFunction(double delayTime);
   public:
-    DelayHash(int capacity, double low, double high, double precision);
+    DelayHash(int capacity, double low, double high, double precision, double** delaysValue, int reacNumber, int specNumber);
     ~DelayHash();
     void insertKey(int specIndex, int reacIndex, double delayTime);
     void print();
