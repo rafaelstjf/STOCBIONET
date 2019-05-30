@@ -57,7 +57,7 @@ void SortingDirectMethod::reacExecution()
         //moves the reaction index to a position ahead on the array
         int temp = reactionSO[reactionSOindex];
         reactionSO[reactionSOindex] = reactionSO[reactionSOindex - 1];
-        reactionSO[reactionSOindex] = temp;
+        reactionSO[reactionSOindex-1] = temp;
     }
     int *depArray = dg->getDependencies(selectedReaction);
     int depSize = dg->getDependenciesSize(selectedReaction);
