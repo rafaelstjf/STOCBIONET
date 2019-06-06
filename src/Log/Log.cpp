@@ -45,7 +45,7 @@ void Log::printLog()
 
     int val;
     Node *it = first;
-    int* tempArray = new int[size];
+    int *tempArray = new int[size];
     while (it != nullptr)
     {
         cout << "time: " << it->getTime() << endl;
@@ -72,7 +72,7 @@ void Log::printLog()
 stringstream Log::exportToStringStream()
 {
     //exports the log into a stringstream
-    int* tempArray = new int[size];
+    int *tempArray = new int[size];
     stringstream buffer;
     int val;
     Node *it = first;
@@ -118,10 +118,12 @@ double Log::getReacPerSecond()
 }
 void Log::saveDetailsToFile(string filename, unsigned long int seed)
 {
+    Utils *ut = new Utils();
     fstream outputFile;
     try
     {
-        outputFile.open(filename, fstream::out | fstream::trunc);
+        string newFileName = ut->checkIfFileExists(filename, ".txt");
+        outputFile.open(newFileName, fstream::out | fstream::trunc);
         outputFile << "Number of reactions executed: " << reacCount << '\n';
         outputFile << "Reactions per second: " << reacPerSecond << '\n';
         outputFile << "Seed: " << seed << '\n';
@@ -131,13 +133,16 @@ void Log::saveDetailsToFile(string filename, unsigned long int seed)
     {
         cout << "Impossible to save the file!" << endl;
     }
+    delete ut;
 }
 void Log::saveResultsToFile(string filename)
 {
+    Utils *ut = new Utils();
     fstream outputFile;
     try
     {
-        outputFile.open(filename, fstream::out | fstream::trunc);
+        string newFileName = ut->checkIfFileExists(filename, ".csv");
+        outputFile.open(newFileName, fstream::out | fstream::trunc);
         int val;
         Node *it = first;
         map<string, long int>::iterator itSpecies = specNameNumber.begin();
@@ -182,4 +187,5 @@ void Log::saveResultsToFile(string filename)
     {
         cout << "Impossible to save the file!" << endl;
     }
+    delete ut;
 }

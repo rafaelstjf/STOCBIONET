@@ -57,13 +57,12 @@ void RejectionMethod::reacExecution()
     double tal = 0.0;
     double u = ut->getRandomNumber();
     double teta = (-1 * ut->ln(u)) / totalPropensity;
-    double sum = 0;
     DelayNode *first = delayStructure->getMinNode();
     if (first != nullptr && first->getDelayTime() > currentTime && first->getDelayTime() <= (currentTime + teta))
     {
         tal = first->getDelayTime();
         vector<DelayNode *> elements = delayStructure->extractEqual(tal);
-        for (int i = 0; i < elements.size(); i++)
+        for (unsigned int i = 0; i < elements.size(); i++)
         {
             int reacIndex = elements[i]->getReacIndex();
             int specIndex = elements[i]->getSpecIndex();
@@ -126,6 +125,7 @@ void RejectionMethod::perform(Model *model, double maximumTime, double initialTi
     {
         log->insertNode(currentTime, specQuantity);
         reacExecution();
+        //delayStructure->print();
     }
     double en = ut->getCurrentTime(); //ending of the simulation
     sucess = true;
@@ -159,7 +159,7 @@ void RejectionMethod::chooseStructure()
             flag = true;
             break;
         case 4:
-            delayStructure = new DelayHash(model->getReacNumber(), initialTime, maximumTime, 0.00001, model->getDelaysValue(), model->getReacNumber(), model->getSpecNumber());
+            delayStructure = new DelayHash(model->getReacNumber(), initialTime, maximumTime, model->getDelaysValue(), model->getReacNumber(), model->getSpecNumber());
             flag = true;
             break;
         default:

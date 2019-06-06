@@ -2,7 +2,6 @@
 SSA::~SSA()
 {
     delete dg;
-    //delete model;
     delete ut;
     delete log;
     delete[] specQuantity;
@@ -20,8 +19,9 @@ void SSA::initialization(Model *model, double maximumTime, double initialTime, l
     this->sucess = false;
     this->reacCount = 0;
     this->reacPerSecond = 0;
-        //creates the output file's name
-    this->methodOutName = ut->extractFileName(model->getFilename());
+    //creates the output file's name
+    methodOutName = ut->removeFilePath(model->getFilename());
+    methodOutName = ut->removeFileType(methodOutName);
     if(seed >= 0 )
         this->ut = new Utils(seed); //instantiates the utility class with a custom seed
     else
@@ -37,8 +37,8 @@ void SSA::initialization(Model *model, double maximumTime, double initialTime, l
 void SSA::saveToFile()
 {
     string date = ut->getCurrentDateTime();
-    string logName = "log_" + methodOutName + "_" + date + ".txt";
-    string resultName = methodOutName + "_" + date + ".csv";
+    string logName = "log_" + methodOutName + "_" + date;
+    string resultName = methodOutName + "_" + date;
     cout << "SAVING SIMULATION RESULTS IN " <<resultName<< endl;
     log->saveResultsToFile(resultName);
     //saving log
@@ -47,7 +47,7 @@ void SSA::saveToFile()
 
 }
 void SSA::saveDetailsToFile(){
-     string date = ut->getCurrentDateTime();
+    string date = ut->getCurrentDateTime();
     string logName = "log_" + methodOutName + "_" + date + ".txt";
     cout << "SAVING SIMULATION DETAILS IN " << logName << endl;
     log->saveDetailsToFile(logName, ut->getSeed());

@@ -91,7 +91,7 @@ string Utils::getCurrentDateTime()
 double Utils::binomialCoefficient(int qnt, int coef)
 {
     //qnt = quantity
-    //coef = stoichiometric coefficient 
+    //coef = stoichiometric coefficient
     // qnt!/coef!*(qnt-coef)!
     long int fatn = 1, fatk = 1;
     if (coef > qnt || (qnt == 0 && coef != 0))
@@ -119,24 +119,52 @@ long int Utils::calcFactorial(int n)
     else
         return n * calcFactorial(n - 1);
 }
-string Utils::extractFileName(string name)
+string Utils::removeFilePath(string name)
 {
-    string filename;
-    string temp;
-    temp.clear();
-    filename.clear();
-    for (int i = (name.size() - 1); i >= 0; i--)
+
+    int index = (name.size() - 1);
+    while (index >= 0)
     {
-        if (name[i] != '/')
-            temp += (name[i]);
-        else
+        if (name[index] == '/')
             break;
+        index--;
     }
-    for (int i = (temp.size() - 1); i >= 0; i--)
+    return name.substr(index + 1, name.size() - 1);
+}
+string Utils::removeFileType(string name)
+{
+    int index = name.size() - 1;
+    while (index >= 0)
     {
-        filename += temp[i];
+        if (name[index] == '.')
+        {
+            break;
+        }
+        index--;
     }
-    return filename;
+    return name.substr(0, index - 1);
+}
+bool Utils::checkIfFileExistsAUX(string name)
+{
+/**
+ * Check if a file exists
+ * @return true if and only if the file exists, false else
+ */
+    struct stat buffer;
+    return (stat(name.c_str(), &buffer) == 0);
+}
+string Utils::checkIfFileExists(string filename, string fileType)
+{
+    int index = 0;
+    string name = (filename + fileType);
+    while (checkIfFileExistsAUX(name) == true)
+    {
+        index++;
+        name = filename + '-' + to_string(index) + fileType;
+    }
+
+    cout << "NOME DO ARQUIVO: " << (filename + '-' + to_string(index) + fileType) << endl;
+    return (filename + '-' + to_string(index) + fileType);
 }
 double Utils::ln(double n)
 {

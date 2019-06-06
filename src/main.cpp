@@ -146,8 +146,11 @@ void runBatchSimulation(Model *model, SSA *simulation, double &initialTime, doub
     char saveOp1 = 'n', saveOp2 = 'n';
     cout << "Do you want to save the simulation's log and the details in a file? [y|n]" << endl;
     cin >> saveOp1;
-    cout << "Do you want to save only the simulation's details in a file? [y|n]" << endl;
-    cin >> saveOp2;
+    if (saveOp1 != 'y')
+    {
+        cout << "Do you want to save only the simulation's details in a file? [y|n]" << endl;
+        cin >> saveOp2;
+    }
     while (curSimulation < numSimulations)
     {
         curSimulation++;

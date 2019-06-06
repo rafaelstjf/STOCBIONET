@@ -8,6 +8,7 @@
 #include <math.h>
 #include <fstream>
 #include <map>
+#include "../Utils.hpp"
 using namespace std;
 class Log{
 
