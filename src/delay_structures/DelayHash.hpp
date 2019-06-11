@@ -11,14 +11,13 @@ class DelayHash : public DelayStructure
 {
 
 private:
-  typedef struct
+  struct Table
   {
     int low;
     int high;
-    RingBuffer **array;
+    vector<RingBuffer *> array;
     int inUse;
-  } Table;
-
+  };
   Table *table1;
   Table *table2;
   int capacity;
@@ -31,7 +30,7 @@ private:
   int hashingFunction(double delayTime, int low, int high);
 
 public:
-  DelayHash(int capacity, double low, double high, double **delaysValue, int reacNumber, int specNumber);
+  DelayHash(double **delaysValue, int reacNumber, int specNumber);
   ~DelayHash();
   void insertKey(int specIndex, int reacIndex, double delayTime);
   void print();

@@ -126,6 +126,8 @@ void RejectionMethod::perform(Model *model, double maximumTime, double initialTi
         log->insertNode(currentTime, specQuantity);
         reacExecution();
         //delayStructure->print();
+        //char a;
+        //cin >> a;
     }
     double en = ut->getCurrentTime(); //ending of the simulation
     sucess = true;
@@ -159,7 +161,7 @@ void RejectionMethod::chooseStructure()
             flag = true;
             break;
         case 4:
-            delayStructure = new DelayHash(model->getReacNumber(), initialTime, maximumTime, model->getDelaysValue(), model->getReacNumber(), model->getSpecNumber());
+            delayStructure = new DelayHash(model->getDelaysValue(),  model->getReacNumber(), model->getSpecNumber());
             flag = true;
             break;
         default:
