@@ -12,8 +12,10 @@
 #include "Model.hpp"
 #if defined(_WIN32)
 #define PLATFORM_NAME "windows" // Windows
+#include <windows.h>
 #elif defined(__linux__)
 #define PLATFORM_NAME "linux" // Linux
+#include <unistd.h>
 #else
 #define PLATFORM_NAME "unknown"
 #endif
@@ -22,6 +24,7 @@ void postSimulation(SSA *simulation);
 void runBatchSimulation(Model *model, SSA *simulation, double &initialTime, double &maximumTime, string &op, long int &seed, int &numSimulations);
 void menu(Model *model, double &initialTime, double &maximumTime, long int &seed, string &op);
 void clearScreen();
+void sleepFor(int sleepMs);
 using namespace std;
 int main(int argc, char *argv[])
 {
@@ -168,6 +171,7 @@ void runBatchSimulation(Model *model, SSA *simulation, double &initialTime, doub
             else if (saveOp2 == 'y')
                 simulation->saveDetailsToFile();
             delete simulation;
+            sleepFor(1000);
         }
     }
 }
@@ -250,4 +254,13 @@ void clearScreen()
         system("cls");
     else if (PLATFORM_NAME == "linux")
         system("clear");
+}
+void sleepFor(int sleepMs)
+{
+#ifdef __linux__
+    usleep(sleepMs * 1000); // usleep takes sleep time in us (1 millionth of a second)
+#endif
+#ifdef _WIN32
+    Sleep(sleepMs);
+#endif
 }

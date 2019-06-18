@@ -39,17 +39,14 @@ void SSA::saveToFile()
     string date = ut->getCurrentDateTime();
     string logName = "log_" + methodOutName + "_" + date;
     string resultName = methodOutName + "_" + date;
-    cout << "SAVING SIMULATION RESULTS IN " <<resultName<< endl;
     log->saveResultsToFile(resultName);
     //saving log
-    cout << "SAVING SIMULATION DETAILS IN " << logName << endl;
     log->saveDetailsToFile(logName, ut->getSeed());
 
 }
 void SSA::saveDetailsToFile(){
     string date = ut->getCurrentDateTime();
-    string logName = "log_" + methodOutName + "_" + date + ".txt";
-    cout << "SAVING SIMULATION DETAILS IN " << logName << endl;
+    string logName = "log_" + methodOutName + "_" + date;
     log->saveDetailsToFile(logName, ut->getSeed());
 }
 void SSA::printResult()

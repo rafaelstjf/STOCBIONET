@@ -123,7 +123,8 @@ void Log::saveDetailsToFile(string filename, unsigned long int seed)
     try
     {
         string newFileName = ut->checkIfFileExists(filename, ".txt");
-        outputFile.open(newFileName, fstream::out | fstream::trunc);
+        cout << "SAVING SIMULATION DETAILS IN " << newFileName << endl;
+        outputFile.open(newFileName, fstream::out);
         outputFile << "Number of reactions executed: " << reacCount << '\n';
         outputFile << "Reactions per second: " << reacPerSecond << '\n';
         outputFile << "Seed: " << seed << '\n';
@@ -142,6 +143,7 @@ void Log::saveResultsToFile(string filename)
     try
     {
         string newFileName = ut->checkIfFileExists(filename, ".csv");
+        cout << "SAVING SIMULATION RESULTS IN " << newFileName << endl;
         outputFile.open(newFileName, fstream::out | fstream::trunc);
         int val;
         Node *it = first;

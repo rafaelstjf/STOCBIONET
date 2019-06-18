@@ -142,16 +142,20 @@ string Utils::removeFileType(string name)
         }
         index--;
     }
-    return name.substr(0, index - 1);
+    return name.substr(0, index);
 }
 bool Utils::checkIfFileExistsAUX(string name)
 {
-/**
+    /**
  * Check if a file exists
  * @return true if and only if the file exists, false else
  */
-    struct stat buffer;
-    return (stat(name.c_str(), &buffer) == 0);
+    struct stat buf;
+    if (stat(name.c_str(), &buf) != -1)
+    {
+        return true;
+    }
+    return false;
 }
 string Utils::checkIfFileExists(string filename, string fileType)
 {
