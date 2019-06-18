@@ -11,8 +11,9 @@ Log *SSA::getLog()
 {
     return log;
 }
-void SSA::initialization(Model *model, double maximumTime, double initialTime, long int seed){
-     //instantiates the variables
+void SSA::initialization(Model *model, double maximumTime, double initialTime, long int seed)
+{
+    //instantiates the variables
     this->model = model;
     this->maximumTime = maximumTime;
     this->initialTime = initialTime;
@@ -22,11 +23,12 @@ void SSA::initialization(Model *model, double maximumTime, double initialTime, l
     //creates the output file's name
     methodOutName = ut->removeFilePath(model->getFilename());
     methodOutName = ut->removeFileType(methodOutName);
-    if(seed >= 0 )
+    if (seed >= 0)
         this->ut = new Utils(seed); //instantiates the utility class with a custom seed
     else
         this->ut = new Utils(); //instantiates the utility class with a generated seed
-    if(model->isModelLoaded()){
+    if (model->isModelLoaded())
+    {
         this->log = new Log(model->getSpecNumber(), model->getSpecNameNumber());
         this->specQuantity = new int[model->getSpecNumber()];
         this->propArray = new double[model->getReacNumber()];
@@ -42,9 +44,9 @@ void SSA::saveToFile()
     log->saveResultsToFile(resultName);
     //saving log
     log->saveDetailsToFile(logName, ut->getSeed());
-
 }
-void SSA::saveDetailsToFile(){
+void SSA::saveDetailsToFile()
+{
     string date = ut->getCurrentDateTime();
     string logName = "log_" + methodOutName + "_" + date;
     log->saveDetailsToFile(logName, ut->getSeed());
@@ -52,6 +54,16 @@ void SSA::saveDetailsToFile(){
 void SSA::printResult()
 {
     log->printLog();
+}
+unsigned long int SSA::getSeed()
+{
+    return ut->getSeed();
+}
+double SSA::getReacPerSecond(){
+    return log->getReacPerSecond();
+}
+double SSA::getNumberReacExecuted(){
+    return log->getNumberReacExecuted();
 }
 void SSA::calcPropensity()
 {

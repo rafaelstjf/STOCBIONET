@@ -125,7 +125,7 @@ void Log::saveDetailsToFile(string filename, unsigned long int seed)
         string newFileName = ut->checkIfFileExists(filename, ".txt");
         cout << "SAVING SIMULATION DETAILS IN " << newFileName << endl;
         outputFile.open(newFileName, fstream::out);
-        outputFile << "Number of reactions executed: " << reacCount << '\n';
+        outputFile << "Number of executed reactions: " << reacCount << '\n';
         outputFile << "Reactions per second: " << reacPerSecond << '\n';
         outputFile << "Seed: " << seed << '\n';
         outputFile.close();

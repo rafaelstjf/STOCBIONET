@@ -17,40 +17,43 @@ using namespace std;
 
 class SSA
 {
-  public:
-    virtual void perform(Model* model, double maximumTime, double initialTime, long int seed) = 0;
-    virtual bool checkSucess();
-    virtual ~SSA();
-    virtual void printResult();
-    virtual void saveToFile();
-    virtual void saveDetailsToFile();
-    virtual Log *getLog();
+public:
+  virtual void perform(Model *model, double maximumTime, double initialTime, long int seed) = 0;
+  virtual bool checkSucess();
+  virtual ~SSA();
+  virtual void printResult();
+  virtual void saveToFile();
+  virtual void saveDetailsToFile();
+  virtual Log *getLog();
+  unsigned long int getSeed();
+  double getReacPerSecond();
+  double getNumberReacExecuted();
 
-  protected:
-    Utils *ut;
-    Log *log;
-    DependencyGraph *dg;
-    Model *model;
-    double totalPropensity; //sum of all the propensities
-    double currentTime;     //current time of the simulation
-    double initialTime;       //time that the simulation begins
-    int selectedReaction;
-    double maximumTime;     //simulation time
-    string methodOutName;
-    double *propArray;    //propensity array
-    int *specQuantity;    //species quantity
-    double reacPerSecond; //number of reactions executed per second
-    int reacCount;        //number of reactions executed in a simulation
-    bool sucess;          //boolean variable used to check if the simulation was performed
+protected:
+  Utils *ut;
+  Log *log;
+  DependencyGraph *dg;
+  Model *model;
+  double totalPropensity; //sum of all the propensities
+  double currentTime;     //current time of the simulation
+  double initialTime;     //time that the simulation begins
+  int selectedReaction;
+  double maximumTime; //simulation time
+  string methodOutName;
+  double *propArray;    //propensity array
+  int *specQuantity;    //species quantity
+  double reacPerSecond; //number of reactions executed per second
+  int reacCount;        //number of reactions executed in a simulation
+  bool sucess;          //boolean variable used to check if the simulation was performed
 
-    //functions
-    virtual void initialization(Model* model, double maximumTime, double initialTime, long int seed); //read the model and initialization data structures
-    virtual void calcPropensity();                                      //calculate the propensity function for each reaction
-    virtual void calcPropOne(int index);
-    virtual void reacTimeGeneration() = 0;
-    virtual void reacSelection() = 0;
-    virtual void reacExecution() = 0;
-    virtual void updateSpeciesQuantities(int index);
+  //functions
+  virtual void initialization(Model *model, double maximumTime, double initialTime, long int seed); //read the model and initialization data structures
+  virtual void calcPropensity();                                                                    //calculate the propensity function for each reaction
+  virtual void calcPropOne(int index);
+  virtual void reacTimeGeneration() = 0;
+  virtual void reacSelection() = 0;
+  virtual void reacExecution() = 0;
+  virtual void updateSpeciesQuantities(int index);
 };
 
 #endif // SSA_H
