@@ -10,26 +10,33 @@ using namespace std;
 class DelayHash : public DelayStructure
 {
 
-  private:
-    int capacity;
+private:
+  struct Table
+  {
+    int low;
+    int high;
+    vector<RingBuffer *> array;
     int inUse;
-    int firstIndex;
-    int firstDelay;
-    double precision;
-    double low;
-    double high;
-    double lowestDelay;
-    double biggestDelay;
-    RingBuffer **array;
-    int hashingFunction(double delayTime);
-  public:
-    DelayHash(int capacity, double low, double high, double precision, double** delaysValue, int reacNumber, int specNumber);
-    ~DelayHash();
-    void insertKey(int specIndex, int reacIndex, double delayTime);
-    void print();
-    bool isEmpty();
-    DelayNode* getMinNode();
-    vector<DelayNode*> extractEqual(double value);
+  };
+  Table *table1;
+  Table *table2;
+  int capacity;
+  int firstIndex;
+  int firstDelay;
+  int firstTable;
+  double precision;
+  double lowestDelay;
+  double biggestDelay;
+  int hashingFunction(double delayTime, int low, int high);
+
+public:
+  DelayHash(double **delaysValue, int reacNumber, int specNumber);
+  ~DelayHash();
+  void insertKey(int specIndex, int reacIndex, double delayTime);
+  void print();
+  bool isEmpty();
+  DelayNode *getMinNode();
+  vector<DelayNode *> extractEqual(double value);
 };
 
 #endif

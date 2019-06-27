@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <string>
+#include <sys/stat.h>
 #if defined(_WIN32)
 #define PLATFORM_NAME "windows" // Windows
 #include <process.h>
@@ -39,13 +40,16 @@ public:
   void saveToCSVNoOverwriting(string buffer, string filename);
   void saveToTXT(string buffer, string filename);
   string getCurrentDateTime();
-  string extractFileName(string name);
+  string removeFilePath(string name);
+  string removeFileType(string name);
+  string checkIfFileExists(string filename, string fileType);
   unsigned long int getSeed();
 
   ~Utils();
 
 private:
   long int calcFactorial(int n);
+  bool checkIfFileExistsAUX(string filename);
   void generateFat();
   long int fat[11];
   unsigned long seed;

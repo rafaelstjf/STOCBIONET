@@ -2,7 +2,6 @@
 SSA::~SSA()
 {
     delete dg;
-    //delete model;
     delete ut;
     delete log;
     delete[] specQuantity;
@@ -12,21 +11,24 @@ Log *SSA::getLog()
 {
     return log;
 }
-void SSA::initialization(Model *model, double maximumTime, double initialTime, long int seed){
-     //instantiates the variables
+void SSA::initialization(Model *model, double maximumTime, double initialTime, long int seed)
+{
+    //instantiates the variables
     this->model = model;
     this->maximumTime = maximumTime;
     this->initialTime = initialTime;
     this->sucess = false;
     this->reacCount = 0;
     this->reacPerSecond = 0;
-        //creates the output file's name
-    this->methodOutName = ut->extractFileName(model->getFilename());
-    if(seed >= 0 )
+    //creates the output file's name
+    methodOutName = ut->removeFilePath(model->getFilename());
+    methodOutName = ut->removeFileType(methodOutName);
+    if (seed >= 0)
         this->ut = new Utils(seed); //instantiates the utility class with a custom seed
     else
         this->ut = new Utils(); //instantiates the utility class with a generated seed
-    if(model->isModelLoaded()){
+    if (model->isModelLoaded())
+    {
         this->log = new Log(model->getSpecNumber(), model->getSpecNameNumber());
         this->specQuantity = new int[model->getSpecNumber()];
         this->propArray = new double[model->getReacNumber()];
@@ -37,24 +39,31 @@ void SSA::initialization(Model *model, double maximumTime, double initialTime, l
 void SSA::saveToFile()
 {
     string date = ut->getCurrentDateTime();
-    string logName = "log_" + methodOutName + "_" + date + ".txt";
-    string resultName = methodOutName + "_" + date + ".csv";
-    cout << "SAVING SIMULATION RESULTS IN " <<resultName<< endl;
+    string logName = "log_" + methodOutName + "_" + date;
+    string resultName = methodOutName + "_" + date;
     log->saveResultsToFile(resultName);
     //saving log
-    cout << "SAVING SIMULATION DETAILS IN " << logName << endl;
     log->saveDetailsToFile(logName, ut->getSeed());
-
 }
-void SSA::saveDetailsToFile(){
-     string date = ut->getCurrentDateTime();
-    string logName = "log_" + methodOutName + "_" + date + ".txt";
-    cout << "SAVING SIMULATION DETAILS IN " << logName << endl;
+void SSA::saveDetailsToFile()
+{
+    string date = ut->getCurrentDateTime();
+    string logName = "log_" + methodOutName + "_" + date;
     log->saveDetailsToFile(logName, ut->getSeed());
 }
 void SSA::printResult()
 {
     log->printLog();
+}
+unsigned long int SSA::getSeed()
+{
+    return ut->getSeed();
+}
+double SSA::getReacPerSecond(){
+    return log->getReacPerSecond();
+}
+double SSA::getNumberReacExecuted(){
+    return log->getNumberReacExecuted();
 }
 void SSA::calcPropensity()
 {

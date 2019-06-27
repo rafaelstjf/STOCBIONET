@@ -1,5 +1,15 @@
 #include <iostream>
+#include <fstream>
 #include <string>
+#if defined(_WIN32)
+#define PLATFORM_NAME "windows" // Windows
+#include <windows.h>
+#elif defined(__linux__)
+#define PLATFORM_NAME "linux" // Linux
+#include <unistd.h>
+#else
+#define PLATFORM_NAME "unknown"
+#endif
 #include "DirectMethod.hpp"
 #include "SortingDirectMethod.hpp"
 #include "OptimizedDirectMethod.hpp"
@@ -10,19 +20,17 @@
 #include "RejectionMethod.hpp"
 #include "ModifiedNextReactionMethod.hpp"
 #include "Model.hpp"
-#if defined(_WIN32)
-#define PLATFORM_NAME "windows" // Windows
-#elif defined(__linux__)
-#define PLATFORM_NAME "linux" // Linux
-#else
-#define PLATFORM_NAME "unknown"
-#endif
+
+using namespace std;
+
+//declaration
 SSA *allocateSimulation(string &op);
 void postSimulation(SSA *simulation);
 void runBatchSimulation(Model *model, SSA *simulation, double &initialTime, double &maximumTime, string &op, long int &seed, int &numSimulations);
 void menu(Model *model, double &initialTime, double &maximumTime, long int &seed, string &op);
 void clearScreen();
-using namespace std;
+void sleepFor(int sleepMs);
+
 int main(int argc, char *argv[])
 {
     char printOp;
@@ -102,6 +110,7 @@ int main(int argc, char *argv[])
     delete simulation;
     return 0;
 }
+//definition
 SSA *allocateSimulation(string &op)
 {
     SSA *simulation = nullptr;
@@ -142,12 +151,20 @@ void postSimulation(SSA *simulation)
 }
 void runBatchSimulation(Model *model, SSA *simulation, double &initialTime, double &maximumTime, string &op, long int &seed, int &numSimulations)
 {
+    vector<double> reacExe;
+    vector<double> reacPerSec;
+    vector<unsigned long int> seedArray;
+    double sumReacExe = 0;
+    double sumReacPerSec = 0;
     int curSimulation = 0;
     char saveOp1 = 'n', saveOp2 = 'n';
     cout << "Do you want to save the simulation's log and the details in a file? [y|n]" << endl;
     cin >> saveOp1;
-    cout << "Do you want to save only the simulation's details in a file? [y|n]" << endl;
-    cin >> saveOp2;
+    if (saveOp1 != 'y')
+    {
+        cout << "Do you want to save only the simulation's details in a file? [y|n]" << endl;
+        cin >> saveOp2;
+    }
     while (curSimulation < numSimulations)
     {
         curSimulation++;
@@ -161,12 +178,35 @@ void runBatchSimulation(Model *model, SSA *simulation, double &initialTime, doub
         {
             simulation->perform(model, maximumTime, initialTime, seed);
             if (saveOp1 == 'y')
+            {
                 simulation->saveToFile();
+                sleepFor(1000);
+            }
             else if (saveOp2 == 'y')
+            {
                 simulation->saveDetailsToFile();
+                sleepFor(1000);
+            }
+            seedArray.push_back(simulation->getSeed());
+            reacPerSec.push_back(simulation->getReacPerSecond());
+            reacExe.push_back(simulation->getNumberReacExecuted());
             delete simulation;
         }
     }
+    fstream bashOutput;
+    bashOutput.open("bashOutput.csv", fstream::out | fstream::trunc);
+    bashOutput << "Number of executed reactions; Number of reactions per second; Seeds used " << endl;
+    for (int i = 0; i < numSimulations; i++)
+    {
+        bashOutput << reacExe[i] << "; " << reacPerSec[i] << " ; " << seedArray[i] << endl;
+        sumReacExe += reacExe[i];
+        sumReacPerSec += reacPerSec[i];
+    }
+    bashOutput << "Average: " << sumReacExe / numSimulations << "; Average: " << sumReacPerSec / numSimulations << "; " << endl;
+    bashOutput.close();
+    seedArray.clear();
+    reacPerSec.clear();
+    reacExe.clear();
 }
 void menu(Model *model, double &initialTime, double &maximumTime, long int &seed, string &op)
 {
@@ -247,4 +287,13 @@ void clearScreen()
         system("cls");
     else if (PLATFORM_NAME == "linux")
         system("clear");
+}
+void sleepFor(int sleepMs)
+{
+#ifdef __linux__
+    usleep(sleepMs * 1000); // usleep takes sleep time in us (1 millionth of a second)
+#endif
+#ifdef _WIN32
+    Sleep(sleepMs);
+#endif
 }

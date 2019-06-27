@@ -97,11 +97,12 @@ void Model::loadModel(string filename)
             sQ2 = r->getProducts();
             for (j = 0; j < sQ2.size(); j++)
             {
-                products[sQ2[j]->getSpecie()->getNumber()][i] = sQ2[j]->getQuantity();
+                int specInd = sQ2[j]->getSpecie()->getNumber();
+                products[specInd][i] = sQ2[j]->getQuantity();
                 if (sQ2[j]->getDelay()->getValue() > 0.0)
-                    delaysValue[sQ2[j]->getSpecie()->getNumber()][i] = sQ2[j]->getDelay()->getValue();
+                    delaysValue[specInd][i] = sQ2[j]->getDelay()->getValue();
                 if (sQ2[j]->getDelay()->getVariation() > 0.0)
-                    delaysValue[sQ2[j]->getSpecie()->getNumber()][i] = sQ2[j]->getDelay()->getVariation();
+                    delaysVariation[specInd][i] = sQ2[j]->getDelay()->getVariation();
             }
         }
         sQ.clear();

@@ -3,6 +3,6 @@ k2=1;
 A = 1000;
 B = 100;
 C = 10;
-v1 = 10;
-transcription,k1:A + B-> C(v1);
+t1 = 0.1;
+transcription,k1:A + B-> C(t1);
 transcription,k2:C->;
