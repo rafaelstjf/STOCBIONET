@@ -29,6 +29,7 @@ public:
     bool isModelLoaded();
     map<string, long int> getSpecNameNumber();
     string getFilename();
+    void printModel();
 private:
     int** reactants; //reactants matrix
     int** products; //products matrix

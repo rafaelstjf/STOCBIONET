@@ -105,7 +105,7 @@ vector<DelayNode *> DelayHeap::extractEqual(double value)
 {
     DelayNode *n;
     vector<DelayNode *> tempArray;
-    while (array[0]->getDelayTime() >= value - INT_MIN && array[0]->getDelayTime() <= value + INT_MIN)
+    while (array[0]->getDelayTime() >= value - EP && array[0]->getDelayTime() <= value + EP)
     {
         n = new DelayNode(array[0]->getSpecIndex(), array[0]->getReacIndex(), array[0]->getDelayTime());
         tempArray.push_back(n);

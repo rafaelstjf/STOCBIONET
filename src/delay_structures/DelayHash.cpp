@@ -96,7 +96,7 @@ int DelayHash::hashingFunction(double delayTime, int low, int high)
     //R = inf + ((sup-inf)/(1.0/precision))*int
     //1.0/precision if precision = 0.0....
     int key = ceil((delayTime - low) * (precision / (high - low)));
-    cout << "DELAY: " << delayTime << " KEY: " << key << " Capacity: " << capacity << " MOD Capacity: " << key % capacity << endl;
+    //cout << "DELAY: " << delayTime << " KEY: " << key << " Capacity: " << capacity << " MOD Capacity: " << key % capacity << endl;
     return key % capacity;
 }
 bool DelayHash::isEmpty()

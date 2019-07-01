@@ -40,7 +40,7 @@ void DelayedDependencyGraph::createGraph(Model *model)
     {
         for (int j = 0; j < numReactions; j++)
         {
-            if (model->getReactants()[i][j] != 0)
+            if (model->getReactants()[i][j] > 0)
                 insertDependency(i, j);
         }
     }

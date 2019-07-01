@@ -175,7 +175,7 @@ vector<DelayNode *> RingBuffer::extractEqual(double value)
     {
         if (array[i] != nullptr)
         {
-            if (array[i]->getDelayTime() >= value - INT_MIN && array[i]->getDelayTime() <= value + INT_MIN)
+            if (array[i]->getDelayTime() >= value - EP && array[i]->getDelayTime() <= value + EP)
             {
                 n = new DelayNode(array[i]->getSpecIndex(), array[i]->getReacIndex(), array[i]->getDelayTime());
                 tempArray.push_back(n);

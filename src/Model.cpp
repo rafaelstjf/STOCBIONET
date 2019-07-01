@@ -207,3 +207,49 @@ string Model::getFilename()
 {
     return filename;
 }
+void Model::printModel()
+{
+    cout << "Reactants: " << endl;
+    for (int i = 0; i < specNumber; i++)
+    {
+        for (int j = 0; j < reacNumber; j++)
+        {
+            cout << reactants[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << "Products: " << endl;
+    for (int i = 0; i < specNumber; i++)
+    {
+        for (int j = 0; j < reacNumber; j++)
+        {
+            cout << products[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    cout << "Delay Values: " << endl;
+    for (int i = 0; i < specNumber; i++)
+    {
+        for (int j = 0; j < reacNumber; j++)
+        {
+            cout << delaysValue[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << "Delay Variation: " << endl;
+    for (int i = 0; i < specNumber; i++)
+    {
+        for (int j = 0; j < reacNumber; j++)
+        {
+            cout << delaysVariation[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << "Reaction Rates: " << endl;
+    for (int j = 0; j < reacNumber; j++)
+    {
+        cout << reacRate[j] << " ";
+    }
+    cout << endl;
+}

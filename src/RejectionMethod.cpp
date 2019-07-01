@@ -58,7 +58,14 @@ void RejectionMethod::reacExecution()
     double u = ut->getRandomNumber();
     double teta = (-1 * ut->ln(u)) / totalPropensity;
     DelayNode *first = delayStructure->getMinNode();
-    if (first != nullptr && first->getDelayTime() > currentTime && first->getDelayTime() <= (currentTime + teta))
+    if (first != nullptr)
+    {
+        cout << "> " << endl;
+        cout << "   current Time: " << currentTime << " First: " << first->getDelayTime() << " CurrentTime + Teta: " << currentTime + teta << endl;
+        cout << "-----------------------------------" << endl;
+        delayStructure->print();
+    }
+    if (first != nullptr && first->getDelayTime() >= currentTime && first->getDelayTime() <= (currentTime + teta))
     {
         tal = first->getDelayTime();
         vector<DelayNode *> elements = delayStructure->extractEqual(tal);
@@ -78,11 +85,12 @@ void RejectionMethod::reacExecution()
             }
             delete depArray;
         }
-        currentTime = tal;
         for (int i = 0; i < elements.size(); i++)
         {
             delete elements[i];
         }
+        elements.clear();
+        currentTime = tal;
     }
     else
     {
@@ -94,8 +102,8 @@ void RejectionMethod::reacExecution()
         else
         {
 
-            updateSpeciesQuantities(selectedReaction);
             currentTime = currentTime + teta;
+            updateSpeciesQuantities(selectedReaction);
 
             //calcPropensity();
             int *depArray = dg->getDependencies(selectedReaction);
@@ -125,7 +133,6 @@ void RejectionMethod::perform(Model *model, double maximumTime, double initialTi
     {
         log->insertNode(currentTime, specQuantity);
         reacExecution();
-        //delayStructure->print();
         //char a;
         //cin >> a;
     }
@@ -161,7 +168,7 @@ void RejectionMethod::chooseStructure()
             flag = true;
             break;
         case 4:
-            delayStructure = new DelayHash(model->getDelaysValue(),  model->getReacNumber(), model->getSpecNumber());
+            delayStructure = new DelayHash(model->getDelaysValue(), model->getReacNumber(), model->getSpecNumber());
             flag = true;
             break;
         default:

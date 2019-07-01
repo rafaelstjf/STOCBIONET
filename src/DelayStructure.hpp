@@ -3,7 +3,8 @@
 #include "delay_structures/DelayNode.hpp"
 #include <vector>
 #include <iostream>
-
+#define INF 1.0E9
+#define EP 1.0E-5
 using namespace std;
 class DelayStructure
 {

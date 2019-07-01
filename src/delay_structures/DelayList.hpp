@@ -16,6 +16,7 @@ public:
   DelayList();
   void insertKey(int specIndex, int reacIndex, double delayTime);
   void removeByIndex(int arrayIndex);
+  void removeByIndexRange(int arrayIndexBeg, int arrayIndexEnd);
   void print();
   int getArraySize();
   vector<DelayNode *> extractEqual(double value);
