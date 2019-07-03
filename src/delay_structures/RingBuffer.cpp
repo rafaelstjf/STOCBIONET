@@ -4,6 +4,7 @@ RingBuffer::RingBuffer(int capacity)
 {
     this->capacity = capacity;
     inUse = 0;
+    //creates an array with "capacity" positions
     array = new DelayNode *[capacity];
     for (int i = 0; i < capacity; i++)
     {
@@ -26,8 +27,10 @@ void RingBuffer::insertKey(int specIndex, int reacIndex, double delayTime)
     //resize the array
     if (inUse == capacity)
     {
+        //array is full
         int newCapacity = 2 * capacity;
         DelayNode **temp = new DelayNode *[newCapacity];
+        //imports all the elements and then puts nullptr in the others
         for (int i = 0; i <= capacity; i++)
         {
             temp[i] = array[i];
@@ -58,6 +61,7 @@ void RingBuffer::insertKey(int specIndex, int reacIndex, double delayTime)
     //it's bigger than the first and lower than the last
     else
     {
+        //it goes anti-clockwise and stops when the new element is smaller than the current
         int count = 0;
         int i = last;
         while (count < inUse)
@@ -65,18 +69,18 @@ void RingBuffer::insertKey(int specIndex, int reacIndex, double delayTime)
             if (array[i] != nullptr)
             {
                 count++;
-                if (delayTime >= array[i]->getDelayTime())
+                if (delayTime <= array[i]->getDelayTime())
                     break; //found position
             }
             i = (i <= 0) ? capacity - 1 : ((i - 1) % capacity);
         }
         index = i;
-        cout << delayTime << " INDEX: " << index << " I: " << i << " last: " << last << endl;
         i = last;
         while (count > 0)
         {
+            //it moves the elements from the last until the desirable index
             array[((i + 1) % capacity)] = array[i];
-            i = (i - 1) % capacity;
+            i = (i <= 0) ? capacity - 1 : ((i - 1) % capacity);
             count--;
         }
         last = (last + 1) % capacity;
@@ -90,7 +94,10 @@ void RingBuffer::removeFirst()
 {
     delete array[first];
     array[first] = nullptr;
-    first = (first + 1) % capacity;
+    if (last == first)
+        first = -1;
+    else
+        first = (first + 1) % capacity;
     inUse--;
 }
 void RingBuffer::removeByIndex(int index)
@@ -109,9 +116,8 @@ void RingBuffer::removeByIndex(int index)
             {
                 array[i] = array[i + 1];
             }
-            delete array[last];
             array[last] = nullptr;
-            last = last - 1;
+            last = (last <= 0) ? capacity - 1 : ((last - 1) % capacity);
         }
         else if (index > last)
         {
@@ -119,17 +125,21 @@ void RingBuffer::removeByIndex(int index)
             for (int i = index; i > last; i--)
             {
                 array[i] = array[i - 1];
+                if (i == first)
+                    first = (first - 1) % capacity;
             }
-            delete array[last];
             array[last] = nullptr;
             last = (last + 1) % capacity;
         }
         else
-        { 
+        {
             //index == last
-            delete array[last];
-            array[last] = nullptr;
             last = (last <= 0) ? capacity - 1 : ((last - 1) % capacity);
+        }
+        inUse--;
+        if(inUse==0){
+            last = -1;
+            first = -1;
         }
     }
 }
@@ -171,6 +181,7 @@ vector<DelayNode *> RingBuffer::extractEqual(double value)
     DelayNode *n;
     int count = 0;
     int i = first;
+    vector<int> indexesToRemove;
     while (count <= inUse)
     {
         if (array[i] != nullptr)
@@ -179,16 +190,17 @@ vector<DelayNode *> RingBuffer::extractEqual(double value)
             {
                 n = new DelayNode(array[i]->getSpecIndex(), array[i]->getReacIndex(), array[i]->getDelayTime());
                 tempArray.push_back(n);
-                removeByIndex(i);
+                indexesToRemove.push_back(i);
             }
-            else
-            {
-                count++;
-                i = (i + 1) % capacity;
-            }
-        }
-        else
+            count++;
             i = (i + 1) % capacity;
+        }
+        else //empty element
+            i = (i + 1) % capacity;
+    }
+    for (int i = 0; i < indexesToRemove.size(); i++)
+    {
+        removeByIndex(indexesToRemove[i]);
     }
     return tempArray;
 }

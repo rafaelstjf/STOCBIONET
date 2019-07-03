@@ -24,6 +24,7 @@ public:
   int getLastIndex();
   int getCapacity();
   void removeByIndex(int index);
+  //void removeByIndexRange(int index);
   void removeFirst();
 
 private:
