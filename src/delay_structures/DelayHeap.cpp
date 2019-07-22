@@ -75,8 +75,7 @@ DelayNode *DelayHeap::extractMin()
         array[0] = nullptr;
         return extracted;
     }
-    DelayNode *r = array[0];
-    DelayNode *root = r;
+    DelayNode *root = array[0];
     array[0] = array[heapSize - 1];
     array[heapSize - 1] = nullptr;
     heapSize--;
