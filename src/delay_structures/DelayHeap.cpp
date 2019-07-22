@@ -4,10 +4,14 @@ DelayHeap::DelayHeap(int capacity)
     this->capacity = capacity;
     heapSize = 0;
     array = new DelayNode *[capacity];
+    for (unsigned int i = 0; i < capacity; i++)
+    {
+        array[i] = nullptr;
+    }
 }
 DelayHeap::~DelayHeap()
 {
-    for (int i = 0; i < heapSize; i++)
+    for (int i = 0; i < capacity; i++)
     {
         delete array[i];
     }
@@ -17,12 +21,7 @@ int DelayHeap::parent(int i)
 {
     return (i - 1) / 2;
 }
-void DelayHeap::swap(DelayNode *a, DelayNode *b)
-{
-    DelayNode temp = *a;
-    *a = *b;
-    *b = temp;
-}
+
 int DelayHeap::left(int i)
 {
     return (2 * i + 1);
@@ -39,7 +38,7 @@ void DelayHeap::insertKey(int specIndex, int reacIndex, double delayTime)
         DelayNode **temp = array;
         capacity = 2 * capacity;
         array = new DelayNode *[capacity];
-        for (int i = 0; i < heapSize; i++)
+        for (int i = 0; i < capacity; i++)
         {
             array[i] = temp[i];
         }
@@ -48,9 +47,10 @@ void DelayHeap::insertKey(int specIndex, int reacIndex, double delayTime)
     int i = heapSize - 1;
     DelayNode *n = new DelayNode(specIndex, reacIndex, delayTime);
     array[i] = n;
-    while (i != 0 && array[parent(i)]->getDelayTime() > array[i]->getDelayTime())
+    while (i != 0 && array[parent(i)] != nullptr && array[parent(i)]->getDelayTime() > array[i]->getDelayTime())
     {
         swap(array[i], array[parent(i)]);
+        cout << "Inserting! " << i << endl;
         i = parent(i);
     }
 }
@@ -75,7 +75,7 @@ DelayNode *DelayHeap::extractMin()
         return array[0];
     }
     DelayNode r = *array[0];
-    DelayNode* root = &r;
+    DelayNode *root = &r;
     array[0] = array[heapSize - 1];
     heapSize--;
     minHeapify(0);
@@ -101,15 +101,25 @@ void DelayHeap::minHeapify(int i)
         minHeapify(smallest);
     }
 }
-vector<DelayNode *> DelayHeap::extractEqual(double value)
+vector<DelayNode *> DelayHeap::extractEqualFirst()
 {
+
     DelayNode *n;
     vector<DelayNode *> tempArray;
-    while (array[0]->getDelayTime() >= value - EP && array[0]->getDelayTime() <= value + EP)
+    double value;
+    if (getMinNode() == nullptr)
+        return tempArray;
+    else
     {
+        value = getMinNode()->getDelayTime();
+    }
+    while (array[0] != nullptr && array[0]->getDelayTime() >= value - EP && array[0]->getDelayTime() <= value + EP)
+    {
+        cout << "Batata" << endl;
         n = new DelayNode(array[0]->getSpecIndex(), array[0]->getReacIndex(), array[0]->getDelayTime());
         tempArray.push_back(n);
-        delete extractMin();
+        DelayNode *a = extractMin();
+        delete a;
     }
     return tempArray;
 }
@@ -126,7 +136,8 @@ void DelayHeap::print()
     {
         for (int j = 0; j < pow(2, i) && pow(2, i) < capacity; j++)
         {
-            cout << array[(int)(j + pow(2, i) - 1)]->getDelayTime() << " ";
+            if (array[(int)(j + pow(2, i) - 1)] != nullptr)
+                cout << array[(int)(j + pow(2, i) - 1)]->getDelayTime() << " ";
         }
         cout << endl;
     }

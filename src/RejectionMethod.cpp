@@ -60,15 +60,17 @@ void RejectionMethod::reacExecution()
     DelayNode *first = delayStructure->getMinNode();
     if (first != nullptr)
     {
+        /*
         cout << "> " << endl;
         cout << "   current Time: " << currentTime << " First: " << first->getDelayTime() << " CurrentTime + Teta: " << currentTime + teta << endl;
         cout << "-----------------------------------" << endl;
         delayStructure->print();
+         */
     }
     if (first != nullptr && first->getDelayTime() >= currentTime && first->getDelayTime() <= (currentTime + teta))
     {
         tal = first->getDelayTime();
-        vector<DelayNode *> elements = delayStructure->extractEqual(tal);
+        vector<DelayNode *> elements = delayStructure->extractEqualFirst();
         for (unsigned int i = 0; i < elements.size(); i++)
         {
             int reacIndex = elements[i]->getReacIndex();
@@ -91,6 +93,12 @@ void RejectionMethod::reacExecution()
         }
         elements.clear();
         currentTime = tal;
+
+        /*
+         cout << "------------------------------AFTER EXECUTION--------------------------------" << endl;
+        delayStructure->print();
+        cout << "--------------------------------------------F--------------------------------" << endl;
+        */
     }
     else
     {

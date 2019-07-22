@@ -22,9 +22,9 @@ DelayHash::DelayHash(double **delaysValue, int reacNumber, int specNumber)
     *   Table 2 = from Biggest delay to 2 * Biggest delay
     */
     table1->low = 0;
-    table1->high = ceil(biggestDelay);
-    table2->low = ceil(biggestDelay);
-    table2->high = ceil(2 * biggestDelay);
+    table1->high = biggestDelay;
+    table2->low = biggestDelay;
+    table2->high = 2 * biggestDelay;
     table1->inUse = 0;
     table2->inUse = 0;
     firstIndex = INT_MAX;
@@ -32,8 +32,10 @@ DelayHash::DelayHash(double **delaysValue, int reacNumber, int specNumber)
     firstTable = 1;
     for (int i = 0; i < capacity; i++)
     {
-        table1->array.push_back(new RingBuffer(10));
-        table2->array.push_back(new RingBuffer(10));
+        RingBuffer *r1 = new RingBuffer(10);
+        RingBuffer *r2 = new RingBuffer(10);
+        table1->array.push_back(r1);
+        table2->array.push_back(r2);
     }
 }
 DelayHash::~DelayHash()
@@ -72,7 +74,6 @@ void DelayHash::insertKey(int specIndex, int reacIndex, double delayTime)
         firstIndex = index;
         firstTable = choosedTable;
     }
-    cout << "insert new delay. Value: " << delayTime << " Index: " << index << " Choosed table: " << choosedTable << endl;
 }
 
 void DelayHash::print()
@@ -90,20 +91,19 @@ void DelayHash::print()
         table2->array[i]->print();
     }
 }
-int DelayHash::hashingFunction(double delayTime, int low, int high)
+int DelayHash::hashingFunction(double delayTime, double low, double high)
 {
 
     //R = inf + ((sup-inf)/(1.0/precision))*int
     //1.0/precision if precision = 0.0....
     int key = ceil((delayTime - low) * (precision / (high - low)));
-    //cout << "DELAY: " << delayTime << " KEY: " << key << " Capacity: " << capacity << " MOD Capacity: " << key % capacity << endl;
+    //cout << "LOW: " << low << " High: " << high << " key: " << key << " delayTime: " << delayTime << endl;
     return key % capacity;
 }
 bool DelayHash::isEmpty()
 {
     if (table1->inUse == 0 && table2->inUse == 0)
     {
-        cout << "Empty list" << endl;
         return true;
     }
     else
@@ -111,121 +111,169 @@ bool DelayHash::isEmpty()
 }
 DelayNode *DelayHash::getMinNode()
 {
-    cout << "First Index: " << firstIndex << " First Table: " << firstTable << endl;
-    if (isEmpty() || (firstIndex > table1->high && firstIndex > table2->high))
+    
+    cout << "First Index: " << firstIndex << " First Table: " << firstTable << " First Value: " << firstDelay << endl;
+    cout << "Table 1 - low: " << table1->low << " Table 1 - High: " << table1->high << " InUse: " << table1->inUse << endl;
+    cout << "Table 2 - low: " << table2->low << " Table 2 - High: " << table2->high << " InUse: " << table2->inUse << endl;
+    if (isEmpty())
         return nullptr;
     else if (firstTable == 1)
-        return table1->array[firstIndex]->getMinNode();
-    else
-        return table2->array[firstIndex]->getMinNode();
-}
-vector<DelayNode *> DelayHash::extractEqual(double value)
-{
-    cout << "Extracting " << value << endl;
-    int index;
-    int choosedTable = 1;
-    bool updateTable = false;
-    if (value <= table1->high && value < table2->high)
-        choosedTable = 1;
-    else if (value <= table1->high && value > table2->high)
     {
-        //table 1 is newer than table 2
-        choosedTable = 1;
-        updateTable = true;
+        //cout << "MinNODE: " << table1->array[firstIndex]->getMinNode()->getDelayTime() << endl;
+        return table1->array[firstIndex]->getMinNode();
     }
-    else if (value > table1->high && value <= table2->high)
+    else
+    {
+        //cout << "MinNODE: " << table2->array[firstIndex]->getMinNode()->getDelayTime() << endl;
+        return table2->array[firstIndex]->getMinNode();
+    }
+}
+vector<DelayNode *> DelayHash::extractEqualFirst()
+{
+    double value;
+    vector<DelayNode *> vec;
+    if (isEmpty())
+        return vec; //returns an empty vector
+    else
+    {
+        value = firstDelay;
+    }
+    //out << "Extracting " << value << endl;
+    int index;
+    int choosedTable = 0;
+    bool updateTable = false;
+    if (value > table1->low && value <= table1->high)
+    {
+        choosedTable = 1;
+        if (value > table2->high) //table 1 is newer than table 2
+            updateTable = true;
+    }
+    else if (value <= table2->high)
     {
         //table 2 is newer than table 1
         choosedTable = 2;
         updateTable = true;
     }
-    vector<DelayNode *> vec;
     if (choosedTable == 1)
     {
-        index = hashingFunction(value, table1->low, table1->high);
-        if (!table1->array[index]->isEmpty())
-        {
-            vec = table1->array[index]->extractEqual(value);
-        }
+        vec = table1->array[firstIndex]->extractEqualFirst();
         table1->inUse = table1->inUse - vec.size();
-        if (table1->inUse != 0 && updateTable)
+        if (table1->inUse != 0)
         {
-            int ind = firstIndex;
-            while (table1->array[ind]->getMinNode() == nullptr)
-            {
-                ind++;
-            }
-            firstIndex = ind;
-            firstDelay = table1->array[ind]->getMinNode()->getDelayTime();
-        }
-        else if (table1->inUse == 0 && updateTable)
-        {
+            //case 1: there are elements on the first table and the second one is older
             firstIndex = INT_MAX;
             firstDelay = INT_MAX;
             firstTable = 1;
-        }
-        else if (table1->inUse == 0 && !updateTable)
-        {
-            if (table2->inUse != 0)
+            for (unsigned int i = 0; i < table1->array.size(); i++)
             {
-                int ind = 0;
-                while (table2->array[ind]->getMinNode() == nullptr)
+                if (table1->array[i]->getMinNode() != nullptr && table1->array[i]->getMinNode()->getDelayTime() < firstDelay)
                 {
-                    ind++;
+                    firstIndex = i;
+                    firstDelay = table1->array[i]->getMinNode()->getDelayTime();
                 }
-                firstIndex = ind;
-                firstDelay = table2->array[ind]->getMinNode()->getDelayTime();
-                firstTable = 2;
             }
         }
+        else
+        {
+            //case 2: there aren't elements on the first table and the second one is older
+            if (updateTable)
+            {
+
+                firstIndex = INT_MAX;
+                firstDelay = INT_MAX;
+                firstTable = 1;
+            }
+            else
+            {
+                //case 3: there aren't elements on the first table and the second one is newer
+
+                if (table2->inUse != 0)
+                {
+                    firstIndex = INT_MAX;
+                    firstDelay = INT_MAX;
+                    firstTable = 2;
+                    for (unsigned int i = 0; i < table2->array.size(); i++)
+                    {
+                        if (table2->array[i]->getMinNode() != nullptr && table2->array[i]->getMinNode()->getDelayTime() < firstDelay)
+                        {
+                            firstIndex = i;
+                            firstDelay = table2->array[i]->getMinNode()->getDelayTime();
+                        }
+                    }
+                }
+                else
+                {
+                    firstIndex = INT_MAX;
+                    firstDelay = INT_MAX;
+                    firstTable = 1;
+                }
+            }
+        }
+        //updates table 2
         if (updateTable)
         {
             table2->low = table1->high;
-            table2->high = ceil(table2->high + biggestDelay);
+            table2->high = table2->low + biggestDelay;
         }
     }
     else
     {
-        index = hashingFunction(value, table2->low, table2->high);
-        if (!table2->array[index]->isEmpty())
-        {
-            vec = table2->array[index]->extractEqual(value);
-        }
+        vec = table2->array[firstIndex]->extractEqualFirst();
         table2->inUse = table2->inUse - vec.size();
-        if (table2->inUse != 0 && updateTable)
+        if (table2->inUse != 0)
         {
-            int ind = firstIndex;
-            while (table2->array[ind]->getMinNode() == nullptr)
-            {
-                ind++;
-            }
-            firstIndex = ind;
-            firstDelay = table2->array[ind]->getMinNode()->getDelayTime();
-        }
-        else if (table2->inUse == 0 && updateTable)
-        {
+
+            //case 1: there are elements on the second table and the first one is older
             firstIndex = INT_MAX;
             firstDelay = INT_MAX;
-            firstTable = 1;
-        }
-        else if (table2->inUse == 0 && !updateTable)
-        {
-            if (table1->inUse != 0)
+            firstTable = 2;
+            for (unsigned int i = 0; i < table2->array.size(); i++)
             {
-                int ind = 0;
-                while (table1->array[ind]->getMinNode() == nullptr)
+                if (table2->array[i]->getMinNode() != nullptr && table2->array[i]->getMinNode()->getDelayTime() < firstDelay)
                 {
-                    ind++;
+                    firstIndex = i;
+                    firstDelay = table2->array[i]->getMinNode()->getDelayTime();
                 }
-                firstIndex = ind;
-                firstDelay = table1->array[ind]->getMinNode()->getDelayTime();
+            }
+        }
+        else
+        {
+            if (updateTable)
+            {
+                //case 2: there aren't elements on the second table and the first one is older
+                firstIndex = INT_MAX;
+                firstDelay = INT_MAX;
                 firstTable = 1;
+            }
+            else
+            {
+                //case 3: there aren't elements on the second table and the first one is newer
+                if (table1->inUse != 0)
+                {
+                    firstIndex = INT_MAX;
+                    firstDelay = INT_MAX;
+                    firstTable = 1;
+                    for (unsigned int i = 0; i < table1->array.size(); i++)
+                    {
+                        if (table1->array[i]->getMinNode() != nullptr && table1->array[i]->getMinNode()->getDelayTime() < firstDelay)
+                        {
+                            firstIndex = i;
+                            firstDelay = table1->array[i]->getMinNode()->getDelayTime();
+                        }
+                    }
+                }
+                else
+                {
+                    firstIndex = INT_MAX;
+                    firstDelay = INT_MAX;
+                    firstTable = 2;
+                }
             }
         }
         if (updateTable)
         {
             table1->low = table2->high;
-            table1->high = ceil(table1->high + biggestDelay);
+            table1->high = table1->low + biggestDelay;
         }
     }
     return vec;

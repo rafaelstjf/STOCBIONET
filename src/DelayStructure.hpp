@@ -17,7 +17,7 @@ public:
   virtual ~DelayStructure();
   virtual void insertKey(int specIndex, int reacIndex, double delayTime);
   virtual void print();
-  virtual vector<DelayNode *> extractEqual(double value);
+  virtual vector<DelayNode *> extractEqualFirst();
   virtual DelayNode *getNode(int index);
   virtual DelayNode *getMinNode();
 };

@@ -62,11 +62,18 @@ int DelayList::getArraySize()
 {
     return array.size();
 }
-vector<DelayNode *> DelayList::extractEqual(double value)
+vector<DelayNode *> DelayList::extractEqualFirst()
 {
 
     DelayNode *n;
     vector<DelayNode *> tempArray;
+    double value;
+    if (array.size() == 0)
+        return tempArray;
+    else
+    {
+        value = array[0]->getDelayTime();
+    }
     vector<int> indexesToRemove;
     unsigned int i = 0;
     while (i < array.size())

@@ -7,6 +7,6 @@ DelayStructure::~DelayStructure()
 }
 void DelayStructure::insertKey(int specIndex, int reacIndex, double delayTime) {}
 void DelayStructure::print() {}
-vector<DelayNode *> DelayStructure::extractEqual(double value) {}
+vector<DelayNode *> DelayStructure::extractEqualFirst() {}
 DelayNode *DelayStructure::getNode(int index) {}
 DelayNode *DelayStructure::getMinNode() {}

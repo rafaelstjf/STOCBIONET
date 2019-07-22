@@ -11,23 +11,23 @@ class DelayHash : public DelayStructure
 {
 
 private:
-  struct Table
+  typedef struct table
   {
-    int low;
-    int high;
+    double low;
+    double high;
     vector<RingBuffer *> array;
     int inUse;
-  };
+  } Table;
   Table *table1;
   Table *table2;
   int capacity;
   int firstIndex;
-  int firstDelay;
+  double firstDelay;
   int firstTable;
   double precision;
   double lowestDelay;
   double biggestDelay;
-  int hashingFunction(double delayTime, int low, int high);
+  int hashingFunction(double delayTime, double low, double high);
 
 public:
   DelayHash(double **delaysValue, int reacNumber, int specNumber);
@@ -36,7 +36,7 @@ public:
   void print();
   bool isEmpty();
   DelayNode *getMinNode();
-  vector<DelayNode *> extractEqual(double value);
+  vector<DelayNode *> extractEqualFirst();
 };
 
 #endif

@@ -15,9 +15,10 @@ public:
   ~RingBuffer();
   void insertKey(int specIndex, int reacIndex, double delayTime);
   void print();
-  vector<DelayNode *> extractEqual(double value);
+  vector<DelayNode *> extractEqualFirst();
   DelayNode *getNode(int index);
   DelayNode *getMinNode();
+  void removeByIndexRange(vector<int> indexes);
   //
   bool isEmpty();
   int getFirstIndex();

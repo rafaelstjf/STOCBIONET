@@ -19,7 +19,7 @@ public:
   void removeByIndexRange(int arrayIndexBeg, int arrayIndexEnd);
   void print();
   int getArraySize();
-  vector<DelayNode *> extractEqual(double value);
+  vector<DelayNode *> extractEqualFirst();
   DelayNode *getNode(int index);
   DelayNode *getMinNode();
   ~DelayList();
