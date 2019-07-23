@@ -214,9 +214,10 @@ void menu(Model *model, double &initialTime, double &maximumTime, long int &seed
     char printOp;
     clearScreen();
     //prints the menu
-    cout << "------------------------------------" << endl;
-    cout << "---------------SSA------------------" << endl;
-    cout << "------------------------------------" << endl;
+    cout << "--------------------------------------------" << endl;
+    cout << "------------------STOCSIM-------------------" << endl;
+    cout << "----A SOFTWARE FOR STOCHASTIC SIMULATION----" << endl;
+    cout << "--------------------------------------------" << endl;
     if (!model->isModelLoaded())
     {
         //load a new model if there is any other loaded
