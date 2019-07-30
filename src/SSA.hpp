@@ -54,6 +54,7 @@ protected:
   virtual void reacSelection() = 0;
   virtual void reacExecution() = 0;
   virtual void updateSpeciesQuantities(int index);
+  virtual void postSimulation(double totalTime);
 };
 
 #endif // SSA_H

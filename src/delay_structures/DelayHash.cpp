@@ -138,8 +138,6 @@ vector<DelayNode *> DelayHash::extractEqualFirst()
     {
         value = firstDelay;
     }
-    //out << "Extracting " << value << endl;
-    int index;
     int choosedTable = 0;
     bool updateTable = false;
     if (value > table1->low && value <= table1->high)

@@ -59,10 +59,12 @@ unsigned long int SSA::getSeed()
 {
     return ut->getSeed();
 }
-double SSA::getReacPerSecond(){
+double SSA::getReacPerSecond()
+{
     return log->getReacPerSecond();
 }
-double SSA::getNumberReacExecuted(){
+double SSA::getNumberReacExecuted()
+{
     return log->getNumberReacExecuted();
 }
 void SSA::calcPropensity()
@@ -102,4 +104,13 @@ void SSA::updateSpeciesQuantities(int index)
 bool SSA::checkSucess()
 {
     return sucess;
+}
+void SSA::postSimulation(double totalTime)
+{
+    sucess = true;
+    reacPerSecond = (double)reacCount / (totalTime);
+    cout << "\nSimulation finished with " << totalTime << " seconds." << endl;
+    cout << "Reactions per second: " << reacPerSecond << endl;
+    log->setReacPerSecond(reacPerSecond);
+    log->setNumberReacExecuted(reacCount);
 }

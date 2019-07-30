@@ -2,13 +2,13 @@
 #include <fstream>
 #include <string>
 #if defined(_WIN32)
-#define PLATFORM_NAME "windows" // Windows
+#define PLATFORM_NAME 0 // Windows
 #include <windows.h>
 #elif defined(__linux__)
-#define PLATFORM_NAME "linux" // Linux
+#define PLATFORM_NAME 1 // Linux
 #include <unistd.h>
 #else
-#define PLATFORM_NAME "unknown"
+#define PLATFORM_NAME 2
 #endif
 #include "DirectMethod.hpp"
 #include "SortingDirectMethod.hpp"
@@ -284,9 +284,9 @@ void menu(Model *model, double &initialTime, double &maximumTime, long int &seed
 void clearScreen()
 {
     //clear the screen
-    if (PLATFORM_NAME == "windows")
+    if (PLATFORM_NAME == 0)
         system("cls");
-    else if (PLATFORM_NAME == "linux")
+    else if (PLATFORM_NAME == 1)
         system("clear");
 }
 void sleepFor(int sleepMs)

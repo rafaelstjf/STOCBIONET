@@ -13,13 +13,13 @@
 #include <string>
 #include <sys/stat.h>
 #if defined(_WIN32)
-#define PLATFORM_NAME "windows" // Windows
+#define PLATFORM_NAME 0 // Windows
 #include <process.h>
 #elif defined(__linux__)
-#define PLATFORM_NAME "linux" // Linux
+#define PLATFORM_NAME 1 // Linux
 #include <unistd.h>
 #else
-#define PLATFORM_NAME "unknown"
+#define PLATFORM_NAME 1
 #endif
 
 #define E 2.71828182845904523536

@@ -35,12 +35,7 @@ void FirstReactionMethod::perform(Model *model, double maximumTime, double initi
         reacExecution();
     }
     double en = ut->getCurrentTime(); //ending of the simulation
-    sucess = true;
-    reacPerSecond = (double)reacCount / (en - beg);
-    cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
-    cout << "Reactions per second: " << reacPerSecond << endl;
-    log->setReacPerSecond(reacPerSecond);
-    log->setNumberReacExecuted(reacCount);
+    postSimulation((en-beg));
 }
 void FirstReactionMethod::reacExecution()
 {
