@@ -215,7 +215,7 @@ void menu(Model *model, double &initialTime, double &maximumTime, long int &seed
     clearScreen();
     //prints the menu
     cout << "--------------------------------------------" << endl;
-    cout << "------------------STOCSIM-------------------" << endl;
+    cout << "------------------STOCBIONET-------------------" << endl;
     cout << "----A SOFTWARE FOR STOCHASTIC SIMULATION----" << endl;
     cout << "--------------------------------------------" << endl;
     if (!model->isModelLoaded())
