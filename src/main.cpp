@@ -153,9 +153,11 @@ void runBatchSimulation(Model *model, SSA *simulation, double &initialTime, doub
 {
     vector<double> reacExe;
     vector<double> reacPerSec;
+    vector<double> timeSpent;
     vector<unsigned long int> seedArray;
     double sumReacExe = 0;
     double sumReacPerSec = 0;
+    double sumTimeSpent = 0;
     int curSimulation = 0;
     char saveOp1 = 'n', saveOp2 = 'n';
     cout << "Do you want to save the simulation's log and the details in a file? [y|n]" << endl;
@@ -190,23 +192,26 @@ void runBatchSimulation(Model *model, SSA *simulation, double &initialTime, doub
             seedArray.push_back(simulation->getSeed());
             reacPerSec.push_back(simulation->getReacPerSecond());
             reacExe.push_back(simulation->getNumberReacExecuted());
+            timeSpent.push_back(simulation->getTimeSpent());
             delete simulation;
         }
     }
     fstream bashOutput;
-    bashOutput.open("bashOutput.csv", fstream::out | fstream::trunc);
-    bashOutput << "Number of executed reactions; Number of reactions per second; Seeds used " << endl;
+    bashOutput.open("batchOutput.csv", fstream::out | fstream::trunc);
+    bashOutput << "Number of executed reactions; Number of reactions per second; Seeds used; Time spent during simulation " << endl;
     for (int i = 0; i < numSimulations; i++)
     {
-        bashOutput << reacExe[i] << "; " << reacPerSec[i] << " ; " << seedArray[i] << endl;
+        bashOutput << reacExe[i] << "; " << reacPerSec[i] << " ; " << seedArray[i] << " ; " << timeSpent[i] << endl;
         sumReacExe += reacExe[i];
         sumReacPerSec += reacPerSec[i];
+        sumTimeSpent += timeSpent[i];
     }
-    bashOutput << "Average: " << sumReacExe / numSimulations << "; Average: " << sumReacPerSec / numSimulations << "; " << endl;
+    bashOutput << "Average: " << sumReacExe / numSimulations << "; Average: " << sumReacPerSec / numSimulations << "; ; Average: " << sumTimeSpent << endl;
     bashOutput.close();
     seedArray.clear();
     reacPerSec.clear();
     reacExe.clear();
+    cout << "Batch simulation's results saved as batchOutput.csv" << endl;
 }
 void menu(Model *model, double &initialTime, double &maximumTime, long int &seed, string &op)
 {

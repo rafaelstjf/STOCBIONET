@@ -114,3 +114,6 @@ void SSA::postSimulation(double totalTime)
     log->setReacPerSecond(reacPerSecond);
     log->setNumberReacExecuted(reacCount);
 }
+double SSA::getTimeSpent(){
+    return log->getTimeSpent();
+}

@@ -28,6 +28,7 @@ public:
   unsigned long int getSeed();
   double getReacPerSecond();
   double getNumberReacExecuted();
+  double getTimeSpent();
 
 protected:
   Utils *ut;
