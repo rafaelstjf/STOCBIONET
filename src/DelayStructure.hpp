@@ -9,9 +9,7 @@ using namespace std;
 class DelayStructure
 {
 private:
-
 protected:
-
 public:
   DelayStructure();
   virtual ~DelayStructure();

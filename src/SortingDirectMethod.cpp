@@ -57,7 +57,7 @@ void SortingDirectMethod::reacExecution()
         //moves the reaction index to a position ahead on the array
         int temp = reactionSO[reactionSOindex];
         reactionSO[reactionSOindex] = reactionSO[reactionSOindex - 1];
-        reactionSO[reactionSOindex-1] = temp;
+        reactionSO[reactionSOindex - 1] = temp;
     }
     int *depArray = dg->getDependencies(selectedReaction);
     int depSize = dg->getDependenciesSize(selectedReaction);
@@ -94,12 +94,7 @@ void SortingDirectMethod::perform(Model *model, double maximumTime, double initi
         reacExecution();
     }
     double en = ut->getCurrentTime(); //ending of the simulation
-    sucess = true;
-    reacPerSecond = (double)reacCount / (en - beg);
-    cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
-    cout << "Reactions per second: " << reacPerSecond << endl;
-    log->setReacPerSecond(reacPerSecond);
-    log->setNumberReacExecuted(reacCount);
+    postSimulation((en - beg));
 }
 SortingDirectMethod::~SortingDirectMethod()
 {

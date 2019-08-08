@@ -75,7 +75,6 @@ void RejectionMethod::reacExecution()
         {
             int reacIndex = elements[i]->getReacIndex();
             int specIndex = elements[i]->getSpecIndex();
-            double delayTime = elements[i]->getDelayTime();
             //updates the specie quantity for each product in delay
             specQuantity[specIndex] = specQuantity[specIndex] + model->getProducts()[specIndex][reacIndex];
             //updates the propensity for all the reactions that this one affects
@@ -87,7 +86,7 @@ void RejectionMethod::reacExecution()
             }
             delete depArray;
         }
-        for (int i = 0; i < elements.size(); i++)
+        for (unsigned int i = 0; i < elements.size(); i++)
         {
             delete elements[i];
         }
@@ -145,16 +144,7 @@ void RejectionMethod::perform(Model *model, double maximumTime, double initialTi
         //cin >> a;
     }
     double en = ut->getCurrentTime(); //ending of the simulation
-    sucess = true;
-    reacPerSecond = (double)reacCount / (en - beg);
-    cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
-    if (isinf(reacPerSecond))
-        cout << "Reactions per milisecond: " << (double)reacCount / ((en - beg) / 1000) << endl;
-    else
-        cout << "Reactions per second: " << reacPerSecond << endl;
-    log->setReacPerSecond(reacPerSecond);
-    log->setNumberReacExecuted(reacCount);
-    log->setTimeSpent(en - beg);
+    postSimulation((en - beg));
 }
 void RejectionMethod::chooseStructure()
 {

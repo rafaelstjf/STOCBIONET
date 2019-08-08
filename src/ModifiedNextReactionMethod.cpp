@@ -37,7 +37,6 @@ void ModifiedNextReactionMethod::reacExecution()
 {
     double u;  //random number
     double nt; //new time
-    int index;
     int sIndex = selectedNode->getIndex();
     //updates the species quantities
     updateSpeciesQuantities(sIndex);
@@ -87,12 +86,7 @@ void ModifiedNextReactionMethod::perform(Model *model, double maximumTime, doubl
         }
     }
     double en = ut->getCurrentTime(); //ending of the simulation
-    sucess = true;
-    reacPerSecond = (double)reacCount / (en - beg);
-    cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
-    cout << "Reactions per second: " << reacPerSecond << endl;
-    log->setReacPerSecond(reacPerSecond);
-    log->setNumberReacExecuted(reacCount);
+    postSimulation((en - beg));
 }
 ModifiedNextReactionMethod::~ModifiedNextReactionMethod()
 {

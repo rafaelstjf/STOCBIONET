@@ -4,7 +4,7 @@ DelayHeap::DelayHeap(int capacity)
     this->capacity = capacity;
     heapSize = 0;
     array = new DelayNode *[capacity];
-    for (unsigned int i = 0; i < capacity; i++)
+    for (int i = 0; i < capacity; i++)
     {
         array[i] = nullptr;
     }
