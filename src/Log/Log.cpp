@@ -112,9 +112,17 @@ void Log::setReacPerSecond(double reacPerSecond)
 {
     this->reacPerSecond = reacPerSecond;
 }
+void Log::setTimeSpent(double timeSpent)
+{
+    this->timeSpent = timeSpent;
+}
 double Log::getReacPerSecond()
 {
     return reacPerSecond;
+}
+double Log::getTimeSpent()
+{
+    return timeSpent;
 }
 void Log::saveDetailsToFile(string filename, unsigned long int seed)
 {
@@ -126,6 +134,10 @@ void Log::saveDetailsToFile(string filename, unsigned long int seed)
         cout << "SAVING SIMULATION DETAILS IN " << newFileName << endl;
         outputFile.open(newFileName, fstream::out);
         outputFile << "Number of executed reactions: " << reacCount << '\n';
+        outputFile << "Time spent on simulation: " << timeSpent << '\n';
+        if(isinf(reacPerSecond))
+        outputFile << "Reactions per milisecond: " << (double)reacCount/(timeSpent/1000) << '\n';
+        else
         outputFile << "Reactions per second: " << reacPerSecond << '\n';
         outputFile << "Seed: " << seed << '\n';
         outputFile.close();

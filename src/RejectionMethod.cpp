@@ -148,9 +148,13 @@ void RejectionMethod::perform(Model *model, double maximumTime, double initialTi
     sucess = true;
     reacPerSecond = (double)reacCount / (en - beg);
     cout << "\nSimulation finished with " << en - beg << " seconds." << endl;
-    cout << "Reactions per second: " << reacPerSecond << endl;
+    if (isinf(reacPerSecond))
+        cout << "Reactions per milisecond: " << (double)reacCount / ((en - beg) / 1000) << endl;
+    else
+        cout << "Reactions per second: " << reacPerSecond << endl;
     log->setReacPerSecond(reacPerSecond);
     log->setNumberReacExecuted(reacCount);
+    log->setTimeSpent(en - beg);
 }
 void RejectionMethod::chooseStructure()
 {
