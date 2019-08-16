@@ -111,10 +111,11 @@ bool DelayHash::isEmpty()
 }
 DelayNode *DelayHash::getMinNode()
 {
-    
-    cout << "First Index: " << firstIndex << " First Table: " << firstTable << " First Value: " << firstDelay << endl;
+
+    /*cout << "First Index: " << firstIndex << " First Table: " << firstTable << " First Value: " << firstDelay << endl;
     cout << "Table 1 - low: " << table1->low << " Table 1 - High: " << table1->high << " InUse: " << table1->inUse << endl;
     cout << "Table 2 - low: " << table2->low << " Table 2 - High: " << table2->high << " InUse: " << table2->inUse << endl;
+    */
     if (isEmpty())
         return nullptr;
     else if (firstTable == 1)

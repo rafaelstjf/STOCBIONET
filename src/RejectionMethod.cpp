@@ -32,7 +32,6 @@ void RejectionMethod::reacSelection()
             }
         }
     }
-    //cout << "Selected reaction: " << selectedReaction << endl;
 }
 void RejectionMethod::reacTimeGeneration()
 {
@@ -58,15 +57,6 @@ void RejectionMethod::reacExecution()
     double u = ut->getRandomNumber();
     double teta = (-1 * ut->ln(u)) / totalPropensity;
     DelayNode *first = delayStructure->getMinNode();
-    if (first != nullptr)
-    {
-        /*
-        cout << "> " << endl;
-        cout << "   current Time: " << currentTime << " First: " << first->getDelayTime() << " CurrentTime + Teta: " << currentTime + teta << endl;
-        cout << "-----------------------------------" << endl;
-        delayStructure->print();
-         */
-    }
     if (first != nullptr && first->getDelayTime() >= currentTime && first->getDelayTime() <= (currentTime + teta))
     {
         tal = first->getDelayTime();
@@ -92,12 +82,6 @@ void RejectionMethod::reacExecution()
         }
         elements.clear();
         currentTime = tal;
-
-        /*
-         cout << "------------------------------AFTER EXECUTION--------------------------------" << endl;
-        delayStructure->print();
-        cout << "--------------------------------------------F--------------------------------" << endl;
-        */
     }
     else
     {
@@ -140,45 +124,36 @@ void RejectionMethod::perform(Model *model, double maximumTime, double initialTi
     {
         log->insertNode(currentTime, specQuantity);
         reacExecution();
-        //char a;
-        //cin >> a;
     }
     double en = ut->getCurrentTime(); //ending of the simulation
     postSimulation((en - beg));
 }
 void RejectionMethod::chooseStructure()
 {
-    int option = 0;
-    bool flag = false;
-    cout << "Choose the delay structure" << endl;
-    cout << "1 - List \n2 - Heap \n3 - Ring Buffer \n4 - Hash Table" << endl;
-    cin >> option;
-    while (!flag)
+    switch (structOp)
     {
-        switch (option)
-        {
-        case 1:
-            delayStructure = new DelayList();
-            flag = true;
-            break;
-        case 2:
-            delayStructure = new DelayHeap(model->getReacNumber());
-            flag = true;
-            break;
-        case 3:
-            delayStructure = new RingBuffer(model->getReacNumber());
-            flag = true;
-            break;
-        case 4:
-            delayStructure = new DelayHash(model->getDelaysValue(), model->getReacNumber(), model->getSpecNumber());
-            flag = true;
-            break;
-        default:
-            cout << "Wrong option! Try again." << endl;
-            cin >> option;
-            break;
-        }
+    case 1:
+
+        cout << "1 - List" << endl;
+        delayStructure = new DelayList();
+        break;
+    case 2:
+        cout << "2 - Heap" << endl;
+        delayStructure = new DelayHeap(model->getReacNumber());
+        break;
+    case 3:
+        cout << "3 - Ring Buffer" << endl;
+        delayStructure = new RingBuffer(model->getReacNumber());
+        break;
+    case 4:
+        cout << "4 - Hash Table" << endl;
+        delayStructure = new DelayHash(model->getDelaysValue(), model->getReacNumber(), model->getSpecNumber());
+        break;
     }
+}
+void RejectionMethod::setDelayStructure(int op)
+{
+    structOp = op;
 }
 RejectionMethod::~RejectionMethod()
 {

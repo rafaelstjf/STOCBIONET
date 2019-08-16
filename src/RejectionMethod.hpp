@@ -16,6 +16,7 @@ class RejectionMethod : public SSA
 {
 public:
     void perform(Model* model, double maximumTime, double initialTime, long int seed);
+    void setDelayStructure(int op);
     virtual ~RejectionMethod();
 
 protected:
@@ -28,6 +29,7 @@ protected:
     DelayedDependencyGraph* ddg;
 
 private:
+    int structOp;
     void chooseStructure();
 };
 

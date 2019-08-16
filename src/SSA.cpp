@@ -113,7 +113,9 @@ void SSA::postSimulation(double totalTime)
     cout << "Reactions per second: " << reacPerSecond << endl;
     log->setReacPerSecond(reacPerSecond);
     log->setNumberReacExecuted(reacCount);
+    log->setTimeSpent(totalTime);
 }
-double SSA::getTimeSpent(){
+double SSA::getTimeSpent()
+{
     return log->getTimeSpent();
 }

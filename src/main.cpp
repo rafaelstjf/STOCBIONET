@@ -130,8 +130,30 @@ SSA *allocateSimulation(string &op)
         simulation = new ModifiedNextReactionMethod();
     else if (op == "SNRM")
         simulation = new SimplifiedNextReactionMethod();
-    else if (op == "RM")
-        simulation = new RejectionMethod();
+    else if (op == "RM-OL")
+    {
+        RejectionMethod *r = new RejectionMethod();
+        r->setDelayStructure(1);
+        simulation = r;
+    }
+    else if (op == "RM-H")
+    {
+        RejectionMethod *r = new RejectionMethod();
+        r->setDelayStructure(2);
+        simulation = r;
+    }
+    else if (op == "RM-CL")
+    {
+        RejectionMethod *r = new RejectionMethod();
+        r->setDelayStructure(3);
+        simulation = r;
+    }
+    else if (op == "RM-HT")
+    {
+        RejectionMethod *r = new RejectionMethod();
+        r->setDelayStructure(4);
+        simulation = r;
+    }
     return simulation;
 }
 void postSimulation(SSA *simulation)
@@ -206,7 +228,7 @@ void runBatchSimulation(Model *model, SSA *simulation, double &initialTime, doub
         sumReacPerSec += reacPerSec[i];
         sumTimeSpent += timeSpent[i];
     }
-    bashOutput << "Average: " << sumReacExe / numSimulations << "; Average: " << sumReacPerSec / numSimulations << "; ; Average: " << sumTimeSpent << endl;
+    bashOutput << "Average: " << sumReacExe / numSimulations << "; Average: " << sumReacPerSec / numSimulations << "; ; Average: " << sumTimeSpent / numSimulations << endl;
     bashOutput.close();
     seedArray.clear();
     reacPerSec.clear();
@@ -254,15 +276,18 @@ void menu(Model *model, double &initialTime, double &maximumTime, long int &seed
     cin >> initialTime;
     cout << "Insert the maximum time:" << endl;
     cin >> maximumTime;
-    cout << "Methods:\nDM - Direct Method\nSDM - Sorting Direct Method\nODM - Optimized Direct Method\nFRM - First Reaction Method\nNRM - Next Reaction Method\nNRMC - Next Reaction Method Compact\nMNRM - Modified Next Reaction Method\nSNRM - Simplified Next Reaction Method\nRM - Rejection Method\n"
+    cout << "Methods:" << endl;
+    cout << "DM - Direct Method\nSDM - Sorting Direct Method\nODM - Optimized Direct Method\nFRM - First Reaction Method\nNRM - Next Reaction Method\nNRMC - Next Reaction Method Compact\nMNRM - Modified Next Reaction Method\nSNRM - Simplified Next Reaction Method\n"
          << endl;
+    cout << "RM-OL - Rejection Method using Ordered List\nRM-H - Rejection Method using Heap\nRM-CL - Rejection Method using Circular List\nRM-HT - Rejection Method using Hash Table" << endl;
 
     double flag = true;
     while (flag)
     {
+
         cout << "Insert the Method:" << endl;
         cin >> op;
-        if (op != "DM" && op != "SDM" && op != "ODM" && op != "FRM" && op != "NRM" && op != "NRMC" && op != "MNRM" && op != "SNRM" && op != "RM")
+        if (op != "DM" && op != "SDM" && op != "ODM" && op != "FRM" && op != "NRM" && op != "NRMC" && op != "MNRM" && op != "SNRM" && op != "RM-OL" && op != "RM-H" && op != "RM-CL" && op != "RM-HT")
         {
             cout << "Error. Invalid operation!" << endl;
             op = "error";
