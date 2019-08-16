@@ -277,7 +277,7 @@ void menu(Model *model, double &initialTime, double &maximumTime, long int &seed
     cout << "Insert the maximum time:" << endl;
     cin >> maximumTime;
     cout << "Methods:" << endl;
-    cout << "DM - Direct Method\nSDM - Sorting Direct Method\nODM - Optimized Direct Method\nFRM - First Reaction Method\nNRM - Next Reaction Method\nNRMC - Next Reaction Method Compact\nMNRM - Modified Next Reaction Method\nSNRM - Simplified Next Reaction Method\n"
+    cout << "DM - Direct Method\nSDM - Sorting Direct Method\nODM - Optimized Direct Method\nFRM - First Reaction Method\nNRM - Next Reaction Method\nNRMC - Next Reaction Method Compact\nMNRM - Modified Next Reaction Method\nSNRM - Simplified Next Reaction Method"
          << endl;
     cout << "RM-OL - Rejection Method using Ordered List\nRM-H - Rejection Method using Heap\nRM-CL - Rejection Method using Circular List\nRM-HT - Rejection Method using Hash Table" << endl;
 
