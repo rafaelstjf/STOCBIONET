@@ -61,12 +61,42 @@ void DelayHash::insertKey(int specIndex, int reacIndex, double delayTime)
         table1->array[index]->insertKey(specIndex, reacIndex, delayTime);
         table1->inUse++;
     }
-    else
+    else if (delayTime <= table2->high)
     {
         index = hashingFunction(delayTime, table2->low, table2->high);
         table2->array[index]->insertKey(specIndex, reacIndex, delayTime);
         choosedTable = 2;
         table2->inUse++;
+    }
+    else
+    {
+        while (delayTime > table1->high && delayTime > table2->high)
+        {
+
+            if (table1->high < table2->high)
+            {
+                table1->low = table2->high;
+                table1->high = table1->low + biggestDelay;
+            }
+            else
+            {
+                table2->low = table1->high;
+                table2->high = table2->low + biggestDelay;
+            }
+        }
+        if (delayTime <= table1->high)
+        {
+            index = hashingFunction(delayTime, table1->low, table1->high);
+            table1->array[index]->insertKey(specIndex, reacIndex, delayTime);
+            table1->inUse++;
+        }
+        else if (delayTime <= table2->high)
+        {
+            index = hashingFunction(delayTime, table2->low, table2->high);
+            table2->array[index]->insertKey(specIndex, reacIndex, delayTime);
+            choosedTable = 2;
+            table2->inUse++;
+        }
     }
     if (delayTime < firstDelay)
     {
@@ -112,9 +142,11 @@ bool DelayHash::isEmpty()
 DelayNode *DelayHash::getMinNode()
 {
 
-    /*cout << "First Index: " << firstIndex << " First Table: " << firstTable << " First Value: " << firstDelay << endl;
+    /*
+    cout << "First Index: " << firstIndex << " First Table: " << firstTable << " First Value: " << firstDelay << endl;
     cout << "Table 1 - low: " << table1->low << " Table 1 - High: " << table1->high << " InUse: " << table1->inUse << endl;
     cout << "Table 2 - low: " << table2->low << " Table 2 - High: " << table2->high << " InUse: " << table2->inUse << endl;
+    cout << "--------------------------------------" << endl;
     */
     if (isEmpty())
         return nullptr;
@@ -139,27 +171,17 @@ vector<DelayNode *> DelayHash::extractEqualFirst()
     {
         value = firstDelay;
     }
-    int choosedTable = 0;
+    int choosedTable = firstTable;
     bool updateTable = false;
-    if (value > table1->low && value <= table1->high)
-    {
-        choosedTable = 1;
-        if (value > table2->high) //table 1 is newer than table 2
-            updateTable = true;
-    }
-    else if (value <= table2->high)
-    {
-        //table 2 is newer than table 1
-        choosedTable = 2;
+    if ((choosedTable == 1 && value > table2->high) || (choosedTable == 2 && value > table1->high))
         updateTable = true;
-    }
     if (choosedTable == 1)
     {
         vec = table1->array[firstIndex]->extractEqualFirst();
         table1->inUse = table1->inUse - vec.size();
         if (table1->inUse != 0)
         {
-            //case 1: there are elements on the first table and the second one is older
+            //case 1: there are elements on the first table
             firstIndex = INT_MAX;
             firstDelay = INT_MAX;
             firstTable = 1;
@@ -222,7 +244,7 @@ vector<DelayNode *> DelayHash::extractEqualFirst()
         if (table2->inUse != 0)
         {
 
-            //case 1: there are elements on the second table and the first one is older
+            //case 1: there are elements on the second table
             firstIndex = INT_MAX;
             firstDelay = INT_MAX;
             firstTable = 2;
@@ -242,7 +264,7 @@ vector<DelayNode *> DelayHash::extractEqualFirst()
                 //case 2: there aren't elements on the second table and the first one is older
                 firstIndex = INT_MAX;
                 firstDelay = INT_MAX;
-                firstTable = 1;
+                firstTable = 2;
             }
             else
             {
