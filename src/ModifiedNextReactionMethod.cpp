@@ -10,7 +10,7 @@ void ModifiedNextReactionMethod::initialization(Model *model, double maximumTime
     if (model->isModelLoaded())
     {
         queue = new IndexedPrioQueue(model->getReacNumber());
-        dg = new DependencyGraph(true, model);
+        dg = model->getDGSelfEdge();
         P = new double[model->getReacNumber()];
         T = new double[model->getReacNumber()];
     }

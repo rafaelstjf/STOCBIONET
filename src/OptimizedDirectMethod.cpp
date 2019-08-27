@@ -7,7 +7,7 @@ void OptimizedDirectMethod::initialization(Model *model, double maximumTime, dou
     if (model->isModelLoaded())
     {
         reactionSO = new int[model->getReacNumber()];
-        dg = new DependencyGraph(true, model);
+        dg = model->getDGSelfEdge();
         for (int i = 0; i < model->getReacNumber(); i++)
         {
             reactionSO[i] = 0;

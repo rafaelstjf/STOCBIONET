@@ -36,12 +36,17 @@ void DelayHeap::insertKey(int specIndex, int reacIndex, double delayTime)
     {
         //resize the heap
         DelayNode **temp = array;
-        capacity = 2 * capacity;
-        array = new DelayNode *[capacity];
+        array = new DelayNode *[2 * capacity];
         for (int i = 0; i < capacity; i++)
         {
             array[i] = temp[i];
         }
+        for (int i = capacity; i < 2 * capacity; i++)
+        {
+            array[i] = nullptr;
+        }
+        capacity = 2 * capacity;
+        delete[] temp;
     }
     heapSize++;
     int i = heapSize - 1;
@@ -71,7 +76,7 @@ DelayNode *DelayHeap::extractMin()
     if (heapSize == 1)
     {
         heapSize--;
-        DelayNode* extracted = array[0];
+        DelayNode *extracted = array[0];
         array[0] = nullptr;
         return extracted;
     }
@@ -119,8 +124,8 @@ vector<DelayNode *> DelayHeap::extractEqualFirst()
         //cout << "Batata: " << value << endl;
         n = new DelayNode(array[0]->getSpecIndex(), array[0]->getReacIndex(), array[0]->getDelayTime());
         tempArray.push_back(n);
-        DelayNode* r = extractMin();
-        if(r!=nullptr)
+        DelayNode *r = extractMin();
+        if (r != nullptr)
             delete r;
     }
     return tempArray;

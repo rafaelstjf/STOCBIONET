@@ -6,6 +6,9 @@ void Model::clear()
     delaysValue = NULL;
     delaysVariation = NULL;
     stoiMatrix = NULL;
+    dgNoSelfEdges = nullptr;
+    dgSelfEdges = nullptr;
+    ddg = nullptr;
     specNumber = 0;
     reacNumber = 0;
     specNameNumber.clear();
@@ -31,6 +34,9 @@ Model::~Model()
     delete[] delaysValue;
     delete[] delaysVariation;
     delete[] stoiMatrix;
+    delete ddg;
+    delete dgSelfEdges;
+    delete dgNoSelfEdges;
 }
 void Model::loadModel(string filename)
 {
@@ -126,7 +132,7 @@ void Model::loadModel(string filename)
         cout << " * Stoichiometry matrix... ";
         buildStoichiometryMatrix();
         cout << "loaded" << endl;
-        cout << "Model loaded" << endl;
+
         modelLoaded = true;
         specQuantity.clear();
         for (int i = 0; i < reacNumber; i++)
@@ -135,6 +141,10 @@ void Model::loadModel(string filename)
         }
         reactions.clear();
         delete tr;
+        cout << " * Dependency graph.. ";
+        buildDependencyGraphs();
+        cout << "loaded" << endl;
+        cout << "Model loaded" << endl;
     }
     else
     {
@@ -252,4 +262,22 @@ void Model::printModel()
         cout << reacRate[j] << " ";
     }
     cout << endl;
+}
+void Model::buildDependencyGraphs()
+{
+    dgSelfEdges = new DependencyGraph(true, reacNumber, specNumber, reactants, products, delaysValue);
+    dgNoSelfEdges = new DependencyGraph(false, reacNumber, specNumber, reactants, products, delaysValue);
+    ddg = new DelayedDependencyGraph(reacNumber, specNumber, reactants);
+}
+DependencyGraph *Model::getDGSelfEdge()
+{
+    return dgSelfEdges;
+}
+DependencyGraph *Model::getDGNoSelfEdge()
+{
+    return dgNoSelfEdges;
+}
+DelayedDependencyGraph *Model::getDDG()
+{
+    return ddg;
 }

@@ -8,8 +8,8 @@ void RejectionMethod::initialization(Model *model, double maximumTime, double in
     if (model->isModelLoaded())
     {
         chooseStructure();
-        dg = new DependencyGraph(true, model);
-        ddg = new DelayedDependencyGraph(model);
+        dg = model->getDGSelfEdge();
+        ddg = model->getDDG();
     }
 }
 void RejectionMethod::reacSelection()

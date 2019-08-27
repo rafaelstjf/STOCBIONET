@@ -2,18 +2,18 @@
 DependencyGraph::DependencyGraph()
 {
 }
-DependencyGraph::DependencyGraph(double selfEdges, Model *model)
+DependencyGraph::DependencyGraph(double selfEdges, int reacNumber, int specNumber, int **reactants, int **products, double **delaysValue)
 {
-    createGraph(selfEdges, model);
+    createGraph(selfEdges, reacNumber, specNumber, reactants, products, delaysValue);
 }
-void DependencyGraph::createGraph(double selfEdges, Model *model)
+void DependencyGraph::createGraph(double selfEdges, int reacNumber, int specNumber, int **reactants, int **products, double **delaysValue)
 {
 
     int **affects; //set of substances that change quantity when the reaction i is executed
     //graph struct
     this->selfEdges = selfEdges;
-    numReactions = model->getReacNumber();
-    numSpecies = model->getSpecNumber();
+    numReactions = reacNumber;
+    numSpecies = specNumber;
     vertex = new DGVertex *[numReactions];
     for (int i = 0; i < numReactions; i++)
     {
@@ -26,7 +26,7 @@ void DependencyGraph::createGraph(double selfEdges, Model *model)
     for (int i = 0; i < numReactions; i++)
     {
         //affects = reactants U products
-        affects[i] = unionSet(model->getReactants(), model->getProducts(), model->getDelaysValue(), i);
+        affects[i] = unionSet(reactants, products, delaysValue, i);
     }
 
     for (int i = 0; i < numReactions; i++)
@@ -34,7 +34,7 @@ void DependencyGraph::createGraph(double selfEdges, Model *model)
         for (int j = 0; j < numReactions; j++)
         {
             int count = 0;
-            int *inter = intersectionSet(affects[i], model->getReactants(), j);
+            int *inter = intersectionSet(affects[i], reactants, j);
             //if the intersection isn't an empty set so there is a dependency
             for (int k = 0; k < numSpecies; k++)
             {

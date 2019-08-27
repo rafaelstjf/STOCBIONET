@@ -6,7 +6,7 @@ void DirectMethod::initialization(Model *model, double maximumTime, double initi
     methodOutName += "_DM_output";
     //loads both log and the depedency graph
     if (model->isModelLoaded())
-        dg = new DependencyGraph(true, model);
+        dg = model->getDGSelfEdge();
 }
 void DirectMethod::reacTimeGeneration()
 {

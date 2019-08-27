@@ -192,6 +192,7 @@ void runBatchSimulation(Model *model, SSA *simulation, double &initialTime, doub
     while (curSimulation < numSimulations)
     {
         curSimulation++;
+        cout << "Simulation number: " << curSimulation << endl;
         simulation = allocateSimulation(op);
         if (simulation == nullptr)
         {

@@ -7,9 +7,9 @@ DelayedDependencyGraph::~DelayedDependencyGraph()
     }
     delete[] vertex;
 }
-DelayedDependencyGraph::DelayedDependencyGraph(Model *model)
+DelayedDependencyGraph::DelayedDependencyGraph(int reacNumber, int specNumber, int **reactants)
 {
-    createGraph(model);
+    createGraph(reacNumber, specNumber, reactants);
 }
 DelayedDependencyGraph::DelayedDependencyGraph()
 {
@@ -17,10 +17,10 @@ DelayedDependencyGraph::DelayedDependencyGraph()
     numReactions = 0;
     vertex = nullptr;
 }
-void DelayedDependencyGraph::createGraph(Model *model)
+void DelayedDependencyGraph::createGraph(int reacNumber, int specNumber, int **reactants)
 {
-    numReactions = model->getReacNumber();
-    numSpecies = model->getSpecNumber();
+    numReactions = reacNumber;
+    numSpecies = specNumber;
     //creates a array of DGVertex with the size of the number of species
     /*
         0->r0, r1,..., rm
@@ -40,7 +40,7 @@ void DelayedDependencyGraph::createGraph(Model *model)
     {
         for (int j = 0; j < numReactions; j++)
         {
-            if (model->getReactants()[i][j] > 0)
+            if (reactants[i][j] > 0)
                 insertDependency(i, j);
         }
     }

@@ -1,7 +1,6 @@
 #include "SSA.hpp"
 SSA::~SSA()
 {
-    delete dg;
     delete ut;
     delete log;
     delete[] specQuantity;
