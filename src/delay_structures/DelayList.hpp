@@ -25,7 +25,7 @@ public:
   ~DelayList();
 
 private:
-  void sortList();
+  int inUse;
 };
 
 #endif
