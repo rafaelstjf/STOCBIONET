@@ -1,5 +1,5 @@
-#ifndef RINGBUFFER_HPP
-#define RINGBUFFER_HPP
+#ifndef CIRCULARLIST_HPP
+#define CIRCULARLIST_HPP
 
 #include <iostream>
 #include <cmath>
@@ -8,11 +8,11 @@
 #include "../DelayStructure.hpp"
 #include <vector>
 using namespace std;
-class RingBuffer : public DelayStructure
+class CircularList : public DelayStructure
 {
 public:
-  RingBuffer(int capacity);
-  ~RingBuffer();
+  CircularList(int capacity);
+  ~CircularList();
   void insertKey(int specIndex, int reacIndex, double delayTime);
   void print();
   vector<DelayNode *> extractEqualFirst();

@@ -1,6 +1,6 @@
-#include "RingBuffer.hpp"
+#include "CircularList.hpp"
 
-RingBuffer::RingBuffer(int capacity)
+CircularList::CircularList(int capacity)
 {
     this->capacity = capacity;
     inUse = 0;
@@ -13,7 +13,7 @@ RingBuffer::RingBuffer(int capacity)
     first = -1;
     last = -1;
 }
-RingBuffer::~RingBuffer()
+CircularList::~CircularList()
 {
     for (int i = 0; i < capacity; i++)
     {
@@ -21,7 +21,7 @@ RingBuffer::~RingBuffer()
     }
     delete[] array;
 }
-void RingBuffer::insertKey(int specIndex, int reacIndex, double delayTime)
+void CircularList::insertKey(int specIndex, int reacIndex, double delayTime)
 {
 
     //resize the array
@@ -51,8 +51,15 @@ void RingBuffer::insertKey(int specIndex, int reacIndex, double delayTime)
         first = 0;
         last = 0;
     }
+    else if (delayTime <= array[first]->getDelayTime())
+    {
+        index = first;
+        first = first - 1;
+        first = (first <= 0) ? capacity - 1 : ((first - 1) % capacity);
+        array[first] = array[index];
+    }
     //bigger than the last
-    else if (delayTime > array[last]->getDelayTime())
+    else if (delayTime >= array[last]->getDelayTime())
     {
         //increase the last index
         last = (last + 1) % capacity;
@@ -66,14 +73,13 @@ void RingBuffer::insertKey(int specIndex, int reacIndex, double delayTime)
         int i = last;
         while (count < inUse)
         {
-            if (array[i] != nullptr)
-            {
-                count++;
-                if (delayTime <= array[i]->getDelayTime())
-                    break; //found position
-            }
+            array[(i + 1) % capacity] = array[i];
+            if (delayTime <= array[i]->getDelayTime())
+                break; //found position
+            count++;
             i = (i <= 0) ? capacity - 1 : ((i - 1) % capacity);
         }
+        /*
         index = i;
         i = last;
         while (count > 0)
@@ -83,6 +89,7 @@ void RingBuffer::insertKey(int specIndex, int reacIndex, double delayTime)
             i = (i <= 0) ? capacity - 1 : ((i - 1) % capacity);
             count--;
         }
+        */
         last = (last + 1) % capacity;
     }
     DelayNode *n = new DelayNode(specIndex, reacIndex, delayTime);
@@ -90,7 +97,7 @@ void RingBuffer::insertKey(int specIndex, int reacIndex, double delayTime)
     inUse++;
 }
 
-void RingBuffer::removeFirst()
+void CircularList::removeFirst()
 {
     delete array[first];
     array[first] = nullptr;
@@ -104,7 +111,7 @@ void RingBuffer::removeFirst()
         first = (first + 1) % capacity;
     inUse--;
 }
-void RingBuffer::removeByIndexRange(vector<int> indexes)
+void CircularList::removeByIndexRange(vector<int> indexes)
 {
     for (int i = 0; i < indexes.size(); i++)
     {
@@ -181,7 +188,7 @@ void RingBuffer::removeByIndexRange(vector<int> indexes)
         }
     }
 }
-void RingBuffer::removeByIndex(int index)
+void CircularList::removeByIndex(int index)
 {
     if (!isEmpty())
     {
@@ -226,7 +233,7 @@ void RingBuffer::removeByIndex(int index)
         }
     }
 }
-void RingBuffer::print()
+void CircularList::print()
 {
     int index = first;
     int count = 0;
@@ -240,30 +247,30 @@ void RingBuffer::print()
         count++;
     }
 }
-bool RingBuffer::isEmpty()
+bool CircularList::isEmpty()
 {
     if (inUse == 0)
         return true;
     else
         return false;
 }
-int RingBuffer::getFirstIndex()
+int CircularList::getFirstIndex()
 {
     return first;
 }
-int RingBuffer::getLastIndex()
+int CircularList::getLastIndex()
 {
     return last;
 }
-int RingBuffer::getCapacity()
+int CircularList::getCapacity()
 {
     return capacity;
 }
-DelayNode *RingBuffer::getNode(int index)
+DelayNode *CircularList::getNode(int index)
 {
     return array[index];
 }
-vector<DelayNode *> RingBuffer::extractEqualFirst()
+vector<DelayNode *> CircularList::extractEqualFirst()
 {
     //it searches for the value in the whole array, adds it on the vector and removes from the array
     vector<DelayNode *> tempArray;
@@ -296,7 +303,7 @@ vector<DelayNode *> RingBuffer::extractEqualFirst()
         removeByIndex(indexesToRemove[0]);
     return tempArray;
 }
-DelayNode *RingBuffer::getMinNode()
+DelayNode *CircularList::getMinNode()
 {
     //it returns the first element of the array
     if (first == -1)

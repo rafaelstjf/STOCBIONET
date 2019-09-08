@@ -32,8 +32,8 @@ DelayHash::DelayHash(double **delaysValue, int reacNumber, int specNumber)
     firstTable = 1;
     for (int i = 0; i < capacity; i++)
     {
-        RingBuffer *r1 = new RingBuffer(10);
-        RingBuffer *r2 = new RingBuffer(10);
+        CircularList *r1 = new CircularList(10);
+        CircularList *r2 = new CircularList(10);
         table1->array.push_back(r1);
         table2->array.push_back(r2);
     }

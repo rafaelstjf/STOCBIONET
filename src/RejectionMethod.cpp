@@ -143,7 +143,7 @@ void RejectionMethod::chooseStructure()
         break;
     case 3:
         cout << "3 - Ring Buffer" << endl;
-        delayStructure = new RingBuffer(model->getReacNumber());
+        delayStructure = new CircularList(model->getReacNumber());
         break;
     case 4:
         cout << "4 - Hash Table" << endl;

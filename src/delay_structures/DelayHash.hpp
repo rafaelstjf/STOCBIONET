@@ -2,7 +2,7 @@
 #define DELAYHASH_HPP
 
 #include <iostream>
-#include "RingBuffer.hpp"
+#include "CircularList.hpp"
 #include "../DelayStructure.hpp"
 #include <vector>
 using namespace std;
@@ -15,7 +15,7 @@ private:
   {
     double low;
     double high;
-    vector<RingBuffer *> array;
+    vector<CircularList *> array;
     int inUse;
   } Table;
   Table *table1;
