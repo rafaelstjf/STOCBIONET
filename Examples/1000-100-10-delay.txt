@@ -1,8 +1,0 @@
-k1=1;
-k2=1;
-A = 1000;
-B = 100;
-C = 10;
-t1 = 0.1;
-transcription,k1:A + B-> C(t1);
-transcription,k2:C->;

@@ -1,8 +1,0 @@
-k1=0.01;
-k2=0.01;
-k3=10;
-A = 0;
-B = 0;
-transcription,k1: -> A;
-transcription,k2: -> B;
-transcription,k3:A+B-> ;

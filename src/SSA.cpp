@@ -66,6 +66,9 @@ double SSA::getNumberReacExecuted()
 {
     return log->getNumberReacExecuted();
 }
+void SSA::onBatch(){
+    batch = true;
+}
 void SSA::calcPropensity()
 {
     totalPropensity = 0.0;
@@ -108,8 +111,10 @@ void SSA::postSimulation(double totalTime)
 {
     sucess = true;
     reacPerSecond = (double)reacCount / (totalTime);
-    cout << "\nSimulation finished with " << totalTime << " seconds." << endl;
-    cout << "Reactions per second: " << reacPerSecond << endl;
+    if(!batch){
+        cout << "\nSimulation finished with " << totalTime << " seconds." << endl;
+        cout << "Reactions per second: " << reacPerSecond << endl;
+    }
     log->setReacPerSecond(reacPerSecond);
     log->setNumberReacExecuted(reacCount);
     log->setTimeSpent(totalTime);

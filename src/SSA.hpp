@@ -24,6 +24,7 @@ public:
   virtual void printResult();
   virtual void saveToFile();
   virtual void saveDetailsToFile();
+  virtual void onBatch();
   virtual Log *getLog();
   unsigned long int getSeed();
   double getReacPerSecond();
@@ -31,6 +32,7 @@ public:
   double getTimeSpent();
 
 protected:
+  bool batch = false;;
   Utils *ut;
   Log *log;
   DependencyGraph *dg;

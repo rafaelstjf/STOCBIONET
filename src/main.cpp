@@ -201,6 +201,7 @@ void runBatchSimulation(Model *model, SSA *simulation, double &initialTime, doub
         }
         else
         {
+            simulation->onBatch();
             simulation->perform(model, maximumTime, initialTime, seed);
             if (saveOp1 == 'y')
             {

@@ -2,7 +2,7 @@ def weaklyCoupled():
     print("A[i] -> A[(i+1) mod M] \ni = 1..Number of reactions\n")
     k = int(input("Type the number of reactions\n"))
     m = int(input("Type the M value\n"))
-    text_file = open("weaklyCoupled" + str(k) + ".txt", "w")
+    text_file = open("weaklyCoupled-" + str(k) +"-" + str(m) + ".txt", "w")
     text_file.write("k1=1;\n")
     for i in range(1, k+1):
         text_file.write("A{}".format(i) + "=1;\n")
@@ -67,7 +67,7 @@ def tightlyCoupled2():
     n = int(input("Type the number of reactions\n"))
     m = int(input("Type the M value\n"))
     g = int(input("Type the g value\n"))
-    text_file = open("tightlyCoupled-2-" + str(n) + "-" + str(g) + ".txt", "w")
+    text_file = open("tightlyCoupled-2-" + str(n) + "-" str(m) + "-" + str(g) + ".txt", "w")
     text_file.write("k1=1;\n")
     for i in range(1, n+1):
         text_file.write("S{}".format(i) + "=40;\n")
@@ -85,7 +85,7 @@ def tightlyCoupled2Delay():
     n = int(input("Type the number of reactions\n"))
     m = int(input("Type the M value\n"))
     g = int(input("Type the g value\n"))
-    text_file = open("tightlyCoupled-2-Delay-" + str(n) + "-" + str(g) + ".txt", "w")
+    text_file = open("tightlyCoupled-2-Delay-" + str(n) + "-" str(m) + "-" + str(g) + ".txt", "w")
     text_file.write("k1=1;\n")
     text_file.write("d1=0.1;\n")
     for i in range(1, n+1):

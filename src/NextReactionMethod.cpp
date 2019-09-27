@@ -111,7 +111,7 @@ void NextReactionMethod::perform(Model *model, double maximumTime, double initia
     //saves the species quantities on initialTime
     log->insertNode(currentTime, specQuantity);
     reacSelection(); //just to check if the time = inf
-    if (currentTime != INF)
+    if (currentTime < INF)
     {
         while (currentTime < maximumTime)
         {

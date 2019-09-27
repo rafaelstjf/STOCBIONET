@@ -135,8 +135,12 @@ void OptimizedDirectMethod::preSimul()
         }
         reactionSO[k + 1] = key;
         temp[k + 1] = key2;
-        delete[] temp;
     }
+    for (j = 0; j < model->getReacNumber(); j++)
+    {
+        reactionSO[j] = temp[j]; //now reactionSO has the index of the reactions in ordered decreasing order
+    }
+    delete[] temp;
 }
 void OptimizedDirectMethod::perform(Model *model, double maximumTime, double initialTime, long int seed)
 {
