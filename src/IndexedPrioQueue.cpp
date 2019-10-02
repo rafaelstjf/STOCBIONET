@@ -1,16 +1,16 @@
 #include "IndexedPrioQueue.hpp"
 
-
 IndexedPrioQueue::IndexedPrioQueue(int capacity)
 {
     this->capacity = capacity;
-    heapArray = new HeapNode*[capacity];
+    heapArray = new HeapNode *[capacity];
     indexArray = new int[capacity];
     heapsize = 0;
 }
 IndexedPrioQueue::~IndexedPrioQueue()
 {
-    for(int i = 0; i < capacity; i++){
+    for (int i = 0; i < capacity; i++)
+    {
         delete heapArray[i];
     }
     delete[] heapArray;
@@ -18,11 +18,11 @@ IndexedPrioQueue::~IndexedPrioQueue()
 }
 int IndexedPrioQueue::left(int i)
 {
-    return (2 * i + 1);
+    return ((2 * i) + 1);
 }
 int IndexedPrioQueue::right(int i)
 {
-    return (2 * i + 2);
+    return ((2 * i) + 2);
 }
 int IndexedPrioQueue::parent(int i)
 {
@@ -30,25 +30,19 @@ int IndexedPrioQueue::parent(int i)
 }
 void IndexedPrioQueue::swap(int ix, int iy)
 {
-    //x = temp
-    int index = heapArray[ix]->getIndex();
-    double time = heapArray[ix]->getTime();
-    //x = y
-    indexArray[heapArray[ix]->getIndex()] = iy;
-    heapArray[ix]->setIndex(heapArray[iy]->getIndex());
-    heapArray[ix]->setTime(heapArray[iy]->getTime());
-    //y = x
-    indexArray[heapArray[iy]->getIndex()] = ix;
-    heapArray[iy]->setIndex(index);
-    heapArray[iy]->setTime(time);
+    HeapNode *temp = heapArray[ix];
+    heapArray[ix] = heapArray[iy];
+    indexArray[temp->getIndex()] = iy;
+    heapArray[iy] = temp;
+    indexArray[heapArray[ix]->getIndex()] = ix;
 }
 void IndexedPrioQueue::insertKey(int index, double time)
 {
     if (heapsize == capacity)
         return;
+    int i = heapsize;
     heapsize++;
-    int i = heapsize - 1;
-    HeapNode* n =  new HeapNode(index, time);
+    HeapNode *n = new HeapNode(index, time);
     heapArray[i] = n;
     indexArray[index] = i;
     while (i != 0 && heapArray[parent(i)]->getTime() > heapArray[i]->getTime())
@@ -72,7 +66,7 @@ void IndexedPrioQueue::update(int index, double time)
 void IndexedPrioQueue::updateAux(int index)
 {
     int p = parent(index);
-    if (p >= 0  && heapArray[index]->getTime() < heapArray[p]->getTime())
+    if (p >= 0 && heapArray[index]->getTime() < heapArray[p]->getTime())
     {
         swap(index, p);
         updateAux(p);
@@ -81,26 +75,32 @@ void IndexedPrioQueue::updateAux(int index)
     {
         int l = left(index);
         int r = right(index);
-        int smallest;
-        bool flag = false;
-        if(l >= 0 && r >=0 && l < heapsize && r < heapsize)
+        int smallest = -1;
+        if (l >= 0 && r >= 0)
         {
-            smallest = l;
-            if (heapArray[l]->getTime() > heapArray[r]->getTime())
+            if (l < heapsize && r < heapsize)
+            {
+                if (heapArray[l]!= nullptr && heapArray[r]!= nullptr && heapArray[l]->getTime() > heapArray[r]->getTime())
+                    smallest = r;
+                else
+                    smallest = l;
+            }
+            else if (l >= heapsize && r < heapsize)
                 smallest = r;
-            flag = true;
+            else if (r >= heapsize && l < heapsize)
+                smallest = l;
         }
-        else if(l >=0 && l < heapsize)
+        else if (l < 0)
         {
-            smallest = l;
-            flag = true;
+            if (r >= 0 && r < heapsize)
+                smallest = r;
         }
-        else if(r >=0 && r < heapsize)
+        else if (r < 0)
         {
-            smallest = r;
-            flag = true;
+            if (l >= 0 && l < heapsize)
+                smallest = l;
         }
-        if(flag &&(heapArray[index]->getTime() > heapArray[smallest]->getTime()))
+        if (smallest != -1 && heapArray[smallest]!= nullptr && (heapArray[index]->getTime() > heapArray[smallest]->getTime()))
         {
             swap(index, smallest);
             updateAux(smallest);
@@ -109,13 +109,13 @@ void IndexedPrioQueue::updateAux(int index)
 }
 void IndexedPrioQueue::print()
 {
-    for(int i = 0; i < heapsize; i++)
+    for (int i = 0; i < heapsize; i++)
     {
-        cout << "(" << heapArray[i]->getIndex() << " ; " << heapArray[i]->getTime() << ")";;
+        cout << "(" << heapArray[i]->getIndex() << " ; " << heapArray[i]->getTime() << ")";
     }
     cout << endl;
 }
-HeapNode* IndexedPrioQueue::getNode(int index)
+HeapNode *IndexedPrioQueue::getNode(int index)
 {
     return heapArray[indexArray[index]];
 }
