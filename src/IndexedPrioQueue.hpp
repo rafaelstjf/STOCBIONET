@@ -10,7 +10,7 @@ class IndexedPrioQueue
   public:
     IndexedPrioQueue(int capacity);
     ~IndexedPrioQueue();
-    void update(int index, double time);
+    void update(int reacIndex, double time);
     HeapNode* getMin();
     void insertKey(int index, double time);
     HeapNode* getNode(int index);

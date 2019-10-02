@@ -5,6 +5,11 @@ IndexedPrioQueue::IndexedPrioQueue(int capacity)
     this->capacity = capacity;
     heapArray = new HeapNode *[capacity];
     indexArray = new int[capacity];
+    for (int i = 0; i < capacity; i++)
+    {
+        heapArray[i] = nullptr;
+        indexArray[i] = -1;
+    }
     heapsize = 0;
 }
 IndexedPrioQueue::~IndexedPrioQueue()
@@ -33,8 +38,8 @@ void IndexedPrioQueue::swap(int ix, int iy)
     HeapNode *temp = heapArray[ix];
     heapArray[ix] = heapArray[iy];
     indexArray[temp->getIndex()] = iy;
+    indexArray[heapArray[iy]->getIndex()] = ix;
     heapArray[iy] = temp;
-    indexArray[heapArray[ix]->getIndex()] = ix;
 }
 void IndexedPrioQueue::insertKey(int index, double time)
 {
@@ -58,15 +63,15 @@ HeapNode *IndexedPrioQueue::getMin()
     else
         return heapArray[0];
 }
-void IndexedPrioQueue::update(int index, double time)
+void IndexedPrioQueue::update(int reacIndex, double time)
 {
-    heapArray[indexArray[index]]->setTime(time);
-    updateAux(indexArray[index]);
+    heapArray[indexArray[reacIndex]]->setTime(time);
+    updateAux(indexArray[reacIndex]);
 }
 void IndexedPrioQueue::updateAux(int index)
 {
     int p = parent(index);
-    if (p >= 0 && heapArray[index]->getTime() < heapArray[p]->getTime())
+    if (index > 0 && heapArray[index]->getTime() < heapArray[p]->getTime())
     {
         swap(index, p);
         updateAux(p);
@@ -75,32 +80,19 @@ void IndexedPrioQueue::updateAux(int index)
     {
         int l = left(index);
         int r = right(index);
-        int smallest = -1;
-        if (l >= 0 && r >= 0)
+        int smallest = index;
+        if (l < heapsize && r < heapsize)
         {
-            if (l < heapsize && r < heapsize)
-            {
-                if (heapArray[l]!= nullptr && heapArray[r]!= nullptr && heapArray[l]->getTime() > heapArray[r]->getTime())
-                    smallest = r;
-                else
-                    smallest = l;
-            }
-            else if (l >= heapsize && r < heapsize)
+            if (heapArray[l]->getTime() > heapArray[r]->getTime())
                 smallest = r;
-            else if (r >= heapsize && l < heapsize)
+            else
                 smallest = l;
         }
-        else if (l < 0)
-        {
-            if (r >= 0 && r < heapsize)
-                smallest = r;
-        }
-        else if (r < 0)
-        {
-            if (l >= 0 && l < heapsize)
-                smallest = l;
-        }
-        if (smallest != -1 && heapArray[smallest]!= nullptr && (heapArray[index]->getTime() > heapArray[smallest]->getTime()))
+        else if (l >= heapsize && r < heapsize)
+            smallest = r;
+        else if (r >= heapsize && l < heapsize)
+            smallest = l;
+        if (smallest != index && (heapArray[index]->getTime() > heapArray[smallest]->getTime()))
         {
             swap(index, smallest);
             updateAux(smallest);

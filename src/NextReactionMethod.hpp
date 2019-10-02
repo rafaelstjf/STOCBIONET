@@ -25,6 +25,7 @@ class NextReactionMethod : public SSA{
     HeapNode* selectedNode;
     double* timePropZero; //time when ak becomes 0
     double* propNonZero;//last propensity != 0
+    double* t0;
 
 };
 
