@@ -8,10 +8,10 @@ DGVertex::DGVertex()
     dependencies.clear();
 
 }
-DGVertex::DGVertex(int id, int m)
+DGVertex::DGVertex(int id, int n)
 {
     this->id = id;
-    this->m = 0;
+    this->n = n;
 }
 
 void DGVertex::insertDependency(int val) //insert a new dependency in the array's end

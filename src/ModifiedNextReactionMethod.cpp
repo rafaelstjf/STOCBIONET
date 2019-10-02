@@ -9,10 +9,10 @@ void ModifiedNextReactionMethod::initialization(Model *model, double maximumTime
     //loads both log and the depedency graph
     if (model->isModelLoaded())
     {
-        queue = new IndexedPrioQueue(model->getReacNumber());
         dg = model->getDGSelfEdge();
         P = new double[model->getReacNumber()];
         T = new double[model->getReacNumber()];
+        dT = new double[model->getReacNumber()];
     }
 }
 void ModifiedNextReactionMethod::reacTimeGeneration()
@@ -24,40 +24,46 @@ void ModifiedNextReactionMethod::reacTimeGeneration()
         u = ut->getRandomNumber();
         P[i] = (-1.0 * ut->ln(u));
         T[i] = 0.0;
-        t1 = (P[i] - T[i]) / propArray[i];
-        queue->insertKey(i, t1);
     }
 }
 void ModifiedNextReactionMethod::reacSelection()
 {
-    selectedNode = queue->getMin();
-    currentTime = currentTime + selectedNode->getTime();
+    double minDT = INF;
+    selectedReaction = -1;
+    for (int i = 0; i < model->getReacNumber(); i++)
+    {
+        dT[i] = (P[i] - T[i]) / propArray[i];
+        if (minDT > dT[i])
+        {
+            minDT = dT[i];
+            selectedReaction = i;
+        }
+    }
 }
 void ModifiedNextReactionMethod::reacExecution()
 {
-    double u;  //random number
-    double nt; //new time
-    int sIndex = selectedNode->getIndex();
+    if (selectedReaction == -1)
+    {
+        currentTime = INF;
+        return;
+    }
+    double u; //random number
     //updates the species quantities
-    updateSpeciesQuantities(sIndex);
-    u = ut->getRandomNumber();
-    P[sIndex] = P[sIndex] + (-1.0 * ut->ln(u));
+    updateSpeciesQuantities(selectedReaction);
     for (int i = 0; i < model->getReacNumber(); i++)
     {
-        T[i] = T[i] + propArray[i] * selectedNode->getTime();
+        T[i] = T[i] + propArray[i] * dT[selectedReaction];
     }
-    int *depArray = dg->getDependencies(sIndex);
-    int depSize = dg->getDependenciesSize(sIndex);
+    u = ut->getRandomNumber();
+    P[selectedReaction] = P[selectedReaction] + (-1.0 * ut->ln(u));
+    currentTime = currentTime + dT[selectedReaction];
+    int *depArray = dg->getDependencies(selectedReaction);
+    int depSize = dg->getDependenciesSize(selectedReaction);
     for (int i = 0; i < depSize; i++)
     {
         calcPropOne(depArray[i]);
     }
     delete[] depArray;
-    for (int i = 0; i < model->getReacNumber(); i++)
-    {
-        nt = (P[i] - T[i]) / propArray[i];
-        queue->update(i, nt);
-    }
 }
 void ModifiedNextReactionMethod::perform(Model *model, double maximumTime, double initialTime, long int seed)
 {
@@ -74,16 +80,11 @@ void ModifiedNextReactionMethod::perform(Model *model, double maximumTime, doubl
     currentTime = initialTime;
     //calculates the propensity of all the reactions and generates the simulation time
     reacTimeGeneration();
-    reacSelection();
-    if (currentTime != inf)
+    while (currentTime < maximumTime)
     {
-        currentTime = initialTime;
-        while (currentTime < maximumTime)
-        {
-            log->insertNode(currentTime, specQuantity);
-            reacSelection();
-            reacExecution();
-        }
+        log->insertNode(currentTime, specQuantity);
+        reacSelection();
+        reacExecution();
     }
     double en = ut->getCurrentTime(); //ending of the simulation
     postSimulation((en - beg));
@@ -92,7 +93,5 @@ ModifiedNextReactionMethod::~ModifiedNextReactionMethod()
 {
     delete[] T;
     delete[] P;
-    delete queue;
-    delete dg;
-    delete selectedNode;
+    delete[] dT;
 }

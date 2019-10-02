@@ -8,7 +8,7 @@ using namespace std;
 class DGVertex
 {
 public:
-    DGVertex(int id, int m);
+    DGVertex(int id, int n);
     DGVertex();
     virtual ~DGVertex();
     void insertDependency(int val);

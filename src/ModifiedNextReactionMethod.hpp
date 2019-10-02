@@ -21,11 +21,9 @@ class ModifiedNextReactionMethod : public SSA{
     virtual void reacTimeGeneration();
     virtual void reacSelection();
     virtual void reacExecution();
-    IndexedPrioQueue* queue;
-    HeapNode* selectedNode;
     double* T;
     double* P;
-
+    double* dT;
 };
 
 #endif
