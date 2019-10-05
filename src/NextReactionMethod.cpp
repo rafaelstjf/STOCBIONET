@@ -11,9 +11,8 @@ void NextReactionMethod::initialization(Model *model, double maximumTime, double
         timePropZero = new double[model->getReacNumber()];
         propNonZero = new double[model->getReacNumber()];
         queue = new IndexedPrioQueue(model->getReacNumber());
-        t0 = new double[model->getReacNumber()];
         //it needs to use the DG without the self edge
-        dg = model->getDGNoSelfEdge();
+        dg = model->getDGSelfEdge();
     }
 }
 void NextReactionMethod::reacTimeGeneration()
@@ -21,12 +20,11 @@ void NextReactionMethod::reacTimeGeneration()
     double u, nt;
     for (int i = 0; i < model->getReacNumber(); i++)
     {
-        t0[i] = -1;
         calcPropOne(i); //uses calcPropOne(i) to saves one O(n)
         if (propArray[i] <= EP)
         {
             nt = INF;
-            propNonZero[i] = 0;
+            propNonZero[i] = EP;
         }
         else
         {
@@ -42,6 +40,7 @@ void NextReactionMethod::reacSelection()
 {
     selectedNode = queue->getMin();
     currentTime = selectedNode->getTime();
+    //cout << "Selected Node: " << selectedNode->getIndex() << " Current Time: " << currentTime << endl;
 }
 void NextReactionMethod::reacExecution()
 {
@@ -58,50 +57,50 @@ void NextReactionMethod::reacExecution()
         index = depArray[i];
         propOld = propArray[index];
         calcPropOne(index);
-        if (propArray[index] <= EP) //propensity is 0
+        int flag = 0;
+        if (propArray[index] > EP)
         {
-            nt = INF;
-            if (t0[index] == -1)
-                t0[index] = currentTime;
-        }
-        else //propensity > 0
-        {
-            if (propOld <= EP) //was 0 before
+            if (index == sIndex)
             {
-                if (propNonZero[index] > EP)
-                    nt = ((propNonZero[index] / propArray[index]) * (timePropZero[index]) - t0[index]) + currentTime;
-                else //it has never been >0
-                {
-                    u = ut->getRandomNumber();
-                    nt = ((-1 * ut->ln(u)) / propArray[index]) + currentTime;
-                }
+                u = ut->getRandomNumber();
+                nt = ((-1 * ut->ln(u)) / propArray[index]) + currentTime;
             }
             else
             {
-                nt = ((propOld / propArray[index]) * (queue->getNode(index)->getTime() - currentTime)) + currentTime;
+                if (propOld <= EP)
+                {
+                    if (propNonZero[index] <= EP)
+                    {
+                        u = ut->getRandomNumber();
+                        nt = ((-1 * ut->ln(u)) / propArray[index]) + currentTime;
+                        flag = 1;
+                    }
+                    else //was 0 before
+                    {
+                        nt = ((propNonZero[index] / propArray[index]) * (currentTime - timePropZero[index])) + currentTime;
+                        flag = 2;
+                        //cout << "Index: " << index << " NT: " << nt << " propArray[index]: " << propArray[index] << " propNonZero[index]: " << propNonZero[index] << " TimePropZero: " << timePropZero[i] << endl;
+                    }
+                }
+                else
+                {
+                    nt = ((propOld / propArray[index]) * (queue->getNode(index)->getTime() - currentTime)) + currentTime;
+                    //cout << "Index: " << index << " NT: " << nt << " propArray[index]: " << propArray[index] << " propOld: " << propOld << " Talfa: " << queue->getNode(index)->getTime() << endl;
+
+                    flag = 3;
+                }
                 propNonZero[index] = propOld; //last propensity >0
-                timePropZero[index] = nt;     //time that the propensity became 0
             }
-            t0[index] = -1;
+        }
+        else
+        {
+            nt = INF;
+            if (propOld > 0)
+                timePropZero[index] = currentTime; //time that the propensity became 0
         }
         queue->update(index, nt);
     }
     delete[] depArray;
-    propOld = propArray[sIndex];
-    calcPropOne(sIndex);
-    if (propArray[sIndex] <= EP)
-    {
-        propNonZero[sIndex] = propOld;
-        timePropZero[sIndex] = currentTime;
-        nt = INF;
-    }
-    else
-    {
-        t0[sIndex] = -1;
-        u = ut->getRandomNumber();
-        nt = ((-1 * ut->ln(u)) / propArray[sIndex]) + currentTime;
-    }
-    queue->update(sIndex, nt);
 }
 void NextReactionMethod::perform(Model *model, double maximumTime, double initialTime, long int seed)
 {
@@ -124,6 +123,7 @@ void NextReactionMethod::perform(Model *model, double maximumTime, double initia
     {
         while (currentTime < maximumTime)
         {
+            //cout << "Current Time: " << currentTime << endl;
             reacExecution(); //executes the reaction
             //saves the species quantities
             log->insertNode(currentTime, specQuantity);

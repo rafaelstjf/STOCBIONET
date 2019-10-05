@@ -266,17 +266,17 @@ void Model::printModel()
 void Model::buildDependencyGraphs()
 {
     dgSelfEdges = new DependencyGraph(true, reacNumber, specNumber, reactants, products, delaysValue);
-    dgNoSelfEdges = new DependencyGraph(false, reacNumber, specNumber, reactants, products, delaysValue);
+//    dgNoSelfEdges = new DependencyGraph(false, reacNumber, specNumber, reactants, products, delaysValue);
     ddg = new DelayedDependencyGraph(reacNumber, specNumber, reactants);
 }
 DependencyGraph *Model::getDGSelfEdge()
 {
     return dgSelfEdges;
 }
-DependencyGraph *Model::getDGNoSelfEdge()
+/*DependencyGraph *Model::getDGNoSelfEdge()
 {
     return dgNoSelfEdges;
-}
+}*/
 DelayedDependencyGraph *Model::getDDG()
 {
     return ddg;

@@ -25,7 +25,7 @@ public:
     double **getDelaysValue();
     double **getDelaysVariation();
     DependencyGraph *getDGSelfEdge();
-    DependencyGraph *getDGNoSelfEdge();
+    //DependencyGraph *getDGNoSelfEdge();
     DelayedDependencyGraph *getDDG();
     int **getStoiMatrix();
     int *getInitialQuantity();

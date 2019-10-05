@@ -67,7 +67,7 @@ def tightlyCoupled2():
     n = int(input("Type the number of reactions\n"))
     m = int(input("Type the M value\n"))
     g = int(input("Type the g value\n"))
-    text_file = open("tightlyCoupled-2-" + str(n) + "-" str(m) + "-" + str(g) + ".txt", "w")
+    text_file = open("tightlyCoupled-2-" + str(n) + "-" + str(m) + "-" + str(g) + ".txt", "w")
     text_file.write("k1=1;\n")
     for i in range(1, n+1):
         text_file.write("S{}".format(i) + "=40;\n")
@@ -85,7 +85,7 @@ def tightlyCoupled2Delay():
     n = int(input("Type the number of reactions\n"))
     m = int(input("Type the M value\n"))
     g = int(input("Type the g value\n"))
-    text_file = open("tightlyCoupled-2-Delay-" + str(n) + "-" str(m) + "-" + str(g) + ".txt", "w")
+    text_file = open("tightlyCoupled-2-Delay-" + str(n) + "-" + str(m) + "-" + str(g) + ".txt", "w")
     text_file.write("k1=1;\n")
     text_file.write("d1=0.1;\n")
     for i in range(1, n+1):
@@ -98,8 +98,23 @@ def tightlyCoupled2Delay():
                 text_file.write(" + ")
         text_file.write(";\n")
 
+def tightlyCoupled3():
+    print("S[n] -> S[1] + ... + S[n-1]] \n (n) = 1..Number of reactions\n")
+    n = int(input("Type the number of reactions\n"))
+    text_file = open("tightlyCoupled-3-" + str(n) + ".txt", "w")
+    text_file.write("k1=1;\n")
+    for i in range(1, n+1):
+        text_file.write("S{}".format(i) + "= 1;\n")
+    for i in range(1, n+1):
+        text_file.write("transcription,k1:" + "S{}".format(i) + "-> ")
+        for j in range(1, (i)):
+            if(j!=i):
+                text_file.write("S{}".format(j))
+            if(j < (i-1)):
+                text_file.write(" + ")
+        text_file.write(";\n")
 op = int(input(
-    "Choose a intance:\n1-Weakly Coupled\n2-Tightly Coupled-1\n3-Tightly Coupled-2\n4-Tightly Coupled-1 with delay\n5-Tightly Coupled-2 with delay\n"))
+    "Choose a intance:\n1-Weakly Coupled\n2-Tightly Coupled-1\n3-Tightly Coupled-2\n4-Tightly Coupled-1 with delay\n5-Tightly Coupled-2 with delay\n6-Tightly Coupled-3\n"))
 if(op == 1):
     weaklyCoupled()
 elif(op == 2):
@@ -110,3 +125,5 @@ elif(op == 4):
     tightlyCoupledDelay()
 elif(op == 5):
     tightlyCoupled2Delay()
+elif(op == 6):
+    tightlyCoupled3()
