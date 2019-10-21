@@ -47,22 +47,21 @@ void DelayList::removeByIndex(int arrayIndex)
 {
     //it uses the default vector's function to remove an element
     delete array[arrayIndex];
+    inUse--;
     if (arrayIndex < array.size())
         array.erase(array.begin() + arrayIndex);
 }
 void DelayList::removeByIndexRange(int arrayIndexBeg, int arrayIndexEnd)
 {
     //it uses the default vector's function to remove an element
-    int it = arrayIndexBeg;
-    while (it <= arrayIndexEnd)
+    int it = arrayIndexEnd;
+    while (it >= arrayIndexBeg)
     {
         delete array[it];
-        it++;
-    }
-    if (arrayIndexBeg == arrayIndexEnd)
+        it--;
         array.erase(array.begin() + arrayIndexBeg);
-    else
-        array.erase(array.begin() + arrayIndexBeg, array.begin() + arrayIndexEnd + 1);
+        inUse--;
+    }
 }
 DelayNode *DelayList::getNode(int index)
 {

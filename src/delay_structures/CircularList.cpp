@@ -31,16 +31,25 @@ void CircularList::insertKey(int specIndex, int reacIndex, double delayTime)
         int newCapacity = 2 * capacity;
         DelayNode **temp = new DelayNode *[newCapacity];
         //imports all the elements and then puts nullptr in the others
-        for (int i = 0; i <= capacity; i++)
-        {
-            temp[i] = array[i];
-        }
-        for (int i = last + 1; i < newCapacity; i++)
+        for (int i = 0; i < newCapacity; i++)
         {
             temp[i] = nullptr;
         }
+        int it = first;
+        int it2 = 0;
+        int count = 0;
+        while(count < inUse){
+            if(array[it]){
+                temp[it2] = array[it];
+                it2++;
+            }
+            it = (it+1) % capacity;
+            count++;
+        }
         capacity = newCapacity;
         array = temp;
+        first = 0;
+        last = it2-1;
     }
     //insert the element
     int index = 0;
@@ -53,10 +62,8 @@ void CircularList::insertKey(int specIndex, int reacIndex, double delayTime)
     }
     else if (delayTime <= array[first]->getDelayTime())
     {
+        first = (first - 1 < 0) ? capacity - 1 : ((first - 1) % capacity);
         index = first;
-        first = first - 1;
-        first = (first <= 0) ? capacity - 1 : ((first - 1) % capacity);
-        array[first] = array[index];
     }
     //bigger than the last
     else if (delayTime >= array[last]->getDelayTime())
@@ -69,27 +76,17 @@ void CircularList::insertKey(int specIndex, int reacIndex, double delayTime)
     else
     {
         //it goes anti-clockwise and stops when the new element is smaller than the current
-        int count = 0;
         int i = last;
-        while (count < inUse)
+        int count = 0;
+        while (i != first && count < inUse)
         {
             array[(i + 1) % capacity] = array[i];
             if (delayTime <= array[i]->getDelayTime())
                 break; //found position
+            else i = (i - 1 < 0) ? capacity - 1 : ((i - 1) % capacity);
             count++;
-            i = (i <= 0) ? capacity - 1 : ((i - 1) % capacity);
         }
-        /*
         index = i;
-        i = last;
-        while (count > 0)
-        {
-            //it moves the elements from the last until the desirable index
-            array[((i + 1) % capacity)] = array[i];
-            i = (i <= 0) ? capacity - 1 : ((i - 1) % capacity);
-            count--;
-        }
-        */
         last = (last + 1) % capacity;
     }
     DelayNode *n = new DelayNode(specIndex, reacIndex, delayTime);
@@ -113,125 +110,9 @@ void CircularList::removeFirst()
 }
 void CircularList::removeByIndexRange(vector<int> indexes)
 {
-    for (int i = 0; i < indexes.size(); i++)
-    {
-        delete array[indexes[i]];
-        array[indexes[i]] = nullptr;
-    }
-    inUse = inUse - indexes.size();
-    if (array[first] == nullptr)
-    {
-        //in the beginning
-        int index = first;
-        while (index != last && array[index] == nullptr)
-        {
-            index = (index + 1) % capacity;
-        }
-        if (array[index] != nullptr)
-        {
-            first = index;
-        }
-        else if (index == last)
-        {
-            first = -1;
-            last = -1;
-        }
-    }
-    else if (array[last] == nullptr)
-    {
-        //in the end
-        int index = last;
-        while (index != first && array[index] == nullptr)
-        {
-            index = (index <= 0) ? capacity - 1 : ((index - 1) % capacity);
-        }
-        if (array[index] != nullptr)
-        {
-            last = index;
-        }
-        else if (index == first)
-        {
-            first = -1;
-            last = -1;
-        }
-    }
-    else
-    {
-        //between the beginning and the end
-        int count = 0;
-        int index = first;
-        while (count < inUse)
-        {
-
-            if (array[index] != nullptr)
-            {
-                count++;
-                index = (index + 1) % capacity;
-            }
-            else
-            {
-                int n = indexes.size();
-                int index2 = 0;
-                while (count < inUse)
-                {
-                    index2 = (index + n) % capacity;
-                    array[index] = array[index2];
-                    array[index2] = nullptr;
-                    if (first == index2)
-                        first = index;
-                    if (last == index2)
-                        last = index;
-                    count++;
-                    index = (index + 1) % capacity;
-                }
-            }
-        }
-    }
 }
 void CircularList::removeByIndex(int index)
 {
-    if (!isEmpty())
-    {
-        if (index == first) //if it's the first so call removeFirst()
-            removeFirst();
-        else
-        {
-            //goes from the end to the beginning moving 1 position until gets in the desirable index
-            delete array[index];
-            array[index] = nullptr;
-            if (index < last)
-            {
-                //if the index is lower than the last so goes from index to last increasing
-                for (int i = index; i < last; i++)
-                {
-                    array[i] = array[i + 1];
-                }
-                array[last] = nullptr;
-                last = (last <= 0) ? capacity - 1 : ((last - 1) % capacity);
-            }
-            else if (index > last)
-            {
-                //if not so goes from index to last decreasing
-                for (int i = index; i > first; i--)
-                {
-                    array[i] = array[i - 1];
-                }
-                first = (first + 1) % capacity;
-                array[first] = nullptr;
-            }
-            else
-            {
-                //index == last
-                last = (last <= 0) ? capacity - 1 : ((last - 1) % capacity);
-            }
-            inUse--;
-            if (inUse == 0)
-            {
-                last = -1;
-                first = -1;
-            }
-        }
-    }
 }
 void CircularList::print()
 {
@@ -275,14 +156,13 @@ vector<DelayNode *> CircularList::extractEqualFirst()
     //it searches for the value in the whole array, adds it on the vector and removes from the array
     vector<DelayNode *> tempArray;
     double value;
-    if (getMinNode() == nullptr)
+    if (array[first] == nullptr)
         return tempArray;
     else
         value = getMinNode()->getDelayTime();
     DelayNode *n;
     int count = 0;
     int i = first;
-    vector<int> indexesToRemove;
     while (count < inUse)
     {
         if (array[i] != nullptr)
@@ -291,16 +171,13 @@ vector<DelayNode *> CircularList::extractEqualFirst()
             {
                 n = new DelayNode(array[i]->getSpecIndex(), array[i]->getReacIndex(), array[i]->getDelayTime());
                 tempArray.push_back(n);
-                indexesToRemove.push_back(i);
             }
             count++;
         }
         i = (i + 1) % capacity;
     }
-    if (indexesToRemove.size() > 1)
-        removeByIndexRange(indexesToRemove);
-    else if (indexesToRemove.size() == 1)
-        removeByIndex(indexesToRemove[0]);
+    for(int k = 0; k < tempArray.size(); k++)
+        removeFirst();
     return tempArray;
 }
 DelayNode *CircularList::getMinNode()
