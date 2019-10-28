@@ -98,7 +98,6 @@ void OptimizedDirectMethod::preSimul()
         }
         else
         {
-
             updateSpeciesQuantities(selectedReaction);
             int *depArray = dg->getDependencies(selectedReaction);
             int depSize = dg->getDependenciesSize(selectedReaction);
@@ -140,6 +139,7 @@ void OptimizedDirectMethod::preSimul()
     {
         reactionSO[j] = temp[j]; //now reactionSO has the index of the reactions in ordered decreasing order
     }
+    reacCount = 0;
     delete[] temp;
 }
 void OptimizedDirectMethod::perform(Model *model, double maximumTime, double initialTime, long int seed)
