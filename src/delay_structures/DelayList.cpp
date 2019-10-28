@@ -5,14 +5,13 @@ DelayList::DelayList()
 }
 DelayList::~DelayList()
 {
-    for (unsigned int i = 0; i < array.size(); i++)
-    {
-        delete array[i];
-    }
+    // for (DelayNode* obj : array)
+    // if(obj) delete obj;
     array.clear();
 }
 void DelayList::insertKey(int specIndex, int reacIndex, double delayTime)
 {
+    //cout << delayTime << " " << inUse << endl;
     DelayNode *n = new DelayNode(specIndex, reacIndex, delayTime);
     if (inUse == 0)
         array.push_back(n);
@@ -31,37 +30,17 @@ void DelayList::insertKey(int specIndex, int reacIndex, double delayTime)
             array.push_back(n);
         else
         {
-
-            DelayNode *lastElement = array[inUse - 1];
-            for (int i = index + 1; i < inUse; i++)
-            {
-                array[i] = array[i - 1];
-            }
-            array.push_back(lastElement);
-            array[index] = n;
+            vector<DelayNode*>::iterator it{array.data() + index};
+            array.insert(it, n);
         }
     }
     inUse++;
 }
 void DelayList::removeByIndex(int arrayIndex)
 {
-    //it uses the default vector's function to remove an element
-    delete array[arrayIndex];
-    inUse--;
-    if (arrayIndex < array.size())
-        array.erase(array.begin() + arrayIndex);
 }
 void DelayList::removeByIndexRange(int arrayIndexBeg, int arrayIndexEnd)
 {
-    //it uses the default vector's function to remove an element
-    int it = arrayIndexEnd;
-    while (it >= arrayIndexBeg)
-    {
-        delete array[it];
-        it--;
-        array.erase(array.begin() + arrayIndexBeg);
-        inUse--;
-    }
 }
 DelayNode *DelayList::getNode(int index)
 {
@@ -74,7 +53,6 @@ int DelayList::getArraySize()
 vector<DelayNode *> DelayList::extractEqualFirst()
 {
 
-    DelayNode *n;
     vector<DelayNode *> tempArray;
     double value;
     if (array.size() == 0)
@@ -83,29 +61,35 @@ vector<DelayNode *> DelayList::extractEqualFirst()
     {
         value = array[0]->getDelayTime();
     }
-    vector<int> indexesToRemove;
+    int indexesToRemove = 0;
     unsigned int i = 0;
-    while (i < array.size())
+    while (i < inUse)
     {
         if (array[i]->getDelayTime() >= value - EP && array[i]->getDelayTime() <= value + EP)
         {
+            DelayNode *n;
             n = new DelayNode(array[i]->getSpecIndex(), array[i]->getReacIndex(), array[i]->getDelayTime());
             tempArray.push_back(n);
-            indexesToRemove.push_back(i);
+            indexesToRemove++;
         }
         i++;
     }
-    inUse = inUse - indexesToRemove.size();
-    removeByIndexRange(indexesToRemove[0], indexesToRemove[indexesToRemove.size() - 1]);
-    indexesToRemove.clear();
+    //cout << "inuse before: " << inUse;
+    inUse = inUse - indexesToRemove;
+    //cout << " InUse now: " << inUse << endl;;
+    // for(int j = 0; j < indexesToRemove; j++){
+    //     array[j] = nullptr;
+    // }
+    vector<DelayNode*>::iterator it{array.data() + indexesToRemove};
+    array.erase(array.begin(), it);
     return tempArray;
 }
 DelayNode *DelayList::getMinNode()
 {
-    if (array.size() == 0)
+    if (inUse == 0)
         return nullptr;
     else
-        return array.front();
+        return array[0];
 }
 void DelayList::print()
 {
