@@ -22,7 +22,6 @@ void FirstReactionMethod::perform(Model *model, double maximumTime, double initi
     double beg = ut->getCurrentTime(); //beginning of the simulation
     currentTime = initialTime;
     //performs the simulation
-    calcPropensity();
     while (currentTime < maximumTime)
     {
         //saves the current species quantities on the log
