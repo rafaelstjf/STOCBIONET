@@ -7,7 +7,7 @@ void SimplifiedNextReactionMethod::initialization(Model *model, double maximumTi
     if (model->isModelLoaded())
     {
         queue = new IndexedPrioQueue(model->getReacNumber());
-        dg = model->getDGSelfEdge();
+        dg = model->getDG();
         P = new double[model->getReacNumber()];
         U = new double[model->getReacNumber()];
         T = new double[model->getReacNumber()];

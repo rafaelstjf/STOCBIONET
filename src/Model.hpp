@@ -24,7 +24,7 @@ public:
     double *getReacRateArray();
     double **getDelaysValue();
     double **getDelaysVariation();
-    DependencyGraph *getDGSelfEdge();
+    DependencyGraph *getDG();
     //DependencyGraph *getDGNoSelfEdge();
     DelayedDependencyGraph *getDDG();
     int **getStoiMatrix();
@@ -51,7 +51,7 @@ private:
     int *initialQuantity;                 //array with the species' initial quantities
     map<string, long int> specNameNumber; //associative container with the species' name and number
     vector<string> modelRepresentation;
-    DependencyGraph *dgSelfEdges;
+    DependencyGraph *dg;
     DependencyGraph *dgNoSelfEdges;
     DelayedDependencyGraph *ddg;
     void buildStoichiometryMatrix();

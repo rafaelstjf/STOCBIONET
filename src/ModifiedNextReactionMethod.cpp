@@ -9,7 +9,7 @@ void ModifiedNextReactionMethod::initialization(Model *model, double maximumTime
     //loads both log and the depedency graph
     if (model->isModelLoaded())
     {
-        dg = model->getDGSelfEdge();
+        dg = model->getDG();
         P = new double[model->getReacNumber()];
         T = new double[model->getReacNumber()];
         dT = new double[model->getReacNumber()];

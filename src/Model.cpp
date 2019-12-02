@@ -6,8 +6,7 @@ void Model::clear()
     delaysValue = NULL;
     delaysVariation = NULL;
     stoiMatrix = NULL;
-    dgNoSelfEdges = nullptr;
-    dgSelfEdges = nullptr;
+    dg = nullptr;
     ddg = nullptr;
     specNumber = 0;
     reacNumber = 0;
@@ -21,7 +20,7 @@ Model::Model()
 }
 Model::~Model()
 {
-    for (int i = 0; i < reacNumber; i++)
+    for (int i = 0; i < specNumber; i++)
     {
         delete[] reactants[i];
         delete[] products[i];
@@ -35,8 +34,7 @@ Model::~Model()
     delete[] delaysVariation;
     delete[] stoiMatrix;
     delete ddg;
-    delete dgSelfEdges;
-    delete dgNoSelfEdges;
+    delete dg;
 }
 void Model::loadModel(string filename)
 {
@@ -265,13 +263,13 @@ void Model::printModel()
 }
 void Model::buildDependencyGraphs()
 {
-    dgSelfEdges = new DependencyGraph(true, reacNumber, specNumber, reactants, products, delaysValue);
+    dg = new DependencyGraph(true, reacNumber, specNumber, reactants, products, delaysValue);
 //    dgNoSelfEdges = new DependencyGraph(false, reacNumber, specNumber, reactants, products, delaysValue);
     ddg = new DelayedDependencyGraph(reacNumber, specNumber, reactants);
 }
-DependencyGraph *Model::getDGSelfEdge()
+DependencyGraph *Model::getDG()
 {
-    return dgSelfEdges;
+    return dg;
 }
 /*DependencyGraph *Model::getDGNoSelfEdge()
 {

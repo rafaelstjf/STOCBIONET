@@ -7,7 +7,7 @@ void OptimizedDirectMethod::initialization(Model *model, double maximumTime, dou
     if (model->isModelLoaded())
     {
         reactionSO = new int[model->getReacNumber()];
-        dg = model->getDGSelfEdge();
+        dg = model->getDG();
         for (int i = 0; i < model->getReacNumber(); i++)
         {
             reactionSO[i] = 0;
@@ -63,8 +63,7 @@ void OptimizedDirectMethod::reacExecution()
 
 void OptimizedDirectMethod::preSimul()
 {
-    cout << "PRESIMUL" << endl;
-    double maxTime = maximumTime / 3;
+    double maxTime = (maximumTime*1.0) / 3;
     double cTime = initialTime;
     this->pSimul = true;
     calcPropensity();
@@ -137,6 +136,7 @@ void OptimizedDirectMethod::preSimul()
     }
     for (j = 0; j < model->getReacNumber(); j++)
     {
+        
         reactionSO[j] = temp[j]; //now reactionSO has the index of the reactions in ordered decreasing order
     }
     reacCount = 0;

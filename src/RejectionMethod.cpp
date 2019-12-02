@@ -8,7 +8,7 @@ void RejectionMethod::initialization(Model *model, double maximumTime, double in
     if (model->isModelLoaded())
     {
         chooseStructure();
-        dg = model->getDGSelfEdge();
+        dg = model->getDG();
         ddg = model->getDDG();
     }
 }

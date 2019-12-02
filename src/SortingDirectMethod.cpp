@@ -8,7 +8,7 @@ void SortingDirectMethod::initialization(Model *model, double maximumTime, doubl
     if (model->isModelLoaded())
     {
         reactionSO = new int[model->getReacNumber()]; //creates an array to sort the most used reactions
-        dg = model->getDGSelfEdge();
+        dg = model->getDG();
         for (int i = 0; i < model->getReacNumber(); i++)
         {
             reactionSO[i] = i;

@@ -12,7 +12,7 @@ void NextReactionMethodCompact::initialization(Model *model, double maximumTime,
         delta = new double[model->getReacNumber()];
         queue = new IndexedPrioQueue(model->getReacNumber());
         //it needs to use the DG without the self edge
-        dg = model->getDGSelfEdge();
+        dg = model->getDG();
     }
 }
 
