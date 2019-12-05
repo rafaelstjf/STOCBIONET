@@ -135,10 +135,10 @@ void Log::saveDetailsToFile(string filename, unsigned long int seed)
         outputFile.open(newFileName, fstream::out);
         outputFile << "Number of executed reactions: " << reacCount << '\n';
         outputFile << "Time spent on simulation: " << timeSpent << '\n';
-        if(isinf(reacPerSecond))
-        outputFile << "Reactions per milisecond: " << (long double)reacCount/(timeSpent/1000) << '\n';
+        if (isinf(reacPerSecond))
+            outputFile << "Reactions per milisecond: " << (long double)reacCount / (timeSpent / 1000) << '\n';
         else
-        outputFile << "Reactions per second: " << reacPerSecond << '\n';
+            outputFile << "Reactions per second: " << reacPerSecond << '\n';
         outputFile << "Seed: " << seed << '\n';
         outputFile.close();
     }
@@ -152,9 +152,15 @@ void Log::saveResultsToFile(string filename)
 {
     Utils *ut = new Utils();
     fstream outputFile;
+    char op;
     try
     {
         string newFileName = ut->checkIfFileExists(filename, ".csv");
+        if (numNodes > 5000)
+        {
+            cout << "There are is a large amount of data (" << numNodes << " lines). Do you want to save a reduced version? [y|n]" << endl;
+            cin >> op;
+        }
         cout << "SAVING SIMULATION RESULTS IN " << newFileName << endl;
         outputFile.open(newFileName, fstream::out | fstream::trunc);
         int val;
@@ -193,7 +199,18 @@ void Log::saveResultsToFile(string filename)
                     outputFile << "; ";
             }
             outputFile << '\n';
-            it = it->getNext();
+            if (op == 'y')
+            {
+                long int space = numNodes / 5000;
+                for (long int k = 0; k < space; k++)
+                    if (it)
+                        it = it->getNext();
+            }
+            else
+            {
+
+                it = it->getNext();
+            }
         }
         outputFile.close();
     }
