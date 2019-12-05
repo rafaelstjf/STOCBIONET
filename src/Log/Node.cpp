@@ -16,7 +16,7 @@ void Node::setPrevious(Node *previous)
 {
     this->previous = previous;
 }
-void Node::setTime(double time)
+void Node::setTime(long double time)
 {
     this->time = time;
 }
@@ -28,7 +28,7 @@ Node *Node::getPrevious()
 {
     return previous;
 }
-double Node::getTime()
+long double Node::getTime()
 {
     return time;
 }

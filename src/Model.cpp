@@ -217,6 +217,7 @@ string Model::getFilename()
 }
 void Model::printModel()
 {
+
     cout << "Reactants: " << endl;
     for (int i = 0; i < specNumber; i++)
     {
@@ -260,6 +261,13 @@ void Model::printModel()
         cout << reacRate[j] << " ";
     }
     cout << endl;
+    cout << "initial quantities: " << endl;
+     map<string, long int>::iterator itQ = specNameNumber.begin();
+        while (itQ != specNameNumber.end())
+        {
+            cout << itQ->first << ": " << initialQuantity[itQ->second] << endl; //search the specie with the same name and set the quantity
+            itQ++;
+        }
 }
 void Model::buildDependencyGraphs()
 {

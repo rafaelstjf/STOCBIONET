@@ -38,7 +38,7 @@ protected:
   DependencyGraph *dg;
   Model *model;
   double totalPropensity; //sum of all the propensities
-  double currentTime;     //current time of the simulation
+  long double currentTime;     //current time of the simulation
   double initialTime;     //time that the simulation begins
   int selectedReaction;
   double maximumTime; //simulation time

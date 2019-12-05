@@ -21,7 +21,7 @@ Log::~Log()
     delete it;
     delete aux;
 }
-void Log::insertNode(double time, int *array)
+void Log::insertNode(long double time, int *array)
 {
     //increase the number of nodes, create a new node and insert the species
     numNodes++;
@@ -108,19 +108,19 @@ int Log::getNumberReacExecuted()
 {
     return reacCount;
 }
-void Log::setReacPerSecond(double reacPerSecond)
+void Log::setReacPerSecond(long double reacPerSecond)
 {
     this->reacPerSecond = reacPerSecond;
 }
-void Log::setTimeSpent(double timeSpent)
+void Log::setTimeSpent(long double timeSpent)
 {
     this->timeSpent = timeSpent;
 }
-double Log::getReacPerSecond()
+long double Log::getReacPerSecond()
 {
     return reacPerSecond;
 }
-double Log::getTimeSpent()
+long double Log::getTimeSpent()
 {
     return timeSpent;
 }
@@ -136,7 +136,7 @@ void Log::saveDetailsToFile(string filename, unsigned long int seed)
         outputFile << "Number of executed reactions: " << reacCount << '\n';
         outputFile << "Time spent on simulation: " << timeSpent << '\n';
         if(isinf(reacPerSecond))
-        outputFile << "Reactions per milisecond: " << (double)reacCount/(timeSpent/1000) << '\n';
+        outputFile << "Reactions per milisecond: " << (long double)reacCount/(timeSpent/1000) << '\n';
         else
         outputFile << "Reactions per second: " << reacPerSecond << '\n';
         outputFile << "Seed: " << seed << '\n';

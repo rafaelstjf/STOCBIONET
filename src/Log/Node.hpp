@@ -12,7 +12,7 @@ class Node {
     map<int, int> dict;
     Node* next;
     Node* previous;
-    double time;
+    long double time;
 
     public:
     Node();
@@ -21,8 +21,8 @@ class Node {
     void setNext(Node* next);
     Node* getPrevious();
     void setPrevious(Node* previous);
-    double getTime();
-    void setTime(double time);
+    long double getTime();
+    void setTime(long double time);
     map<int, int> getDict();
     int getValIndex(int index);
     int getValIndexFather(int index);
