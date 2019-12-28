@@ -88,7 +88,7 @@ string Utils::getCurrentDateTime()
     return buf;
 }
 
-double Utils::binomialCoefficient(int qnt, int coef)
+double Utils::binomialCoefficient(double qnt, int coef)
 {
     //qnt = quantity
     //coef = stoichiometric coefficient

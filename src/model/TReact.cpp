@@ -28,7 +28,7 @@ TReact::~TReact()
     speciesNumber.clear();
     delete sm;
 }
-vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long int>& speciesAndNumbers, map<string, long int>& speciesQuantity, vector<string>& modelRepresentation)
+vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long int>& speciesAndNumbers, map<string, double>& speciesQuantity, vector<string>& modelRepresentation)
 {
     if(debug)
         cout << "getReactions" << endl;
@@ -118,7 +118,7 @@ vector<Reaction*> TReact::getReactions(string textToTranslate, map<string, long 
         //searches for the iterator's key
         if (constants.find(it->first) != constants.end())
         {
-            long int temp = (long int) constants.find(it->first)->second;
+            double temp =  constants.find(it->first)->second;
             if(debug)
                 cout << "Insert on speciesQuantity map: " << it->first << " " << temp << endl;
             speciesQuantity.insert(make_pair(it->first, temp));
@@ -339,7 +339,7 @@ SpecieQuantity* TReact::getSpecieQuantity(string specQText)
     }
     else
     {
-        spec->setQuantity(atoi(patch::to_string(s).c_str()));
+        spec->setQuantity(stod(patch::to_string(s).c_str()));
     }
     string sbName;
     while(position < specQText.size() && specQText[position] != '(')

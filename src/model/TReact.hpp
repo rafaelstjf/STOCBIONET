@@ -35,7 +35,7 @@ private:
 public:
     TReact(bool debug);
     ~TReact();
-    vector<Reaction*> getReactions(string textToTranslate, map<string, long int>& speciesAndNumbers,map<string, long int>& speciesQuantity, vector<string>& modelRepresentation);
+    vector<Reaction*> getReactions(string textToTranslate, map<string, long int>& speciesAndNumbers,map<string, double>& speciesQuantity, vector<string>& modelRepresentation);
 
 
 };

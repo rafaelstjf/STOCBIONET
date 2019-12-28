@@ -20,12 +20,12 @@ class Log{
     double reacPerSecond;
     int reacCount;
     long double timeSpent;
-    int* currentArray;
+    double* currentArray;
     map<string, long int>specNameNumber; //name and index nof the species 
     public:
     Log(int size, map<string, long int>specNameNumber);
     ~Log();
-    void insertNode(long double time, int* array);
+    void insertNode(long double time, double* array);
     void printLog();
     stringstream exportToStringStream();
     void saveResultsToFile(string filename);

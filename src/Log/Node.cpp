@@ -32,13 +32,13 @@ long double Node::getTime()
 {
     return time;
 }
-map<int, int> Node::getDict()
+map<int, double> Node::getDict()
 {
     return dict;
 }
-int Node::getValIndex(int index)
+double Node::getValIndex(int index)
 {
-    map<int, int>::iterator it = dict.find(index);
+    map<int, double>::iterator it = dict.find(index);
     if (it == dict.end())
         return -1 * INT_MAX;
     else
@@ -51,7 +51,7 @@ bool Node::checkExists(int index)
     else
         return false;
 }
-int Node::getValIndexFather(int index)
+double Node::getValIndexFather(int index)
 {
     //checks if there is an element in the desirable index then returns it
     //if there isn't an element then check on the previous node
@@ -69,19 +69,19 @@ int Node::getValIndexFather(int index)
     }
     return -1;
 }
-void Node::insertSpecie(int index, int value, int* array)
+void Node::insertSpecie(int index, double value, double* array)
 {
     Node *it = previous;
     if(previous==nullptr)
     {
-        dict.insert(pair<int, int>(index, value));
+        dict.insert(pair<int, double>(index, value));
         array[index] = value;
     }
     else
     {
         if(array[index] != value)
         {
-            dict.insert(pair<int, int>(index, value));
+            dict.insert(pair<int, double>(index, value));
             array[index] = value;
         }
 

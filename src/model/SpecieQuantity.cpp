@@ -6,10 +6,10 @@ quantity = 0;
 }
 SpecieQuantity::~SpecieQuantity(){
 }
-int SpecieQuantity::getQuantity(){
+double SpecieQuantity::getQuantity(){
     return quantity;
 }
-void SpecieQuantity::setQuantity(int quant){
+void SpecieQuantity::setQuantity(double quant){
     quantity = quant;
 }
 Delay* SpecieQuantity::getDelay(){

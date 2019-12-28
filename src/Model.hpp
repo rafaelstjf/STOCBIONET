@@ -28,7 +28,7 @@ public:
     //DependencyGraph *getDGNoSelfEdge();
     DelayedDependencyGraph *getDDG();
     int **getStoiMatrix();
-    int *getInitialQuantity();
+    double *getInitialQuantity();
     int getSpecNumber();
     int getReacNumber();
     vector<string> getModelRepresentation();
@@ -48,7 +48,7 @@ private:
     double *reacRate; //array with the rate used in each reaction
     bool modelLoaded; //boolean to show if the model is loaded or not
     int **stoiMatrix;
-    int *initialQuantity;                 //array with the species' initial quantities
+    double *initialQuantity;                 //array with the species' initial quantities
     map<string, long int> specNameNumber; //associative container with the species' name and number
     vector<string> modelRepresentation;
     DependencyGraph *dg;

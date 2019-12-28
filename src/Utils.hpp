@@ -32,7 +32,7 @@ public:
   Utils();
   Utils(unsigned long int seed);
   double getRandomNumber();
-  double binomialCoefficient(int qnt, int coef);
+  double binomialCoefficient(double qnt, int coef);
   double ln(double n);
   double getCurrentTime();
   double getMinDouble(double *array, int size);

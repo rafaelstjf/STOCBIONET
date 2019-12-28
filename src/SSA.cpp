@@ -29,7 +29,7 @@ void SSA::initialization(Model *model, double maximumTime, double initialTime, l
     if (model->isModelLoaded())
     {
         this->log = new Log(model->getSpecNumber(), model->getSpecNameNumber());
-        this->specQuantity = new int[model->getSpecNumber()];
+        this->specQuantity = new double[model->getSpecNumber()];
         this->propArray = new double[model->getReacNumber()];
         for (int i = 0; i < model->getSpecNumber(); i++)
             this->specQuantity[i] = model->getInitialQuantity()[i];

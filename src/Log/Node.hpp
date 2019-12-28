@@ -9,7 +9,7 @@ using namespace std;
 
 class Node {
     private:
-    map<int, int> dict;
+    map<int, double> dict;
     Node* next;
     Node* previous;
     long double time;
@@ -23,10 +23,10 @@ class Node {
     void setPrevious(Node* previous);
     long double getTime();
     void setTime(long double time);
-    map<int, int> getDict();
-    int getValIndex(int index);
-    int getValIndexFather(int index);
-    void insertSpecie(int index, int value, int* array);
+    map<int, double> getDict();
+    double getValIndex(int index);
+    double getValIndexFather(int index);
+    void insertSpecie(int index, double value, double* array);
     bool checkExists(int index);
 };
 #endif

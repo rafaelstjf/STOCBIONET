@@ -9,15 +9,15 @@ using namespace std;
 class SpecieQuantity
 {
   private:
-    int quantity;
+    long int quantity;
     Specie* specie;
     Delay* delay;
 
   public:
     SpecieQuantity();
     ~SpecieQuantity();
-    int getQuantity();
-    void setQuantity(int quant);
+    double getQuantity();
+    void setQuantity(double quant);
     Specie* getSpecie();
     void setSpecie(Specie* sp);
     Delay* getDelay();

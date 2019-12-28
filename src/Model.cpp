@@ -43,7 +43,7 @@ void Model::loadModel(string filename)
     fstream inFile;
     vector<SpecieQuantity *> sQ;
     vector<SpecieQuantity *> sQ2;
-    map<string, long int> specQuantity;
+    map<string, double> specQuantity;
     TReact *tr;
     char debug;
     stringstream text;
@@ -119,7 +119,7 @@ void Model::loadModel(string filename)
         }
         cout << "loaded" << endl;
         cout << " * Species quantities... ";
-        initialQuantity = new int[specNumber];
+        initialQuantity = new double[specNumber];
         map<string, long int>::iterator itQ = specNameNumber.begin();
         while (itQ != specNameNumber.end())
         {
@@ -186,7 +186,7 @@ map<string, long int> Model::getSpecNameNumber()
 {
     return specNameNumber;
 }
-int *Model::getInitialQuantity()
+double* Model::getInitialQuantity()
 {
     return initialQuantity;
 }

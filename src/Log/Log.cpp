@@ -6,7 +6,7 @@ Log::Log(int size, map<string, long int> specNameNumber)
     numNodes = 0;
     last = nullptr;
     this->size = size;
-    currentArray = new int[size];
+    currentArray = new double[size];
 }
 Log::~Log()
 {
@@ -21,7 +21,7 @@ Log::~Log()
     delete it;
     delete aux;
 }
-void Log::insertNode(long double time, int *array)
+void Log::insertNode(long double time, double *array)
 {
     //increase the number of nodes, create a new node and insert the species
     numNodes++;
@@ -43,9 +43,9 @@ void Log::printLog()
 {
     //print all the nodes using the array to update the different species
 
-    int val;
+    double val;
     Node *it = first;
-    int *tempArray = new int[size];
+    double *tempArray = new double[size];
     while (it != nullptr)
     {
         cout << "time: " << it->getTime() << endl;

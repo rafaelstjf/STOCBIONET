@@ -44,7 +44,7 @@ protected:
   double maximumTime; //simulation time
   string methodOutName;
   double *propArray;    //propensity array
-  int *specQuantity;    //species quantity
+  double *specQuantity;    //species quantity
   double reacPerSecond; //number of reactions executed per second
   int reacCount;        //number of reactions executed in a simulation
   bool sucess;          //boolean variable used to check if the simulation was performed
