@@ -163,7 +163,7 @@ void Log::saveResultsToFile(string filename)
         }
         cout << "SAVING SIMULATION RESULTS IN " << newFileName << endl;
         outputFile.open(newFileName, fstream::out | fstream::trunc);
-        int val;
+        double val;
         Node *it = first;
         map<string, long int>::iterator itSpecies = specNameNumber.begin();
         string names[specNameNumber.size()];

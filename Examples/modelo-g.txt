@@ -16,7 +16,7 @@ Gbg=3000;
 reacao1, kRLm: L + R ->RL;
 reacao2, kRL: RL -> R + L;
 reacao3, kRdo: R ->;
-reacao4, kRs: ->R;
+reacao4, kRs: -> R;
 reacao5, kRD1: RL ->;
 reacao6, kG1: Gd + Gbg ->G;
 reacao7, kGa: G + RL -> Ga + Gbg + RL;
