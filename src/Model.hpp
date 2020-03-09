@@ -50,10 +50,9 @@ private:
     int **stoiMatrix;
     double *initialQuantity;                 //array with the species' initial quantities
     map<string, long int> specNameNumber; //associative container with the species' name and number
-    vector<string> modelRepresentation;
-    DependencyGraph *dg;
-    DependencyGraph *dgNoSelfEdges;
-    DelayedDependencyGraph *ddg;
+    vector<string> modelRepresentation; //string that has all the input file's content
+    DependencyGraph *dg; //dependency graph
+    DelayedDependencyGraph *ddg; //delayed dependency graph
     void buildStoichiometryMatrix();
     void buildDependencyGraphs();
     void clear();

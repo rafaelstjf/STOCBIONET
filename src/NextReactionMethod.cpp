@@ -11,7 +11,6 @@ void NextReactionMethod::initialization(Model *model, double maximumTime, double
         timePropZero = new double[model->getReacNumber()];
         propNonZero = new double[model->getReacNumber()];
         queue = new IndexedPrioQueue(model->getReacNumber());
-        //it needs to use the DG without the self edge
         dg = model->getDG();
     }
 }
