@@ -55,6 +55,20 @@ void DelayHash::insertKey(int specIndex, int reacIndex, double delayTime)
 {
     int choosedTable = 1;
     int index = 0;
+    while (delayTime > table1->high && delayTime > table2->high)
+    {
+
+        if (table1->high < table2->high)
+        {
+            table1->low = table2->high;
+            table1->high = table1->low + biggestDelay;
+        }
+        else
+        {
+            table2->low = table1->high;
+            table2->high = table2->low + biggestDelay;
+        }
+    }
     if (delayTime <= table1->high)
     {
         index = hashingFunction(delayTime, table1->low, table1->high);
@@ -67,36 +81,6 @@ void DelayHash::insertKey(int specIndex, int reacIndex, double delayTime)
         table2->array[index]->insertKey(specIndex, reacIndex, delayTime);
         choosedTable = 2;
         table2->inUse++;
-    }
-    else
-    {
-        while (delayTime > table1->high && delayTime > table2->high)
-        {
-
-            if (table1->high < table2->high)
-            {
-                table1->low = table2->high;
-                table1->high = table1->low + biggestDelay;
-            }
-            else
-            {
-                table2->low = table1->high;
-                table2->high = table2->low + biggestDelay;
-            }
-        }
-        if (delayTime <= table1->high)
-        {
-            index = hashingFunction(delayTime, table1->low, table1->high);
-            table1->array[index]->insertKey(specIndex, reacIndex, delayTime);
-            table1->inUse++;
-        }
-        else if (delayTime <= table2->high)
-        {
-            index = hashingFunction(delayTime, table2->low, table2->high);
-            table2->array[index]->insertKey(specIndex, reacIndex, delayTime);
-            choosedTable = 2;
-            table2->inUse++;
-        }
     }
     if (delayTime < firstDelay)
     {
