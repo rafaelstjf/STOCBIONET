@@ -10,7 +10,6 @@ vs=250.0;
 km1=165.0;
 km2=30.0;
 km3=3.0;
-k2=1.0;
 k11=146.6;
 k12=200.0;
 k13=20.0;
@@ -29,10 +28,9 @@ kd3=15.0;
 k1=2.0;
 k2=1.0;
 G=400;
-PN=0;
 GPN=0;
 GPN2=0;
-GPN3=0 
+GPN3=0;
 GPN4=0;
 M=0;
 Em=0;
@@ -66,7 +64,7 @@ reaction 12, km3: CM -> Em ;
 reaction 13, ks: M -> M + P0 ;
 reaction 14, k11: P0 + E1 -> C1 ;
 reaction 15, k12: C1 -> P0 + E1 ;
-reaction 16, k13: C1 -> P1 + E1
+reaction 16, k13: C1 -> P1 + E1 ;
 reaction 17, k21: P1 + E2 -> C2 ;
 reaction 18, k22: C2 -> P1 + E2 ;
 reaction 19, k23: C2 -> P0 + E2 ;
