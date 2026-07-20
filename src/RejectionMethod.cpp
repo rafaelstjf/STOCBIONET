@@ -1,5 +1,12 @@
 #include "RejectionMethod.hpp"
 
+RejectionMethod::RejectionMethod()
+{
+    delayStructure = nullptr;
+    ddg = nullptr;
+    structOp = 1;
+}
+
 void RejectionMethod::initialization(Model *model, double maximumTime, double initialTime, long int seed)
 {
 
@@ -74,7 +81,7 @@ void RejectionMethod::reacExecution()
             {
                 calcPropOne(depArray[j]);
             }
-            delete depArray;
+            delete[] depArray;
         }
         for (unsigned int i = 0; i < elements.size(); i++)
         {
@@ -103,7 +110,7 @@ void RejectionMethod::reacExecution()
             {
                 calcPropOne(depArray[j]);
             }
-            delete depArray;
+            delete[] depArray;
         }
     }
 }
@@ -130,6 +137,11 @@ void RejectionMethod::perform(Model *model, double maximumTime, double initialTi
 }
 void RejectionMethod::chooseStructure()
 {
+    if (delayStructure != nullptr)
+    {
+        delete delayStructure;
+        delayStructure = nullptr;
+    }
     switch (structOp)
     {
     case 1:
@@ -148,6 +160,10 @@ void RejectionMethod::chooseStructure()
     case 4:
         cout << "4 - Hash Table" << endl;
         delayStructure = new DelayHash(model->getDelaysValue(), model->getReacNumber(), model->getSpecNumber());
+        break;
+    default:
+        cout << "1 - List" << endl;
+        delayStructure = new DelayList();
         break;
     }
 }

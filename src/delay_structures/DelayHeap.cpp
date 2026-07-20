@@ -121,12 +121,9 @@ vector<DelayNode *> DelayHeap::extractEqualFirst()
     }
     while (array[0] != nullptr && array[0]->getDelayTime() >= value - EP && array[0]->getDelayTime() <= value + EP)
     {
-        //cout << "Batata: " << value << endl;
-        n = new DelayNode(array[0]->getSpecIndex(), array[0]->getReacIndex(), array[0]->getDelayTime());
-        tempArray.push_back(n);
-        DelayNode *r = extractMin();
-        if (r != nullptr)
-            delete r;
+        n = extractMin();
+        if (n != nullptr)
+            tempArray.push_back(n);
     }
     return tempArray;
 }

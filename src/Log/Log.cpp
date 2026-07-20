@@ -38,6 +38,12 @@ void Log::insertNode(long double time, double *array)
     {
         n->insertSpecie(i, array[i], currentArray);
     }
+    if (progressCallback)
+        progressCallback(time, currentArray, size);
+}
+void Log::setProgressCallback(function<void(long double, const double*, int)> callback)
+{
+    progressCallback = callback;
 }
 void Log::printLog()
 {

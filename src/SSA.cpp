@@ -10,6 +10,10 @@ Log *SSA::getLog()
 {
     return log;
 }
+void SSA::setProgressCallback(function<void(long double, const double*, int)> callback)
+{
+    progressCallback = callback;
+}
 void SSA::initialization(Model *model, double maximumTime, double initialTime, long int seed)
 {
     //instantiates the variables
@@ -19,16 +23,17 @@ void SSA::initialization(Model *model, double maximumTime, double initialTime, l
     this->sucess = false;
     this->reacCount = 0;
     this->reacPerSecond = 0;
-    //creates the output file's name
-    methodOutName = ut->removeFilePath(model->getFilename());
-    methodOutName = ut->removeFileType(methodOutName);
     if (seed >= 0)
         this->ut = new Utils(seed); //instantiates the utility class with a custom seed
     else
         this->ut = new Utils(); //instantiates the utility class with a generated seed
+    //creates the output file's name
+    methodOutName = ut->removeFilePath(model->getFilename());
+    methodOutName = ut->removeFileType(methodOutName);
     if (model->isModelLoaded())
     {
         this->log = new Log(model->getSpecNumber(), model->getSpecNameNumber());
+        log->setProgressCallback(progressCallback);
         this->specQuantity = new double[model->getSpecNumber()];
         this->propArray = new double[model->getReacNumber()];
         for (int i = 0; i < model->getSpecNumber(); i++)
