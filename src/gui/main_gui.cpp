@@ -270,7 +270,7 @@ void runSimulation(GtkButton *, gpointer user_data)
 
 void activate(GtkApplication *app, gpointer)
 {
-    AdwApplicationWindow *window = ADW_APPLICATION_WINDOW(adw_application_window_new(ADW_APPLICATION(app)));
+    AdwApplicationWindow *window = ADW_APPLICATION_WINDOW(adw_application_window_new(GTK_APPLICATION(app)));
     gtk_window_set_title(GTK_WINDOW(window), "STOCBIONET");
     gtk_window_set_default_size(GTK_WINDOW(window), 1000, 720);
 

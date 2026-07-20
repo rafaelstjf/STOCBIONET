@@ -23,7 +23,7 @@
 #endif
 
 #define E 2.71828182845904523536
-#define EP 1.0E-5
+static const double UTILS_EP = 1.0E-5;
 using namespace std;
 
 class Utils

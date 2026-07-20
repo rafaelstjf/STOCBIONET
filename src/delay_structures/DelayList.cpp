@@ -63,8 +63,8 @@ vector<DelayNode *> DelayList::extractEqualFirst()
     }
     int indexesToRemove = 0;
     while (indexesToRemove < inUse &&
-           array[indexesToRemove]->getDelayTime() >= value - EP &&
-           array[indexesToRemove]->getDelayTime() <= value + EP)
+           array[indexesToRemove]->getDelayTime() >= value - DELAY_EP &&
+           array[indexesToRemove]->getDelayTime() <= value + DELAY_EP)
     {
         tempArray.push_back(array[indexesToRemove]);
         indexesToRemove++;

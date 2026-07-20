@@ -24,7 +24,7 @@ void RejectionMethod::reacSelection()
 
     double u = ut->getRandomNumber();
     double selector;
-    if (totalPropensity <= EP)
+    if (totalPropensity <= SSA_EP)
         selectedReaction = -1;
     else
     {
@@ -32,7 +32,7 @@ void RejectionMethod::reacSelection()
         for (int i = 0; i < model->getReacNumber(); i++)
         {
             selector = selector - propArray[i];
-            if (selector <= EP)
+            if (selector <= SSA_EP)
             {
                 selectedReaction = i;
                 break;
@@ -49,7 +49,7 @@ void RejectionMethod::updateSpeciesQuantities(int index)
     //updates the reactants and add the product on the delay list if it has delay
     for (int i = 0; i < model->getSpecNumber(); i++)
     {
-        if (model->getDelaysValue()[i][index] > EP)
+        if (model->getDelaysValue()[i][index] > DELAY_EP)
         {
             delayStructure->insertKey(i, index, (currentTime + model->getDelaysValue()[i][index]));
             specQuantity[i] = specQuantity[i] - model->getReactants()[i][index];

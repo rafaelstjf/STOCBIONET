@@ -14,7 +14,7 @@ DelayHash::DelayHash(double **delaysValue, int reacNumber, int specNumber)
         }
     }
     if (biggestDelay <= 0.0)
-        biggestDelay = EP;
+        biggestDelay = DELAY_EP;
     precision = 100000;
     capacity = reacNumber > 0 ? reacNumber : 1;
     table1 = new Table;

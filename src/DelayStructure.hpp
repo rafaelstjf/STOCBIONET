@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 #define INF 1.0E9
-#define EP 1.0E-5
+static const double DELAY_EP = 1.0E-5;
 using namespace std;
 class DelayStructure
 {

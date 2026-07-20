@@ -127,8 +127,8 @@ vector<DelayNode *> CircularList::extractEqualFirst()
 
     double value = minNode->getDelayTime();
     while (inUse > 0 && array[first] != nullptr &&
-           array[first]->getDelayTime() >= value - EP &&
-           array[first]->getDelayTime() <= value + EP)
+           array[first]->getDelayTime() >= value - DELAY_EP &&
+           array[first]->getDelayTime() <= value + DELAY_EP)
     {
         tempArray.push_back(array[first]);
         array[first] = nullptr;

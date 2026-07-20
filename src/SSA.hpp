@@ -13,7 +13,7 @@
 #include "Log/Log.hpp"
 
 #define INF 1.0E9
-#define EP 1.0E-15
+static const double SSA_EP = 1.0E-15;
 using namespace std;
 
 class SSA

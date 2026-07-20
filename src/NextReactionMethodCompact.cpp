@@ -25,7 +25,7 @@ void NextReactionMethodCompact::reacTimeGeneration()
         calcPropOne(i);
         u = ut->getRandomNumber();
         delta[i] = (-1.00) * ut->ln(u);
-        if (propArray[i] > EP)
+        if (propArray[i] > SSA_EP)
             t1 = (delta[i] / propArray[i]) + currentTime;
         else
             t1 = INF;
@@ -73,13 +73,13 @@ void NextReactionMethodCompact::reacExecution()
         propOld = propArray[index];
         calcPropOne(index);
         nt = INF;
-        if (propArray[index] > EP)
+        if (propArray[index] > SSA_EP)
         {
             nt = (delta[index] - (propNonZero[index] * currentTime)) / propArray[index] + currentTime;
             propNonZero[index] = propArray[index];
             delta[index] = propArray[index] * nt;
         }
-        else if (propOld > EP)
+        else if (propOld > SSA_EP)
         {
             propNonZero[index] = (-1.0 * propOld);
             delta[index] = propOld * currentTime;

@@ -19,7 +19,7 @@ void DirectMethod::reacSelection()
     double selector;
     double u2;
     u2 = ut->getRandomNumber();
-    if (totalPropensity <= EP)
+    if (totalPropensity <= SSA_EP)
         selectedReaction = -1;
     else
     {
@@ -28,7 +28,7 @@ void DirectMethod::reacSelection()
         for (int i = 0; i < model->getReacNumber(); i++)
         {
             selector = selector - propArray[i];
-            if (selector <= EP)
+            if (selector <= SSA_EP)
             {
                 selectedReaction = i;
                 break;

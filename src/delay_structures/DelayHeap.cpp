@@ -119,7 +119,7 @@ vector<DelayNode *> DelayHeap::extractEqualFirst()
     {
         value = getMinNode()->getDelayTime();
     }
-    while (array[0] != nullptr && array[0]->getDelayTime() >= value - EP && array[0]->getDelayTime() <= value + EP)
+    while (array[0] != nullptr && array[0]->getDelayTime() >= value - DELAY_EP && array[0]->getDelayTime() <= value + DELAY_EP)
     {
         n = extractMin();
         if (n != nullptr)
