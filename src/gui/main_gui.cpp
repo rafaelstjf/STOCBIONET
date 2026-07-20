@@ -270,54 +270,54 @@ void runSimulation(GtkButton *, gpointer user_data)
 
 void activate(GtkApplication *app, gpointer)
 {
-    adw_application_window_set_content(ADW_APPLICATION_WINDOW(window), box);
-    gtk_window_set_title(GTK_WINDOW(window), "STOCBIONET");
-    gtk_window_set_default_size(GTK_WINDOW(window), 1000, 720);
+    GtkWindow *window = GTK_WINDOW(adw_application_window_new(app));
+    gtk_window_set_title(window, "STOCBIONET");
+    gtk_window_set_default_size(window, 1000, 720);
 
-    GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
-    gtk_widget_set_margin_top(box, 18);
-    gtk_widget_set_margin_bottom(box, 18);
-    gtk_widget_set_margin_start(box, 18);
-    gtk_widget_set_margin_end(box, 18);
-    gtk_window_set_child(GTK_WINDOW(window), box);
+    GtkWidget *content = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
+    gtk_widget_set_margin_top(content, 18);
+    gtk_widget_set_margin_bottom(content, 18);
+    gtk_widget_set_margin_start(content, 18);
+    gtk_widget_set_margin_end(content, 18);
+    adw_application_window_set_content(ADW_APPLICATION_WINDOW(window), content);
 
     GuiState *state = new GuiState();
     state->file_entry = gtk_entry_new();
     gtk_entry_set_placeholder_text(GTK_ENTRY(state->file_entry), "arquivo .xml/.sbml/.txt");
-    gtk_box_append(GTK_BOX(box), state->file_entry);
+    gtk_box_append(GTK_BOX(content), state->file_entry);
 
     const char *methods[] = {"DM", "ODM", "SDM", "FRM", "NRM", "NRMC", "MNRM", "SNRM", "RM-OL", "RM-H", "RM-CL", "RM-HT", nullptr};
     state->method_dropdown = gtk_drop_down_new_from_strings(methods);
-    gtk_box_append(GTK_BOX(box), state->method_dropdown);
+    gtk_box_append(GTK_BOX(content), state->method_dropdown);
 
     state->initial_entry = gtk_entry_new();
     gtk_entry_set_placeholder_text(GTK_ENTRY(state->initial_entry), "tempo inicial");
     gtk_editable_set_text(GTK_EDITABLE(state->initial_entry), "0");
-    gtk_box_append(GTK_BOX(box), state->initial_entry);
+    gtk_box_append(GTK_BOX(content), state->initial_entry);
 
     state->maximum_entry = gtk_entry_new();
     gtk_entry_set_placeholder_text(GTK_ENTRY(state->maximum_entry), "tempo maximo");
     gtk_editable_set_text(GTK_EDITABLE(state->maximum_entry), "10");
-    gtk_box_append(GTK_BOX(box), state->maximum_entry);
+    gtk_box_append(GTK_BOX(content), state->maximum_entry);
 
     state->seed_entry = gtk_entry_new();
     gtk_entry_set_placeholder_text(GTK_ENTRY(state->seed_entry), "seed opcional");
-    gtk_box_append(GTK_BOX(box), state->seed_entry);
+    gtk_box_append(GTK_BOX(content), state->seed_entry);
 
     state->run_button = gtk_button_new_with_label("Executar simulacao");
     g_signal_connect(state->run_button, "clicked", G_CALLBACK(runSimulation), state);
-    gtk_box_append(GTK_BOX(box), state->run_button);
+    gtk_box_append(GTK_BOX(content), state->run_button);
 
     state->status_label = gtk_label_new("Pronto para simular.");
     gtk_label_set_xalign(GTK_LABEL(state->status_label), 0.0);
-    gtk_box_append(GTK_BOX(box), state->status_label);
+    gtk_box_append(GTK_BOX(content), state->status_label);
 
     state->drawing_area = gtk_drawing_area_new();
     gtk_widget_set_vexpand(state->drawing_area, TRUE);
     gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(state->drawing_area), drawChart, state, nullptr);
-    gtk_box_append(GTK_BOX(box), state->drawing_area);
+    gtk_box_append(GTK_BOX(content), state->drawing_area);
 
-    gtk_window_present(GTK_WINDOW(window));
+    gtk_window_present(window);
 }
 }
 
