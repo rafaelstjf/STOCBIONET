@@ -6,6 +6,10 @@
 
 #ifdef STOCBIONET_HAVE_LIBSBML
 #include <sbml/SBMLTypes.h>
+#ifndef LIBSBML_CPP_NAMESPACE_USE
+#define LIBSBML_CPP_NAMESPACE_USE
+#endif
+LIBSBML_CPP_NAMESPACE_USE
 #endif
 
 using namespace std;
@@ -32,19 +36,19 @@ string sanitizeId(const string &id)
 }
 
 #ifdef STOCBIONET_HAVE_LIBSBML
-double parameterValue(const libsbml::Model *model, const libsbml::KineticLaw *law, const string &name, bool &found)
+double parameterValue(const Model *model, const KineticLaw *law, const string &name, bool &found)
 {
     found = false;
     if (law != nullptr)
     {
-        const libsbml::Parameter *local = law->getParameter(name);
+        const Parameter *local = law->getParameter(name);
         if (local != nullptr && local->isSetValue())
         {
             found = true;
             return local->getValue();
         }
     }
-    const libsbml::Parameter *global = model->getParameter(name);
+    const Parameter *global = model->getParameter(name);
     if (global != nullptr && global->isSetValue())
     {
         found = true;
@@ -53,13 +57,13 @@ double parameterValue(const libsbml::Model *model, const libsbml::KineticLaw *la
     return 0.0;
 }
 
-double numericKineticLaw(const libsbml::Model *model, const libsbml::KineticLaw *law, bool &ok)
+double numericKineticLaw(const Model *model, const KineticLaw *law, bool &ok)
 {
     ok = false;
     if (law == nullptr || law->getMath() == nullptr)
         return 0.0;
 
-    const libsbml::ASTNode *math = law->getMath();
+    const ASTNode *math = law->getMath();
     if (math->isNumber())
     {
         ok = true;
@@ -75,7 +79,7 @@ double numericKineticLaw(const libsbml::Model *model, const libsbml::KineticLaw 
     return 0.0;
 }
 
-string speciesTerm(const libsbml::SpeciesReference *ref, double delay, double variation, const string &delayName, const string &variationName)
+string speciesTerm(const SpeciesReference *ref, double delay, double variation, const string &delayName, const string &variationName)
 {
     stringstream term;
     double stoich = ref->isSetStoichiometry() ? ref->getStoichiometry() : 1.0;
@@ -108,7 +112,7 @@ bool SBMLImporter::load(const string &filename, string &translatedModel, string 
     errorMessage = "libSBML is not available in this build.";
     return false;
 #else
-    libsbml::SBMLDocument *document = libsbml::readSBMLFromFile(filename.c_str());
+    SBMLDocument *document = readSBMLFromFile(filename.c_str());
     if (document == nullptr)
     {
         errorMessage = "Unable to read SBML document.";
@@ -120,7 +124,7 @@ bool SBMLImporter::load(const string &filename, string &translatedModel, string 
         ss << "SBML validation reported " << document->getNumErrors() << " issue(s).";
         errorMessage = ss.str();
     }
-    const libsbml::Model *model = document->getModel();
+    const Model *model = document->getModel();
     if (model == nullptr)
     {
         delete document;
@@ -131,13 +135,13 @@ bool SBMLImporter::load(const string &filename, string &translatedModel, string 
     stringstream out;
     for (unsigned int i = 0; i < model->getNumParameters(); ++i)
     {
-        const libsbml::Parameter *parameter = model->getParameter(i);
+        const Parameter *parameter = model->getParameter(i);
         if (parameter->isSetValue())
             out << sanitizeId(parameter->getId()) << "=" << parameter->getValue() << ";\n";
     }
     for (unsigned int i = 0; i < model->getNumSpecies(); ++i)
     {
-        const libsbml::Species *species = model->getSpecies(i);
+        const Species *species = model->getSpecies(i);
         double amount = 0.0;
         if (species->isSetInitialAmount())
             amount = species->getInitialAmount();
@@ -148,8 +152,8 @@ bool SBMLImporter::load(const string &filename, string &translatedModel, string 
 
     for (unsigned int i = 0; i < model->getNumReactions(); ++i)
     {
-        const libsbml::Reaction *reaction = model->getReaction(i);
-        const libsbml::KineticLaw *law = reaction->getKineticLaw();
+        const Reaction *reaction = model->getReaction(i);
+        const KineticLaw *law = reaction->getKineticLaw();
         bool rateOk = false;
         double rate = numericKineticLaw(model, law, rateOk);
         if (!rateOk)
