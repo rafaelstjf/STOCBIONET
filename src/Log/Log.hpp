@@ -7,6 +7,7 @@
 #include <climits>
 #include <math.h>
 #include <fstream>
+#include <functional>
 #include <map>
 #include "../Utils.hpp"
 using namespace std;
@@ -21,11 +22,13 @@ class Log{
     int reacCount;
     long double timeSpent;
     double* currentArray;
+    function<void(long double, const double*, int)> progressCallback;
     map<string, long int>specNameNumber; //name and index nof the species 
     public:
     Log(int size, map<string, long int>specNameNumber);
     ~Log();
     void insertNode(long double time, double* array);
+    void setProgressCallback(function<void(long double, const double*, int)> callback);
     void printLog();
     stringstream exportToStringStream();
     void saveResultsToFile(string filename);

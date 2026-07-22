@@ -26,7 +26,7 @@ void OptimizedDirectMethod::reacSelection()
     double u2;
     int reactionSOindex;
     u2 = ut->getRandomNumber();
-    if (totalPropensity <= EP)
+    if (totalPropensity <= SSA_EP)
         selectedReaction = -1;
     else
     {
@@ -34,7 +34,7 @@ void OptimizedDirectMethod::reacSelection()
         for (int i = 0; i < model->getReacNumber(); i++)
         {
             selector = selector - propArray[reactionSO[i]];
-            if (selector <= EP)
+            if (selector <= SSA_EP)
             {
                 reactionSOindex = i;
                 selectedReaction = reactionSO[i];
@@ -74,7 +74,7 @@ void OptimizedDirectMethod::preSimul()
         double selector;
         double u2;
         u2 = ut->getRandomNumber();
-        if (totalPropensity <= EP)
+        if (totalPropensity <= SSA_EP)
             selectedReaction = -1;
         else
         {
@@ -82,7 +82,7 @@ void OptimizedDirectMethod::preSimul()
             for (int i = 0; i < model->getReacNumber(); i++)
             {
                 selector = selector - propArray[i];
-                if (selector <= EP)
+                if (selector <= SSA_EP)
                 {
                     selectedReaction = i;
                     reactionSO[i]++; //increases the number of times that this reaction was selected

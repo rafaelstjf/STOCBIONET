@@ -5,8 +5,8 @@ DelayList::DelayList()
 }
 DelayList::~DelayList()
 {
-    // for (DelayNode* obj : array)
-    // if(obj) delete obj;
+    for (DelayNode *node : array)
+        delete node;
     array.clear();
 }
 void DelayList::insertKey(int specIndex, int reacIndex, double delayTime)
@@ -30,7 +30,7 @@ void DelayList::insertKey(int specIndex, int reacIndex, double delayTime)
             array.push_back(n);
         else
         {
-            vector<DelayNode*>::iterator it{array.data() + index};
+            vector<DelayNode*>::iterator it = array.begin() + index;
             array.insert(it, n);
         }
     }
@@ -62,26 +62,15 @@ vector<DelayNode *> DelayList::extractEqualFirst()
         value = array[0]->getDelayTime();
     }
     int indexesToRemove = 0;
-    unsigned int i = 0;
-    while (i < inUse)
+    while (indexesToRemove < inUse &&
+           array[indexesToRemove]->getDelayTime() >= value - DELAY_EP &&
+           array[indexesToRemove]->getDelayTime() <= value + DELAY_EP)
     {
-        if (array[i]->getDelayTime() >= value - EP && array[i]->getDelayTime() <= value + EP)
-        {
-            DelayNode *n;
-            n = new DelayNode(array[i]->getSpecIndex(), array[i]->getReacIndex(), array[i]->getDelayTime());
-            tempArray.push_back(n);
-            indexesToRemove++;
-        }
-        i++;
+        tempArray.push_back(array[indexesToRemove]);
+        indexesToRemove++;
     }
-    //cout << "inuse before: " << inUse;
     inUse = inUse - indexesToRemove;
-    //cout << " InUse now: " << inUse << endl;;
-    // for(int j = 0; j < indexesToRemove; j++){
-    //     array[j] = nullptr;
-    // }
-    vector<DelayNode*>::iterator it{array.data() + indexesToRemove};
-    array.erase(array.begin(), it);
+    array.erase(array.begin(), array.begin() + indexesToRemove);
     return tempArray;
 }
 DelayNode *DelayList::getMinNode()

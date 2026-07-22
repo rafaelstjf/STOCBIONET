@@ -4,7 +4,7 @@ DelayHash::DelayHash(double **delaysValue, int reacNumber, int specNumber)
 {
 
     //Get the biggest delay
-    biggestDelay = delaysValue[0][0];
+    biggestDelay = 0.0;
     for (int i = 0; i < specNumber; i++)
     {
         for (int j = 0; j < reacNumber; j++)
@@ -13,8 +13,10 @@ DelayHash::DelayHash(double **delaysValue, int reacNumber, int specNumber)
                 biggestDelay = delaysValue[i][j];
         }
     }
+    if (biggestDelay <= 0.0)
+        biggestDelay = DELAY_EP;
     precision = 100000;
-    capacity = reacNumber;
+    capacity = reacNumber > 0 ? reacNumber : 1;
     table1 = new Table;
     table2 = new Table;
     /*
@@ -110,8 +112,11 @@ int DelayHash::hashingFunction(double delayTime, double low, double high)
 
     //R = inf + ((sup-inf)/(1.0/precision))*int
     //1.0/precision if precision = 0.0....
+    if (high <= low)
+        return 0;
     int key = ceil((delayTime - low) * (precision / (high - low)));
-    //cout << "LOW: " << low << " High: " << high << " key: " << key << " delayTime: " << delayTime << endl;
+    if (key < 0)
+        key = 0;
     return key % capacity;
 }
 bool DelayHash::isEmpty()

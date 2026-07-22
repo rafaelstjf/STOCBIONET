@@ -15,6 +15,7 @@ using namespace std;
 class RejectionMethod : public SSA
 {
 public:
+    RejectionMethod();
     void perform(Model* model, double maximumTime, double initialTime, long int seed);
     void setDelayStructure(int op);
     virtual ~RejectionMethod();

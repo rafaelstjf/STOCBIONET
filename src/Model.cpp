@@ -1,4 +1,5 @@
 #include "Model.hpp"
+#include "sbml/SBMLImporter.hpp"
 void Model::clear()
 {
     reactants = NULL;
@@ -54,9 +55,24 @@ void Model::loadModel(string filename)
     {
         //cout << "Importing reactions..." << endl;
         text << inFile.rdbuf();
-        tr = new TReact(false);
-        vector<Reaction *> reactions = tr->getReactions(text.str(), specNameNumber, specQuantity, modelRepresentation);
+        string modelText = text.str();
         text.clear();
+        if (SBMLImporter::canLoad(filename))
+        {
+            string translatedModel;
+            string errorMessage;
+            if (!SBMLImporter::load(filename, translatedModel, errorMessage))
+            {
+                cout << "SBML import error: " << errorMessage << endl;
+                modelLoaded = false;
+                return;
+            }
+            if (!errorMessage.empty())
+                cout << "SBML import warning: " << errorMessage << endl;
+            modelText = translatedModel;
+        }
+        tr = new TReact(false);
+        vector<Reaction *> reactions = tr->getReactions(modelText, specNameNumber, specQuantity, modelRepresentation);
         specNumber = specNameNumber.size();
         reacNumber = reactions.size();
         //Lines = species; Columns = reactions

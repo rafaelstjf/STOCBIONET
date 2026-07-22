@@ -71,7 +71,7 @@ double Utils::getRandomNumber()
     double i = 0.0;
     static mt19937 generator(seed);
     static uniform_real_distribution<double> dist(0.0, 1.0);
-    while (i <= EP || i >= 1 - EP)
+    while (i <= UTILS_EP || i >= 1 - UTILS_EP)
         i = dist(generator);
     return i;
 }

@@ -111,3 +111,13 @@ MCCOLLUM, James M. et al. The sorting direct method for stochastic simulation of
 SILVA, Camillo de Lellis Falcão da et al. Novos algoritmos de simulação estocástica com atraso para redes gênicas. 2014.
 
 :+1: Credits for the input file structure: Camillo de Lellis Falcão da Silva
+
+## SBML input support
+
+STOCBIONET can import `.xml` and `.sbml` files when built with libSBML. The importer supports SBML reaction networks whose kinetic law is either a numeric constant or a single parameter. Initial species amounts/concentrations and global parameters are translated to the existing STOCBIONET model format before simulation.
+
+Delayed reactions are represented through optional kinetic-law parameters named `delay` and `delay_variation`. When present, the delay is applied to all products of the SBML reaction and can be simulated with the rejection-method variants (`RM-OL`, `RM-H`, `RM-CL`, or `RM-HT`). SBML event delays are part of SBML Core, but this importer intentionally maps reaction-level stochastic delays from those kinetic-law parameters because STOCBIONET delays are associated with delayed products.
+
+## GTK/GNOME GUI
+
+When GTK 4 and libadwaita development packages are available, CMake also builds `StocbionetGui`. The GUI uses GTK/libadwaita as a GNOME frontend while reusing the same C++ simulation core as the command-line executable.

@@ -20,10 +20,10 @@ void NextReactionMethod::reacTimeGeneration()
     for (int i = 0; i < model->getReacNumber(); i++)
     {
         calcPropOne(i); //uses calcPropOne(i) to saves one O(n)
-        if (propArray[i] <= EP)
+        if (propArray[i] <= SSA_EP)
         {
             nt = INF;
-            propNonZero[i] = EP;
+            propNonZero[i] = SSA_EP;
         }
         else
         {
@@ -57,7 +57,7 @@ void NextReactionMethod::reacExecution()
         propOld = propArray[index];
         calcPropOne(index);
         int flag = 0;
-        if (propArray[index] > EP)
+        if (propArray[index] > SSA_EP)
         {
             if (index == sIndex)
             {
@@ -66,9 +66,9 @@ void NextReactionMethod::reacExecution()
             }
             else
             {
-                if (propOld <= EP)
+                if (propOld <= SSA_EP)
                 {
-                    if (propNonZero[index] <= EP)
+                    if (propNonZero[index] <= SSA_EP)
                     {
                         u = ut->getRandomNumber();
                         nt = ((-1 * ut->ln(u)) / propArray[index]) + currentTime;
